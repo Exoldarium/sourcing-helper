@@ -1,16 +1,18 @@
 import { CreateNewUser } from '../src/types';
 import { parseToString } from './parsingHelpers';
 
-const toNewUserentry = (entry: unknown): CreateNewUser => {
+const toNewUserEntry = (entry: unknown): CreateNewUser => {
   if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
 
   if (
     'email' in entry &&
-    'name' in entry
+    'name' in entry &&
+    'password' in entry
   ) {
     const newUser: CreateNewUser = {
       name: parseToString(entry.name),
-      email: parseToString(entry.email)
+      email: parseToString(entry.email),
+      password: parseToString(entry.password)
     };
 
     return newUser;
@@ -19,4 +21,4 @@ const toNewUserentry = (entry: unknown): CreateNewUser => {
   throw new Error('Invalid user input or some fields might be missing');
 };
 
-export { toNewUserentry };
+export { toNewUserEntry };

@@ -2,16 +2,24 @@
 
 user (id: primaryKey, name, password, admin)
 
-position (
+positionTotal (
   id: primaryKey, 
   userId: foreignKey, 
   name, 
   dateAdded, 
-  dateModified, 
   permission(creator, admin, users)
+  invitation,
+  initialContact,
+  replied,
+  jobDescription,
+  applicationReview,
+  proposed,
+  accepted,
+  rejected,
+  followUp
 )
 
-positionData (
+positionDataLog (
   id: primaryKey, 
   userId: foreignKey, 
   positionId: foreignKey,
