@@ -1,3 +1,4 @@
+import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { NewUser } from '../types';
 
@@ -7,8 +8,8 @@ const getUsers = async () => {
       .selectAll()
       .execute();
   } catch (err) {
-    console.log(err);
-    throw new Error(`there was an error ${err}`);
+    const error = parseError(err);
+    throw Error(error);
   }
 };
 
@@ -20,8 +21,8 @@ const insertUser = async (user: NewUser) => {
       .returningAll()
       .execute();
   } catch (err) {
-    console.log(err);
-    throw new Error(`there was an error ${err}`);
+    const error = parseError(err);
+    throw Error(error);
   }
 };
 
