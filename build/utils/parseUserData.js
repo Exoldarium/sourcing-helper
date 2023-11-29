@@ -1,0 +1,34 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.toUserLoginEntry = exports.toNewUserEntry = void 0;
+const parsingHelpers_1 = require("./parsingHelpers");
+const toNewUserEntry = (entry) => {
+    if (!entry || typeof entry !== 'object')
+        throw new Error('Invalid user input');
+    if ('email' in entry &&
+        'name' in entry &&
+        'password' in entry) {
+        const newUser = {
+            name: (0, parsingHelpers_1.parseToString)(entry.name),
+            email: (0, parsingHelpers_1.parseToString)(entry.email),
+            password: (0, parsingHelpers_1.parseToString)(entry.password)
+        };
+        return newUser;
+    }
+    throw new Error('Invalid user input or some fields might be missing');
+};
+exports.toNewUserEntry = toNewUserEntry;
+const toUserLoginEntry = (entry) => {
+    if (!entry || typeof entry !== 'object')
+        throw new Error('Invalid user input');
+    if ('email' in entry &&
+        'password' in entry) {
+        const newUser = {
+            email: (0, parsingHelpers_1.parseToString)(entry.email),
+            password: (0, parsingHelpers_1.parseToString)(entry.password)
+        };
+        return newUser;
+    }
+    throw new Error('Invalid login input or some fields might be missing');
+};
+exports.toUserLoginEntry = toUserLoginEntry;

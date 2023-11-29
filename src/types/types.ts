@@ -1,5 +1,4 @@
 import {
-  Generated,
   Insertable,
   Selectable,
   Updateable
@@ -10,10 +9,10 @@ export interface SourcingHelperDatabase {
 }
 
 export interface UserTable {
-  user_id: Generated<string>;
+  user_id: string;
   email: string;
   name: string;
-  passwordHash: string;
+  password_hash: string;
   admin: boolean;
   disabled: boolean;
   created_on: string | number | Date;
@@ -25,12 +24,14 @@ export interface CreateNewUser {
   password: string;
 }
 
+export type UserLogin = Omit<CreateNewUser, 'name'>;
+
 export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UpdateUser = Updateable<UserTable>;
 
 export interface RoleTotalTable {
-  role_id: Generated<string>;
+  role_id: string;
   user_id: string;
   name: string;
   date_added: string;
@@ -46,9 +47,7 @@ export interface RoleTotalTable {
   follow_up: number;
 }
 
-export interface CreateNewRole {
-  name: string;
-}
+export type CreateNewRole = Pick<RoleTotalTable, 'name'>;
 
 export type Role = Selectable<RoleTotalTable>;
 export type NewRole = Insertable<RoleTotalTable>;

@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { parseToString } from './parsingHelpers';
 
 const PORT = process.env.PORT;
 
@@ -10,4 +11,11 @@ const DB_CONFIG = {
   port: Number(process.env.PGPORT)
 };
 
-export { PORT, DB_CONFIG };
+const SESSION = {
+  secret: parseToString(process.env.COOKIESECRET),
+  saveUninitialized: true,
+  cookie: { maxAge: 60 * 60 * 24 * 30 },
+  resave: false
+};
+
+export { PORT, DB_CONFIG, SESSION };

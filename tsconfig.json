@@ -8,6 +8,10 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./src/types/index.d.ts",
+      "./node_modules/@types"
+    ]
   }
 }

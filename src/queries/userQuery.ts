@@ -1,12 +1,24 @@
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { NewUser } from '../types';
+import { NewUser } from '../types/types';
 
 const getUsers = async () => {
   try {
     return await db.selectFrom('users')
       .selectAll()
       .execute();
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
+const getUser = async (email: string) => {
+  try {
+    return await db.selectFrom('users')
+      .where('email', '=', email)
+      .selectAll()
+      .executeTakeFirst();
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
@@ -26,4 +38,8 @@ const insertUser = async (user: NewUser) => {
   }
 };
 
-export { getUsers, insertUser };
+export {
+  getUsers,
+  getUser,
+  insertUser
+};
