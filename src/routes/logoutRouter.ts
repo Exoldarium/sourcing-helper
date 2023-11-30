@@ -1,12 +1,15 @@
 import express from 'express';
 import { parseError } from '../../utils/parsingHelpers';
+import { deleteSession } from '../queries/sessionQuery';
 
 const logoutRouter = express.Router();
 
-logoutRouter.get('/', (req, res) => {
-  const session = req.session;
+logoutRouter.get('/', async (req, res) => {
+  const user = req.session.user;
 
-  if (!session) return res.status(400).send('Already logged out');
+  if (!user) return res.status(400).send('Already logged out');
+
+  await deleteSession(req.sessionID);
 
   req.session.destroy((err) => {
     if (err) {

@@ -6,6 +6,7 @@ import { loginrouter } from './src/routes/loginRouter';
 import { logoutRouter } from './src/routes/logoutRouter';
 
 const app = express();
+
 app.use(express.json());
 app.use(session(SESSION));
 

@@ -1,13 +1,17 @@
 import {
+  Generated,
   Insertable,
   Selectable,
   Updateable
 } from 'kysely';
 
+// DATABASE SCHEMA
 export interface SourcingHelperDatabase {
   users: UserTable;
+  session: SessionTable;
 }
 
+// USER SCHEMA
 export interface UserTable {
   user_id: string;
   email: string;
@@ -24,12 +28,25 @@ export interface CreateNewUser {
   password: string;
 }
 
+export type UpdateUserAdmin = Omit<UserTable, 'user_id' | 'password_hash' | 'created_on'>;
+export type UpdateUserRegular = Pick<UserTable, 'email' | 'name'>;
+
 export type UserLogin = Omit<CreateNewUser, 'name'>;
 
 export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UpdateUser = Updateable<UserTable>;
 
+// SESSION SCHEMA
+export interface SessionTable {
+  sid: Generated<string>;
+  sess: Generated<JsonWebKey>;
+  expire: Generated<number>;
+}
+
+export type Session = Selectable<SessionTable>;
+
+// ROLE SCHEMA
 export interface RoleTotalTable {
   role_id: string;
   user_id: string;

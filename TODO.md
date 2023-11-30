@@ -35,7 +35,7 @@ positionDataLog (
   followUp
 )
 
-session(id: primaryKey, userId: foreignKey, active)
+session(id: primaryKey, hashed_sessionid)
 
 cookies(id: primaryKey, userId: foreignKey, cookie)
 

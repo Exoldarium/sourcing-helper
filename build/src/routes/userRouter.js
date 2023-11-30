@@ -11,14 +11,21 @@ const userQuery_1 = require("../queries/userQuery");
 const helpers_1 = require("../../utils/helpers");
 const parsingHelpers_1 = require("../../utils/parsingHelpers");
 const parseUserData_1 = require("../../utils/parseUserData");
+const sessionQuery_1 = require("../queries/sessionQuery");
 // TODO:
-// add passwordHash column to postgres
+// the user session should be set to active while they are logged in
+// if the cookie is expired and they are still active, refuse login
+// revoked users should have their sessionid blacklisted (it should be hashed)
+// https://gist.github.com/productioncoder/3d2f27753b5a952f23383334a25c2ed2
+// https://levelup.gitconnected.com/expressjs-postgresql-session-store-ec987146f706
 const userRouter = express_1.default.Router();
 exports.userRouter = userRouter;
 userRouter.get('/', async (req, res) => {
     try {
         const user = req.session.user;
-        if (!user)
+        const session = await (0, sessionQuery_1.getSession)(req.sessionID);
+        console.log(session);
+        if (!user || !session)
             return res.status(404).send('Must be logged in to access this');
         const allUsers = await (0, userQuery_1.getUsers)();
         return res.status(200).json(allUsers);
