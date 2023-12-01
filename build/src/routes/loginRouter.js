@@ -28,7 +28,7 @@ loginrouter.post('/', async (req, res) => {
             id: user.user_id
         };
         req.session.user = loggedUser;
-        return res.status(200).send('You are logged in!');
+        return res.status(200).send(loggedUser);
     }
     catch (err) {
         const error = (0, parsingHelpers_1.parseError)(err);

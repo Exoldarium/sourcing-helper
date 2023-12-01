@@ -49,6 +49,7 @@ const updateUser = async (id, email, name) => {
             email
         })
             .where('user_id', '=', id)
+            .returningAll()
             .executeTakeFirst();
     }
     catch (err) {

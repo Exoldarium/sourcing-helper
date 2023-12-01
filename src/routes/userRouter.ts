@@ -6,16 +6,14 @@ import { NewUser } from '../types/types';
 import { getDate } from '../../utils/helpers';
 import { parseError } from '../../utils/parsingHelpers';
 import { toNewUserEntry, toUpdateUserEntry } from '../../utils/parseUserData';
-import { getSession } from '../queries/sessionQuery';
 
 const userRouter = express.Router();
 
 userRouter.get('/', async (req, res) => {
   try {
     const user = req.session.user;
-    const session = await getSession(req.sessionID);
 
-    if (!user || !session) return res.status(405).send('Must be logged in to access this');
+    if (!user) return res.status(405).send('Must be logged in to access this');
 
     const allUsers = await getUsers();
 

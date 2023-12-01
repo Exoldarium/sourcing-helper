@@ -5,7 +5,7 @@ import { NewUser } from '../types/types';
 const getUsers = async () => {
   try {
     return await db.selectFrom('users')
-      .selectAll()
+      .select(['email', 'user_id', 'name'])
       .execute();
   } catch (err) {
     const error = parseError(err);

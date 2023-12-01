@@ -13,7 +13,7 @@ loginrouter.post('/', async (req, res) => {
 
     const session = await getSession(req.sessionID);
 
-    // TODO: redirect the user to the home page if logged in
+    // TODO: remove session store, no point in persisting session in different browsers
     if (session) return res.status(400).send('Already logged in');
 
     const user = await getUser(email);
@@ -24,7 +24,7 @@ loginrouter.post('/', async (req, res) => {
 
     const loggedUser = {
       email: user.email,
-      id: user.user_id
+      id: user.user_id,
     };
 
     req.session.user = loggedUser;

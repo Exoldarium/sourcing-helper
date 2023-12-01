@@ -54,11 +54,16 @@ userRouter.post('/create', async (req, res) => {
     }
 });
 userRouter.put('/:id', async (req, res) => {
-    const currentUser = req.session.user;
-    if (!currentUser)
-        return res.status(405).send('Must be logged in to do this');
-    const parseUpdatedUser = (0, parseUserData_1.toUpdateUserEntry)(req.body);
-    const upatedUser = await (0, userQuery_1.updateUser)(currentUser.id, parseUpdatedUser.email, parseUpdatedUser.name);
-    console.log(upatedUser);
-    return res.status(200);
+    try {
+        const currentUser = req.session.user;
+        if (!currentUser)
+            return res.status(405).send('Must be logged in to do this');
+        const parseUpdatedUser = (0, parseUserData_1.toUpdateUserEntry)(req.body);
+        const updatedUser = await (0, userQuery_1.updateUser)(currentUser.id, parseUpdatedUser.email, parseUpdatedUser.name);
+        return res.status(200).send(updatedUser);
+    }
+    catch (err) {
+        const error = (0, parsingHelpers_1.parseError)(err);
+        return res.status(400).send(error);
+    }
 });
