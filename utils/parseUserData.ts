@@ -1,4 +1,4 @@
-import { CreateNewUser, UserLogin } from '../src/types/types';
+import { CreateNewUser, UpdateUserRegular, UserLogin } from '../src/types/types';
 import { parseToString } from './parsingHelpers';
 
 const toNewUserEntry = (entry: unknown): CreateNewUser => {
@@ -39,4 +39,26 @@ const toUserLoginEntry = (entry: unknown): UserLogin => {
   throw new Error('Invalid login input or some fields might be missing');
 };
 
-export { toNewUserEntry, toUserLoginEntry };
+const toUpdateUserEntry = (entry: unknown): UpdateUserRegular => {
+  if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
+
+  if (
+    'email' in entry &&
+    'name' in entry
+  ) {
+    const updatedUser: UpdateUserRegular = {
+      email: parseToString(entry.email),
+      name: parseToString(entry.name)
+    };
+
+    return updatedUser;
+  }
+
+  throw new Error('Invalid login input or some fields might be missing');
+};
+
+export {
+  toNewUserEntry,
+  toUserLoginEntry,
+  toUpdateUserEntry
+};

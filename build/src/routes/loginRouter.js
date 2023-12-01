@@ -16,7 +16,7 @@ loginrouter.post('/', async (req, res) => {
     try {
         const { email, password } = (0, parseUserData_1.toUserLoginEntry)(req.body);
         const session = await (0, sessionQuery_1.getSession)(req.sessionID);
-        console.log(session);
+        // TODO: redirect the user to the home page if logged in
         if (session)
             return res.status(400).send('Already logged in');
         const user = await (0, userQuery_1.getUser)(email);

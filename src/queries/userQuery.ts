@@ -26,7 +26,6 @@ const getUser = async (email: string) => {
 };
 
 const insertUser = async (user: NewUser) => {
-  console.log(user);
   try {
     return await db.insertInto('users')
       .values(user)
@@ -38,8 +37,39 @@ const insertUser = async (user: NewUser) => {
   }
 };
 
+const updateUser = async (id: string, email: string, name: string) => {
+  try {
+    return await db.updateTable('users')
+      .set({
+        name,
+        email
+      })
+      .where('user_id', '=', id)
+      .returningAll()
+      .executeTakeFirst();
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
+const getAdmin = async (id: string) => {
+  try {
+    return await db.selectFrom('users')
+      .where('user_id', '=', id)
+      .where('admin', '=', true)
+      .selectAll()
+      .execute();
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
 export {
   getUsers,
   getUser,
-  insertUser
+  insertUser,
+  updateUser,
+  getAdmin,
 };

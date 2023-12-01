@@ -40,3 +40,9 @@ session(id: primaryKey, hashed_sessionid)
 cookies(id: primaryKey, userId: foreignKey, cookie)
 
 blacklist(id: primaryKey, userId: foreignKey, cookie)
+
+admin route
+  admin should be able to update users through /admin/:id
+  admin can disable users
+  admin can delete users
+  admin can make other admins

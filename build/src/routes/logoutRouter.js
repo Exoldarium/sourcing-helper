@@ -9,7 +9,6 @@ const parsingHelpers_1 = require("../../utils/parsingHelpers");
 const sessionQuery_1 = require("../queries/sessionQuery");
 const logoutRouter = express_1.default.Router();
 exports.logoutRouter = logoutRouter;
-// TODO: create a custom session table
 logoutRouter.get('/', async (req, res) => {
     const user = req.session.user;
     if (!user)

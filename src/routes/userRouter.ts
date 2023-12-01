@@ -1,20 +1,12 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
-import { getUsers, insertUser } from '../queries/userQuery';
+import { getUsers, insertUser, updateUser } from '../queries/userQuery';
 import { NewUser } from '../types/types';
 import { getDate } from '../../utils/helpers';
 import { parseError } from '../../utils/parsingHelpers';
-import { toNewUserEntry } from '../../utils/parseUserData';
+import { toNewUserEntry, toUpdateUserEntry } from '../../utils/parseUserData';
 import { getSession } from '../queries/sessionQuery';
-
-// TODO:
-// the user session should be set to active while they are logged in
-// if the cookie is expired and they are still active, refuse login
-// revoked users should have their sessionid blacklisted (it should be hashed)
-
-// https://gist.github.com/productioncoder/3d2f27753b5a952f23383334a25c2ed2
-// https://levelup.gitconnected.com/expressjs-postgresql-session-store-ec987146f706
 
 const userRouter = express.Router();
 
@@ -22,9 +14,8 @@ userRouter.get('/', async (req, res) => {
   try {
     const user = req.session.user;
     const session = await getSession(req.sessionID);
-    console.log(session);
 
-    if (!user || !session) return res.status(404).send('Must be logged in to access this');
+    if (!user || !session) return res.status(405).send('Must be logged in to access this');
 
     const allUsers = await getUsers();
 
@@ -60,6 +51,24 @@ userRouter.post('/create', async (req, res) => {
     const newUserRes = await insertUser(newUser);
 
     return res.status(201).json(newUserRes);
+  } catch (err) {
+    const error = parseError(err);
+
+    return res.status(400).send(error);
+  }
+});
+
+userRouter.put('/:id', async (req, res) => {
+  try {
+    const currentUser = req.session.user;
+
+    if (!currentUser) return res.status(405).send('Must be logged in to do this');
+
+    const parseUpdatedUser = toUpdateUserEntry(req.body);
+
+    const updatedUser = await updateUser(currentUser.id, parseUpdatedUser.email, parseUpdatedUser.name);
+
+    return res.status(200).send(updatedUser);
   } catch (err) {
     const error = parseError(err);
 

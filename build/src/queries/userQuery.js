@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertUser = exports.getUser = exports.getUsers = void 0;
+exports.getAdmin = exports.updateUser = exports.insertUser = exports.getUser = exports.getUsers = void 0;
 const parsingHelpers_1 = require("../../utils/parsingHelpers");
 const db_1 = require("../db");
 const getUsers = async () => {
@@ -29,7 +29,6 @@ const getUser = async (email) => {
 };
 exports.getUser = getUser;
 const insertUser = async (user) => {
-    console.log(user);
     try {
         return await db_1.db.insertInto('users')
             .values(user)
@@ -42,3 +41,33 @@ const insertUser = async (user) => {
     }
 };
 exports.insertUser = insertUser;
+const updateUser = async (id, email, name) => {
+    try {
+        return await db_1.db.updateTable('users')
+            .set({
+            name,
+            email
+        })
+            .where('user_id', '=', id)
+            .executeTakeFirst();
+    }
+    catch (err) {
+        const error = (0, parsingHelpers_1.parseError)(err);
+        throw Error(error);
+    }
+};
+exports.updateUser = updateUser;
+const getAdmin = async (id) => {
+    try {
+        return await db_1.db.selectFrom('users')
+            .where('user_id', '=', id)
+            .where('admin', '=', true)
+            .selectAll()
+            .execute();
+    }
+    catch (err) {
+        const error = (0, parsingHelpers_1.parseError)(err);
+        throw Error(error);
+    }
+};
+exports.getAdmin = getAdmin;
