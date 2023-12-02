@@ -18,8 +18,9 @@ loginrouter.post('/', async (req, res) => {
         if (req.session.user)
             return res.status(400).send('Already logged in');
         const user = await (0, userQuery_1.getUser)(email);
+        // TODO: create blacklist table that holds user ids and block login
         const validatePassword = user === undefined ? false : await bcrypt_1.default.compare(password, user.password_hash);
-        if (!(user && validatePassword))
+        if (!(user && validatePassword) || user.disabled)
             return res.status(400).send('Invalid e-mail or password');
         const loggedUser = {
             email: user.email,
@@ -27,6 +28,7 @@ loginrouter.post('/', async (req, res) => {
         };
         req.session.user = loggedUser;
         req.session.admin = user.admin;
+        req.session.disabled = user.disabled;
         return res.status(200).send(loggedUser);
     }
     catch (err) {

@@ -12,8 +12,9 @@ const userRouter = express.Router();
 userRouter.get('/', async (req, res) => {
   try {
     const currentUser = req.session.user;
+    const userDisabled = req.session.disabled;
 
-    if (!currentUser) return res.status(405).send('Must be logged in to access this');
+    if (!currentUser || userDisabled) return res.status(405).send('Must be logged in to access this');
 
     const allUsers = await getUsers();
 
@@ -59,8 +60,9 @@ userRouter.post('/create', async (req, res) => {
 userRouter.put('/:id', async (req, res) => {
   try {
     const currentUser = req.session.user;
+    const userDisabled = req.session.disabled;
 
-    if (!(currentUser && currentUser.id === req.params.id)) return res.status(403).send('Not allowed');
+    if (!(currentUser && currentUser.id === req.params.id) || userDisabled) return res.status(403).send('Not allowed');
 
     const parsedUserToUpdate = toUpdateUserEntry(req.body);
 

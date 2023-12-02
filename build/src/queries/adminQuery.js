@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAdmin = exports.updateUserAdmin = exports.getUserAdmin = exports.getUsersAdmin = void 0;
+exports.deleteUser = exports.checkAdmin = exports.updateUserAdmin = exports.getUserAdmin = exports.getUsersAdmin = void 0;
 const parsingHelpers_1 = require("../../utils/parsingHelpers");
 const db_1 = require("../db");
 const checkAdmin = async (id) => {
@@ -62,3 +62,15 @@ const updateUserAdmin = async (user, id) => {
     }
 };
 exports.updateUserAdmin = updateUserAdmin;
+const deleteUser = async (id) => {
+    try {
+        return await db_1.db.deleteFrom('users')
+            .where('user_id', '=', id)
+            .executeTakeFirst();
+    }
+    catch (err) {
+        const error = (0, parsingHelpers_1.parseError)(err);
+        throw Error(error);
+    }
+};
+exports.deleteUser = deleteUser;

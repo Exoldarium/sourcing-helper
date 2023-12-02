@@ -1,9 +1,9 @@
-PUT http://localhost:53005/api/admin/user/8af6c55e-3021-4231-97ea-1a553a0d683d
+PUT http://localhost:53005/api/admin/user/a4a49664-6211-42d5-b71f-fc53b4bf1555
 Content-Type: application/json
 
 {
-  "email": "dusan@gmail.com",
-  "name": "Dusan",
-  "admin": true,
-  "disabled": false
+  "email": "test@gmail.com",
+  "name": "Testing",
+  "admin": false,
+  "disabled": true
 }

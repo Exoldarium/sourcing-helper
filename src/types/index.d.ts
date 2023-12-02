@@ -10,5 +10,6 @@ declare module 'express-session' {
       id: string;
     };
     admin: boolean;
+    disabled: boolean;
   }
 }

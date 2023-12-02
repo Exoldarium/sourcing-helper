@@ -16,7 +16,8 @@ exports.userRouter = userRouter;
 userRouter.get('/', async (req, res) => {
     try {
         const currentUser = req.session.user;
-        if (!currentUser)
+        const userDisabled = req.session.disabled;
+        if (!currentUser || userDisabled)
             return res.status(405).send('Must be logged in to access this');
         const allUsers = await (0, userQuery_1.getUsers)();
         return res.status(200).json(allUsers);
@@ -54,7 +55,8 @@ userRouter.post('/create', async (req, res) => {
 userRouter.put('/:id', async (req, res) => {
     try {
         const currentUser = req.session.user;
-        if (!(currentUser && currentUser.id === req.params.id))
+        const userDisabled = req.session.disabled;
+        if (!(currentUser && currentUser.id === req.params.id) || userDisabled)
             return res.status(403).send('Not allowed');
         const parsedUserToUpdate = (0, parseUserData_1.toUpdateUserEntry)(req.body);
         const updatedUser = await (0, userQuery_1.updateUser)(parsedUserToUpdate, currentUser.id);

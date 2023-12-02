@@ -8,9 +8,11 @@ const adminRouter = express.Router();
 adminRouter.get('/users', async (req, res) => {
   try {
     const currentUser = req.session.user;
+    console.log(currentUser);
     const admin = req.session.admin;
+    const userDisabled = req.session.disabled;
 
-    if (!(currentUser && admin)) return res.status(403).send('Not allowed');
+    if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
 
     const allUsers = await getUsersAdmin();
 
@@ -26,8 +28,9 @@ adminRouter.put('/user/:id', async (req, res) => {
   try {
     const currentUser = req.session.user;
     const admin = req.session.admin;
+    const userDisabled = req.session.disabled;
 
-    if (!(currentUser && admin)) return res.status(403).send('Not allowed');
+    if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
 
     const findUser = await getUserAdmin(req.params.id);
     const parsedUser = toUpdateUserEntryAdmin(req.body);
@@ -48,8 +51,9 @@ adminRouter.delete('/user/:id', async (req, res) => {
   try {
     const currentUser = req.session.user;
     const admin = req.session.admin;
+    const userDisabled = req.session.disabled;
 
-    if (!(currentUser && admin)) return res.status(403).send('Not allowed');
+    if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
 
     const findUser = await getUserAdmin(req.params.id);
 
