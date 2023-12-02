@@ -1,0 +1,1 @@
+DELETE http://localhost:53005/api/admin/user/9164fa1b-4cd5-409c-80ce-804e517962eb

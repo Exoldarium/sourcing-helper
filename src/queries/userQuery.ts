@@ -1,6 +1,6 @@
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { NewUser } from '../types/types';
+import { NewUser, UpdateUserRegular } from '../types/types';
 
 const getUsers = async () => {
   try {
@@ -37,7 +37,9 @@ const insertUser = async (user: NewUser) => {
   }
 };
 
-const updateUser = async (id: string, email: string, name: string) => {
+const updateUser = async (user: UpdateUserRegular, id: string) => {
+  const { name, email } = user;
+
   try {
     return await db.updateTable('users')
       .set({
@@ -53,23 +55,9 @@ const updateUser = async (id: string, email: string, name: string) => {
   }
 };
 
-const getAdmin = async (id: string) => {
-  try {
-    return await db.selectFrom('users')
-      .where('user_id', '=', id)
-      .where('admin', '=', true)
-      .selectAll()
-      .execute();
-  } catch (err) {
-    const error = parseError(err);
-    throw Error(error);
-  }
-};
-
 export {
   getUsers,
   getUser,
   insertUser,
-  updateUser,
-  getAdmin,
+  updateUser
 };

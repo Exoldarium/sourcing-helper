@@ -1,7 +1,7 @@
-PUT http://localhost:53005/api/users/8af6c55e-3021-4231-97ea-1a553a0d683d
+PUT http://localhost:53005/api/users/a66b5712-8bce-4918-aeb2-d8061e09bc7d
 Content-Type: application/json
 
 {
-  "name": "Dusan",
-  "email": "dusan@gmail.com"
+  "name": "Tarn",
+  "email": "tarn@gmail.com"
 }

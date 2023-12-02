@@ -3,18 +3,15 @@ import bcrypt from 'bcrypt';
 import { toUserLoginEntry } from '../../utils/parseUserData';
 import { getUser } from '../queries/userQuery';
 import { parseError } from '../../utils/parsingHelpers';
-import { getSession } from '../queries/sessionQuery';
 
 const loginrouter = express.Router();
 
 loginrouter.post('/', async (req, res) => {
   try {
     const { email, password } = toUserLoginEntry(req.body);
+    console.log(email);
 
-    const session = await getSession(req.sessionID);
-
-    // TODO: remove session store, no point in persisting session in different browsers
-    if (session) return res.status(400).send('Already logged in');
+    if (req.session.user) return res.status(400).send('Already logged in');
 
     const user = await getUser(email);
 
@@ -28,6 +25,7 @@ loginrouter.post('/', async (req, res) => {
     };
 
     req.session.user = loggedUser;
+    req.session.admin = user.admin;
 
     return res.status(200).send(loggedUser);
   } catch (err) {

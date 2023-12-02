@@ -1,5 +1,5 @@
-import { CreateNewUser, UpdateUserRegular, UserLogin } from '../src/types/types';
-import { parseToString } from './parsingHelpers';
+import { CreateNewUser, UpdateUserAdmin, UpdateUserRegular, UserLogin } from '../src/types/types';
+import { parseToBool, parseToString } from './parsingHelpers';
 
 const toNewUserEntry = (entry: unknown): CreateNewUser => {
   if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
@@ -57,8 +57,31 @@ const toUpdateUserEntry = (entry: unknown): UpdateUserRegular => {
   throw new Error('Invalid login input or some fields might be missing');
 };
 
+const toUpdateUserEntryAdmin = (entry: unknown): UpdateUserAdmin => {
+  if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
+
+  if (
+    'email' in entry &&
+    'name' in entry &&
+    'admin' in entry &&
+    'disabled' in entry
+  ) {
+    const updatedUser: UpdateUserAdmin = {
+      email: parseToString(entry.email),
+      name: parseToString(entry.name),
+      admin: parseToBool(entry.admin),
+      disabled: parseToBool(entry.disabled)
+    };
+
+    return updatedUser;
+  }
+
+  throw new Error('Invalid login input or some fields might be missing');
+};
+
 export {
   toNewUserEntry,
   toUserLoginEntry,
-  toUpdateUserEntry
+  toUpdateUserEntry,
+  toUpdateUserEntryAdmin
 };

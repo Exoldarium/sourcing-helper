@@ -11,9 +11,9 @@ const userRouter = express.Router();
 
 userRouter.get('/', async (req, res) => {
   try {
-    const user = req.session.user;
+    const currentUser = req.session.user;
 
-    if (!user) return res.status(405).send('Must be logged in to access this');
+    if (!currentUser) return res.status(405).send('Must be logged in to access this');
 
     const allUsers = await getUsers();
 
@@ -46,9 +46,9 @@ userRouter.post('/create', async (req, res) => {
       created_on: getDate()
     };
 
-    const newUserRes = await insertUser(newUser);
+    const createdUser = await insertUser(newUser);
 
-    return res.status(201).json(newUserRes);
+    return res.status(201).json(createdUser);
   } catch (err) {
     const error = parseError(err);
 
@@ -60,11 +60,11 @@ userRouter.put('/:id', async (req, res) => {
   try {
     const currentUser = req.session.user;
 
-    if (!currentUser) return res.status(405).send('Must be logged in to do this');
+    if (!(currentUser && currentUser.id === req.params.id)) return res.status(403).send('Not allowed');
 
-    const parseUpdatedUser = toUpdateUserEntry(req.body);
+    const parsedUserToUpdate = toUpdateUserEntry(req.body);
 
-    const updatedUser = await updateUser(currentUser.id, parseUpdatedUser.email, parseUpdatedUser.name);
+    const updatedUser = await updateUser(parsedUserToUpdate, currentUser.id);
 
     return res.status(200).send(updatedUser);
   } catch (err) {

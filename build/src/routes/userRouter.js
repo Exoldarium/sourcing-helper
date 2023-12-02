@@ -11,14 +11,12 @@ const userQuery_1 = require("../queries/userQuery");
 const helpers_1 = require("../../utils/helpers");
 const parsingHelpers_1 = require("../../utils/parsingHelpers");
 const parseUserData_1 = require("../../utils/parseUserData");
-const sessionQuery_1 = require("../queries/sessionQuery");
 const userRouter = express_1.default.Router();
 exports.userRouter = userRouter;
 userRouter.get('/', async (req, res) => {
     try {
-        const user = req.session.user;
-        const session = await (0, sessionQuery_1.getSession)(req.sessionID);
-        if (!user || !session)
+        const currentUser = req.session.user;
+        if (!currentUser)
             return res.status(405).send('Must be logged in to access this');
         const allUsers = await (0, userQuery_1.getUsers)();
         return res.status(200).json(allUsers);
@@ -45,8 +43,8 @@ userRouter.post('/create', async (req, res) => {
             admin: false,
             created_on: (0, helpers_1.getDate)()
         };
-        const newUserRes = await (0, userQuery_1.insertUser)(newUser);
-        return res.status(201).json(newUserRes);
+        const createdUser = await (0, userQuery_1.insertUser)(newUser);
+        return res.status(201).json(createdUser);
     }
     catch (err) {
         const error = (0, parsingHelpers_1.parseError)(err);
@@ -56,10 +54,10 @@ userRouter.post('/create', async (req, res) => {
 userRouter.put('/:id', async (req, res) => {
     try {
         const currentUser = req.session.user;
-        if (!currentUser)
-            return res.status(405).send('Must be logged in to do this');
-        const parseUpdatedUser = (0, parseUserData_1.toUpdateUserEntry)(req.body);
-        const updatedUser = await (0, userQuery_1.updateUser)(currentUser.id, parseUpdatedUser.email, parseUpdatedUser.name);
+        if (!(currentUser && currentUser.id === req.params.id))
+            return res.status(403).send('Not allowed');
+        const parsedUserToUpdate = (0, parseUserData_1.toUpdateUserEntry)(req.body);
+        const updatedUser = await (0, userQuery_1.updateUser)(parsedUserToUpdate, currentUser.id);
         return res.status(200).send(updatedUser);
     }
     catch (err) {

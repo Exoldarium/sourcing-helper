@@ -1,5 +1,4 @@
 import {
-  Generated,
   Insertable,
   Selectable,
   Updateable
@@ -8,7 +7,6 @@ import {
 // DATABASE SCHEMA
 export interface SourcingHelperDatabase {
   users: UserTable;
-  session: SessionTable;
 }
 
 // USER SCHEMA
@@ -36,15 +34,6 @@ export type UserLogin = Omit<CreateNewUser, 'name'>;
 export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UpdateUser = Updateable<UserTable>;
-
-// SESSION SCHEMA
-export interface SessionTable {
-  sid: Generated<string>;
-  sess: Generated<JsonWebKey>;
-  expire: Generated<number>;
-}
-
-export type Session = Selectable<SessionTable>;
 
 // ROLE SCHEMA
 export interface RoleTotalTable {

@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.insertUser = exports.getUser = exports.getUsers = void 0;
+exports.checkAdmin = exports.updateUserAdmin = exports.getUserAdmin = exports.getUsersAdmin = void 0;
 const parsingHelpers_1 = require("../../utils/parsingHelpers");
 const db_1 = require("../db");
-const getUsers = async () => {
+const checkAdmin = async (id) => {
     try {
         return await db_1.db.selectFrom('users')
-            .select(['email', 'user_id', 'name'])
+            .where('user_id', '=', id)
+            .where('admin', '=', true)
+            .selectAll()
             .execute();
     }
     catch (err) {
@@ -14,11 +16,23 @@ const getUsers = async () => {
         throw Error(error);
     }
 };
-exports.getUsers = getUsers;
-const getUser = async (email) => {
+exports.checkAdmin = checkAdmin;
+const getUsersAdmin = async () => {
     try {
         return await db_1.db.selectFrom('users')
-            .where('email', '=', email)
+            .selectAll('users')
+            .execute();
+    }
+    catch (err) {
+        const error = (0, parsingHelpers_1.parseError)(err);
+        throw Error(error);
+    }
+};
+exports.getUsersAdmin = getUsersAdmin;
+const getUserAdmin = async (id) => {
+    try {
+        return await db_1.db.selectFrom('users')
+            .where('user_id', '=', id)
             .selectAll()
             .executeTakeFirst();
     }
@@ -27,27 +41,16 @@ const getUser = async (email) => {
         throw Error(error);
     }
 };
-exports.getUser = getUser;
-const insertUser = async (user) => {
-    try {
-        return await db_1.db.insertInto('users')
-            .values(user)
-            .returningAll()
-            .execute();
-    }
-    catch (err) {
-        const error = (0, parsingHelpers_1.parseError)(err);
-        throw Error(error);
-    }
-};
-exports.insertUser = insertUser;
-const updateUser = async (user, id) => {
-    const { name, email } = user;
+exports.getUserAdmin = getUserAdmin;
+const updateUserAdmin = async (user, id) => {
+    const { name, email, disabled, admin } = user;
     try {
         return await db_1.db.updateTable('users')
             .set({
             name,
-            email
+            email,
+            admin,
+            disabled
         })
             .where('user_id', '=', id)
             .returningAll()
@@ -58,4 +61,4 @@ const updateUser = async (user, id) => {
         throw Error(error);
     }
 };
-exports.updateUser = updateUser;
+exports.updateUserAdmin = updateUserAdmin;
