@@ -2,11 +2,10 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import { toUserLoginEntry } from '../../utils/parseUserData';
 import { getUser } from '../queries/userQuery';
-import { parseError } from '../../utils/parsingHelpers';
 
 const loginrouter = express.Router();
 
-loginrouter.post('/', async (req, res) => {
+loginrouter.post('/', async (req, res, next) => {
   try {
     const { email, password } = toUserLoginEntry(req.body);
 
@@ -30,9 +29,7 @@ loginrouter.post('/', async (req, res) => {
 
     return res.status(200).send(loggedUser);
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 

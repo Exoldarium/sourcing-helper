@@ -1,36 +1,31 @@
 import express from 'express';
 import { deleteUser, getUserAdmin, getUsersAdmin, updateUserAdmin } from '../queries/adminQuery';
-import { parseError } from '../../utils/parsingHelpers';
 import { toUpdateUserEntryAdmin } from '../../utils/parseUserData';
 import { blacklistUser, getBlacklistedUsers, removeUserFromBlacklist } from '../queries/blacklistQuery';
 
 const adminRouter = express.Router();
 
-adminRouter.get('/users', async (_req, res) => {
+adminRouter.get('/users', async (_req, res, next) => {
   try {
     const allUsers = await getUsersAdmin();
 
     return res.status(200).json(allUsers);
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 
-adminRouter.get('/blacklist', async (_req, res) => {
+adminRouter.get('/blacklist', async (_req, res, next) => {
   try {
     const blacklistedUsers = await getBlacklistedUsers();
 
     return res.status(200).send(blacklistedUsers);
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 
-adminRouter.put('/user/:id', async (req, res) => {
+adminRouter.put('/user/:id', async (req, res, next) => {
   try {
     const findUser = await getUserAdmin(req.params.id);
     const parsedUser = toUpdateUserEntryAdmin(req.body);
@@ -46,13 +41,11 @@ adminRouter.put('/user/:id', async (req, res) => {
 
     return res.status(200).send(updatedUser);
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 
-adminRouter.delete('/user/:id', async (req, res) => {
+adminRouter.delete('/user/:id', async (req, res, next) => {
   try {
     const findUser = await getUserAdmin(req.params.id);
 
@@ -62,13 +55,11 @@ adminRouter.delete('/user/:id', async (req, res) => {
 
     return res.status(204).end();
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 
-adminRouter.delete('/blacklist/:id', async (req, res) => {
+adminRouter.delete('/blacklist/:id', async (req, res, next) => {
   try {
     const findUser = await getUserAdmin(req.params.id);
 
@@ -85,9 +76,7 @@ adminRouter.delete('/blacklist/:id', async (req, res) => {
 
     return res.status(200).end();
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 

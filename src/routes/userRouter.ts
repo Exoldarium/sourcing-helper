@@ -4,12 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { getUsers, insertUser, updateUser } from '../queries/userQuery';
 import { NewUser } from '../types/types';
 import { getDate } from '../../utils/helpers';
-import { parseError } from '../../utils/parsingHelpers';
 import { toNewUserEntry, toUpdateUserEntry } from '../../utils/parseUserData';
 
 const userRouter = express.Router();
 
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', async (req, res, next) => {
   try {
     const currentUser = req.session.user;
 
@@ -19,13 +18,11 @@ userRouter.get('/', async (req, res) => {
 
     return res.status(200).json(allUsers);
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 
-userRouter.post('/', async (req, res) => {
+userRouter.post('/', async (req, res, next) => {
   try {
     const parseNewUser = toNewUserEntry(req.body);
 
@@ -55,13 +52,11 @@ userRouter.post('/', async (req, res) => {
 
     return res.status(201).json(createdUserToReturn);
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 
-userRouter.put('/:id', async (req, res) => {
+userRouter.put('/:id', async (req, res, next) => {
   try {
     const currentUser = req.session.user;
 
@@ -80,9 +75,7 @@ userRouter.put('/:id', async (req, res) => {
 
     return res.status(200).send(updatedUserToReturn);
   } catch (err) {
-    const error = parseError(err);
-
-    return res.status(400).send(error);
+    return next(err);
   }
 });
 

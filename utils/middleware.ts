@@ -1,11 +1,11 @@
 import { NextFunction, Response, Request } from 'express';
 
 // READ: https://www.codeconcisely.com/posts/how-to-handle-errors-in-express-with-typescript/
-const errorMiddleware = (error: Error, res: Response, next: NextFunction) => {
+const handleError = (error: Error, res: Response, next: NextFunction) => {
   console.log(error);
 
-  if (error) {
-    return res.status(400).json(error);
+  if (error instanceof Error) {
+    return res.status(400).json({ message: error.message });
   }
 
   return next(error);
@@ -28,7 +28,7 @@ const validateAdmin = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export {
-  errorMiddleware,
+  handleError,
   validateAdmin,
   validateUser
 };
