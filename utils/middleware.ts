@@ -1,6 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
 
-// READ: https://www.codeconcisely.com/posts/how-to-handle-errors-in-express-with-typescript/
 const handleError = (error: Error, res: Response, next: NextFunction) => {
   console.log(error);
 
