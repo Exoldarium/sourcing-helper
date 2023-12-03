@@ -5,7 +5,7 @@ import { userRouter } from './src/routes/userRouter';
 import { loginrouter } from './src/routes/loginRouter';
 import { logoutRouter } from './src/routes/logoutRouter';
 import { adminRouter } from './src/routes/adminRouter';
-import { validateAdmin } from './utils/middleware';
+import { validateAdmin, validateUser } from './utils/middleware';
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use('/api/ping', (_req, res) => {
 });
 
 app.use('/api/admin', validateAdmin, adminRouter);
-app.use('/api/users', userRouter);
+app.use('/api/users', validateUser, userRouter);
 app.use('/api/login', loginrouter);
 app.use('/api/logout', logoutRouter);
 

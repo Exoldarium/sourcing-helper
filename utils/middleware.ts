@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 
-const error = (error: Error, res: Response, next: NextFunction) => {
+// READ: https://www.codeconcisely.com/posts/how-to-handle-errors-in-express-with-typescript/
+const errorMiddleware = (error: Error, res: Response, next: NextFunction) => {
   console.log(error);
 
   if (error) {
@@ -8,6 +9,12 @@ const error = (error: Error, res: Response, next: NextFunction) => {
   }
 
   return next(error);
+};
+
+const validateUser = (req: Request, res: Response, next: NextFunction) => {
+  if (req.session.disabled) return res.status(403).send('Not allowed');
+
+  return next();
 };
 
 const validateAdmin = (req: Request, res: Response, next: NextFunction) => {
@@ -21,6 +28,7 @@ const validateAdmin = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export {
-  error,
-  validateAdmin
+  errorMiddleware,
+  validateAdmin,
+  validateUser
 };
