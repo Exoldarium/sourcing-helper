@@ -1,4 +1,4 @@
-PUT http://localhost:53005/api/admin/user/a4a49664-6211-42d5-b71f-fc53b4bf1555
+PUT http://localhost:53005/api/admin/user/36a6b127-b721-4802-98a3-4998349ac57e
 Content-Type: application/json
 
 {

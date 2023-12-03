@@ -7,6 +7,7 @@ import {
 // DATABASE SCHEMA
 export interface SourcingHelperDatabase {
   users: UserTable;
+  blacklist: BlacklistTable;
 }
 
 // USER SCHEMA
@@ -34,6 +35,16 @@ export type UserLogin = Omit<CreateNewUser, 'name'>;
 export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UpdateUser = Updateable<UserTable>;
+
+// BLACKLIST SCHEMA
+export interface BlacklistTable {
+  user_id: string;
+  email: string;
+}
+
+export type Blacklist = Selectable<BlacklistTable>;
+export type NewBlacklist = Insertable<BlacklistTable>;
+export type UpdateBlacklist = Updateable<BlacklistTable>;
 
 // ROLE SCHEMA
 export interface RoleTotalTable {

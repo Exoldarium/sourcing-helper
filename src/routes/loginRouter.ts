@@ -19,7 +19,8 @@ loginrouter.post('/', async (req, res) => {
 
     const validatePassword = user === undefined ? false : await bcrypt.compare(password, user.password_hash);
 
-    if (!(user && validatePassword) || user.disabled) return res.status(400).send('Invalid e-mail or password');
+    if (!(user && validatePassword)) return res.status(400).send('Invalid e-mail or password');
+    if (user.disabled) return res.status(403).send('Not allowed');
 
     const loggedUser = {
       email: user.email,

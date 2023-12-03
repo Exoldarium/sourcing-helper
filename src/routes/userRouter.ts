@@ -26,7 +26,7 @@ userRouter.get('/', async (req, res) => {
   }
 });
 
-userRouter.post('/create', async (req, res) => {
+userRouter.post('/', async (req, res) => {
   try {
     const parseNewUser = toNewUserEntry(req.body);
 
@@ -47,9 +47,15 @@ userRouter.post('/create', async (req, res) => {
       created_on: getDate()
     };
 
-    const createdUser = await insertUser(newUser);
+    await insertUser(newUser);
 
-    return res.status(201).json(createdUser);
+    const createdUserToReturn = {
+      id: newUser.user_id,
+      email: newUser.email,
+      name: newUser.name,
+    };
+
+    return res.status(201).json(createdUserToReturn);
   } catch (err) {
     const error = parseError(err);
 
@@ -68,7 +74,13 @@ userRouter.put('/:id', async (req, res) => {
 
     const updatedUser = await updateUser(parsedUserToUpdate, currentUser.id);
 
-    return res.status(200).send(updatedUser);
+    const updatedUserToReturn = {
+      id: updatedUser?.user_id,
+      email: updatedUser?.email,
+      name: updatedUser?.name,
+    };
+
+    return res.status(200).send(updatedUserToReturn);
   } catch (err) {
     const error = parseError(err);
 
