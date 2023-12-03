@@ -6,14 +6,8 @@ import { blacklistUser, getBlacklistedUsers, removeUserFromBlacklist } from '../
 
 const adminRouter = express.Router();
 
-adminRouter.get('/users', async (req, res) => {
+adminRouter.get('/users', async (_req, res) => {
   try {
-    const currentUser = req.session.user;
-    const admin = req.session.admin;
-    const userDisabled = req.session.disabled;
-
-    if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
-
     const allUsers = await getUsersAdmin();
 
     return res.status(200).json(allUsers);
@@ -24,14 +18,8 @@ adminRouter.get('/users', async (req, res) => {
   }
 });
 
-adminRouter.get('/blacklist', async (req, res) => {
+adminRouter.get('/blacklist', async (_req, res) => {
   try {
-    const currentUser = req.session.user;
-    const admin = req.session.admin;
-    const userDisabled = req.session.disabled;
-
-    if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
-
     const blacklistedUsers = await getBlacklistedUsers();
 
     return res.status(200).send(blacklistedUsers);
@@ -44,12 +32,6 @@ adminRouter.get('/blacklist', async (req, res) => {
 
 adminRouter.put('/user/:id', async (req, res) => {
   try {
-    const currentUser = req.session.user;
-    const admin = req.session.admin;
-    const userDisabled = req.session.disabled;
-
-    if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
-
     const findUser = await getUserAdmin(req.params.id);
     const parsedUser = toUpdateUserEntryAdmin(req.body);
 
@@ -72,12 +54,6 @@ adminRouter.put('/user/:id', async (req, res) => {
 
 adminRouter.delete('/user/:id', async (req, res) => {
   try {
-    const currentUser = req.session.user;
-    const admin = req.session.admin;
-    const userDisabled = req.session.disabled;
-
-    if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
-
     const findUser = await getUserAdmin(req.params.id);
 
     if (!findUser) return res.status(404).send('User not found');
@@ -94,12 +70,6 @@ adminRouter.delete('/user/:id', async (req, res) => {
 
 adminRouter.delete('/blacklist/:id', async (req, res) => {
   try {
-    const currentUser = req.session.user;
-    const admin = req.session.admin;
-    const userDisabled = req.session.disabled;
-
-    if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
-
     const findUser = await getUserAdmin(req.params.id);
 
     if (!findUser) return res.status(404).send('User not found');

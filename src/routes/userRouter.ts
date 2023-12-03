@@ -30,9 +30,8 @@ userRouter.post('/', async (req, res) => {
   try {
     const parseNewUser = toNewUserEntry(req.body);
 
-    if (parseNewUser.password.length < 5) {
+    if (parseNewUser.password.length < 5)
       return res.status(400).send('Invalid input: password must be at least 5 characters long');
-    }
 
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(parseNewUser.password, saltRounds);
@@ -68,6 +67,7 @@ userRouter.put('/:id', async (req, res) => {
     const currentUser = req.session.user;
     const userDisabled = req.session.disabled;
 
+    // user can only update his own info
     if (!(currentUser && currentUser.id === req.params.id) || userDisabled) return res.status(403).send('Not allowed');
 
     const parsedUserToUpdate = toUpdateUserEntry(req.body);

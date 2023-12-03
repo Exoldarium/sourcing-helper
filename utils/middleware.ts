@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 
 const error = (error: Error, res: Response, next: NextFunction) => {
   console.log(error);
@@ -10,4 +10,17 @@ const error = (error: Error, res: Response, next: NextFunction) => {
   return next(error);
 };
 
-export { error };
+const validateAdmin = (req: Request, res: Response, next: NextFunction) => {
+  const currentUser = req.session.user;
+  const admin = req.session.admin;
+  const userDisabled = req.session.disabled;
+
+  if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
+
+  return next();
+};
+
+export {
+  error,
+  validateAdmin
+};

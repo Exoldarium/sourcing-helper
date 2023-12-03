@@ -5,6 +5,7 @@ import { userRouter } from './src/routes/userRouter';
 import { loginrouter } from './src/routes/loginRouter';
 import { logoutRouter } from './src/routes/logoutRouter';
 import { adminRouter } from './src/routes/adminRouter';
+import { validateAdmin } from './utils/middleware';
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use('/api/ping', (_req, res) => {
   res.send('pong');
 });
 
-app.use('/api/admin', adminRouter);
+app.use('/api/admin', validateAdmin, adminRouter);
 app.use('/api/users', userRouter);
 app.use('/api/login', loginrouter);
 app.use('/api/logout', logoutRouter);
