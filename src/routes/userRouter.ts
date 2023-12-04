@@ -6,6 +6,8 @@ import { NewUser } from '../types/types';
 import { getDate } from '../../utils/helpers';
 import { toNewUserEntry, toUpdateUserEntry } from '../../utils/parseUserData';
 
+// TODO: get specific user, both for admin and normal users
+
 const userRouter = express.Router();
 
 userRouter.get('/', async (req, res, next) => {

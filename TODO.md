@@ -2,10 +2,13 @@
 
 user (id: primaryKey, name, password, admin)
 
+Role permissions can be added when the role is created (an id that can be passed to the array)
+When the role is created all the values should default to 0
+
 positionTotal (
   id: primaryKey, 
   userId: foreignKey, 
-  name, 
+  name (unique), 
   dateAdded, 
   permission(creator, admin, users)
   invitation,
