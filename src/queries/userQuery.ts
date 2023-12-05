@@ -1,13 +1,15 @@
-import { toExistingUserEntry } from '../../utils/parseUserData';
+import { toExistingUserEntry, toRegularUserentry } from '../../utils/parseUserData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { NewUser, UpdateUserRegular, User, UserRegular } from '../types/types';
 
 const getUsers = async (): Promise<UserRegular[]> => {
   try {
-    return await db.selectFrom('users')
+    const users = await db.selectFrom('users')
       .select(['email', 'user_id', 'name'])
       .execute();
+
+    return users.map(toRegularUserentry);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
@@ -30,10 +32,11 @@ const getUserByEmail = async (email: string): Promise<User> => {
 
 const insertUser = async (user: NewUser): Promise<User[]> => {
   try {
-    return await db.insertInto('users')
+    const users = await db.insertInto('users')
       .values(user)
       .returningAll()
       .execute();
+    return users.map(toExistingUserEntry);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

@@ -1,19 +1,22 @@
+import { toExistingRoleEntry } from '../../utils/parseRoleData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { CreateNewRole, NewRole, Role } from '../types/types';
 
 const getAllRoles = async (): Promise<Role[]> => {
   try {
-    return await db.selectFrom('roles_total')
+    const roles = await db.selectFrom('roles_total')
       .selectAll()
       .execute();
+
+    return roles.map(toExistingRoleEntry);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const createRole = async (role: CreateNewRole): Promise<NewRole[]> => {
+const createRole = async (role: CreateNewRole): Promise<Role[]> => {
   const roleToInsert: NewRole = {
     ...role,
     invitation: 0,
@@ -28,10 +31,12 @@ const createRole = async (role: CreateNewRole): Promise<NewRole[]> => {
   };
 
   try {
-    return await db.insertInto('roles_total')
+    const roles = await db.insertInto('roles_total')
       .values(roleToInsert)
       .returningAll()
       .execute();
+
+    return roles.map(toExistingRoleEntry);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

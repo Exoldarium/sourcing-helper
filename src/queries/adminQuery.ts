@@ -5,9 +5,11 @@ import { UpdateUserAdmin, User } from '../types/types';
 
 const getUsersAdmin = async (): Promise<User[]> => {
   try {
-    return await db.selectFrom('users')
+    const users = await db.selectFrom('users')
       .selectAll('users')
       .execute();
+
+    return users.map(toExistingUserEntry);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

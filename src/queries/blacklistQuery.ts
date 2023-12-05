@@ -1,27 +1,32 @@
+import { toExistingBlacklistEntry } from '../../utils/parseBlacklistData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { Blacklist, NewBlacklist } from '../types/types';
+import { Blacklist } from '../types/types';
 
 const getBlacklistedUsers = async (): Promise<Blacklist[]> => {
   try {
-    return await db.selectFrom('blacklist')
+    const blacklist = await db.selectFrom('blacklist')
       .selectAll('blacklist')
       .execute();
+
+    return blacklist.map(toExistingBlacklistEntry);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const blacklistUser = async (id: string, email: string): Promise<NewBlacklist[]> => {
+const blacklistUser = async (id: string, email: string): Promise<Blacklist[]> => {
   try {
-    return await db.insertInto('blacklist')
+    const blacklist = await db.insertInto('blacklist')
       .values({
         user_id: id,
         email,
       })
       .returningAll()
       .execute();
+
+    return blacklist.map(toExistingBlacklistEntry);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

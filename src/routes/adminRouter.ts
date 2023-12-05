@@ -6,11 +6,23 @@ import { User } from '../types/types';
 
 const adminRouter = express.Router();
 
+// TODO: get specific blacklisted user
+
 adminRouter.get('/users', async (_req, res, next) => {
   try {
     const allUsers = await getUsersAdmin();
 
-    return res.status(200).json(allUsers);
+    return res.status(200).send(allUsers);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+adminRouter.get('/users/:id', async (req, res, next) => {
+  try {
+    const user = await getUserAdmin(req.params.id);
+
+    return res.status(200).send(user);
   } catch (err) {
     return next(err);
   }
@@ -26,7 +38,7 @@ adminRouter.get('/blacklist', async (_req, res, next) => {
   }
 });
 
-adminRouter.put('/user/:id', async (req, res, next) => {
+adminRouter.put('/users/:id', async (req, res, next) => {
   try {
     const findUser = await getUserAdmin(req.params.id);
     const parsedUser = toUpdateUserEntryAdmin(req.body);
@@ -44,7 +56,7 @@ adminRouter.put('/user/:id', async (req, res, next) => {
   }
 });
 
-adminRouter.delete('/user/:id', async (req, res, next) => {
+adminRouter.delete('/users/:id', async (req, res, next) => {
   try {
     const findUser = await getUserAdmin(req.params.id);
 

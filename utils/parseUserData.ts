@@ -1,4 +1,4 @@
-import { CreateNewUser, UpdateUserAdmin, UpdateUserRegular, User, UserLogin } from '../src/types/types';
+import { CreateNewUser, UpdateUserAdmin, UpdateUserRegular, User, UserLogin, UserRegular } from '../src/types/types';
 import { parseDate, parseToBool, parseToString } from './parsingHelpers';
 
 const toNewUserEntry = (entry: unknown): CreateNewUser => {
@@ -79,6 +79,7 @@ const toUpdateUserEntryAdmin = (entry: unknown): UpdateUserAdmin => {
   throw new Error('Invalid user input or some fields might be missing');
 };
 
+// existing user is the user with all available properties
 const toExistingUserEntry = (entry: unknown): User => {
   if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
 
@@ -107,10 +108,32 @@ const toExistingUserEntry = (entry: unknown): User => {
   throw new Error('Invalid user input or some fields might be missing');
 };
 
+// regular user values are visible for non-admin users
+const toRegularUserentry = (entry: unknown): UserRegular => {
+  if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
+
+  if (
+    'user_id' in entry &&
+    'email' in entry &&
+    'name' in entry
+  ) {
+    const updatedUser: UserRegular = {
+      user_id: parseToString(entry.user_id),
+      email: parseToString(entry.email),
+      name: parseToString(entry.name),
+    };
+
+    return updatedUser;
+  }
+
+  throw new Error('Invalid user input or some fields might be missing');
+};
+
 export {
   toNewUserEntry,
   toExistingUserEntry,
   toUserLoginEntry,
   toUpdateUserEntry,
-  toUpdateUserEntryAdmin
+  toUpdateUserEntryAdmin,
+  toRegularUserentry
 };
