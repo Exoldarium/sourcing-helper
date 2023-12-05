@@ -1,5 +1,4 @@
 import {
-  Generated,
   Insertable,
   Selectable,
   Updateable
@@ -29,13 +28,13 @@ export interface CreateNewUser {
   password: string;
 }
 
-
 export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UpdateUser = Updateable<UserTable>;
 
 export type UpdateUserAdmin = Omit<UpdateUser, 'user_id' | 'password_hash' | 'created_on'>;
 export type UpdateUserRegular = Pick<UpdateUser, 'email' | 'name'>;
+export type UserRegular = Pick<User, 'email' | 'user_id' | 'name'>;
 
 export type UserLogin = Omit<CreateNewUser, 'name'>;
 
@@ -54,7 +53,7 @@ export interface RoleTotalTable {
   role_id: string;
   user_id: string;
   name: string;
-  created_on: Generated<string>;
+  created_on: string;
   permission: string[],
   invitation: number;
   initial_contact: number;

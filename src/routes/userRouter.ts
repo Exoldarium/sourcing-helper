@@ -70,9 +70,9 @@ userRouter.put('/:id', async (req, res, next) => {
     const updatedUser = await updateUser(parsedUserToUpdate, currentUser.id);
 
     const updatedUserToReturn = {
-      id: updatedUser?.user_id,
-      email: updatedUser?.email,
-      name: updatedUser?.name,
+      id: updatedUser.user_id,
+      email: updatedUser.email,
+      name: updatedUser.name,
     };
 
     return res.status(200).send(updatedUserToReturn);

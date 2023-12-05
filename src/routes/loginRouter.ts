@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import { toUserLoginEntry } from '../../utils/parseUserData';
-import { getUser } from '../queries/userQuery';
+import { getUserByEmail } from '../queries/userQuery';
 
 const loginrouter = express.Router();
 
@@ -11,11 +11,11 @@ loginrouter.post('/', async (req, res, next) => {
 
     if (req.session.user) return res.status(400).send('Already logged in');
 
-    const user = await getUser(email);
+    const user = await getUserByEmail(email);
 
-    const validatePassword = user === undefined ? false : await bcrypt.compare(password, user.password_hash);
+    const validatePassword = await bcrypt.compare(password, user.password_hash);
 
-    if (!(user && validatePassword)) return res.status(400).send('Invalid e-mail or password');
+    if (!validatePassword) return res.status(400).send('Invalid e-mail or password');
     if (user.disabled) return res.status(403).send('Not allowed'); // if user is blacklisted, prohibit login
 
     const loggedUser = {

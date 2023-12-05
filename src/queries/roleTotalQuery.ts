@@ -1,8 +1,8 @@
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { CreateNewRole } from '../types/types';
+import { CreateNewRole, NewRole, Role } from '../types/types';
 
-const getAllRoles = async () => {
+const getAllRoles = async (): Promise<Role[]> => {
   try {
     return await db.selectFrom('roles_total')
       .selectAll()
@@ -13,8 +13,8 @@ const getAllRoles = async () => {
   }
 };
 
-const createRole = async (role: CreateNewRole) => {
-  const roleToInsert = {
+const createRole = async (role: CreateNewRole): Promise<NewRole[]> => {
+  const roleToInsert: NewRole = {
     ...role,
     invitation: 0,
     initial_contact: 0,

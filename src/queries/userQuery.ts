@@ -1,8 +1,9 @@
+import { toExistingUserEntry } from '../../utils/parseUserData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { NewUser, UpdateUserRegular } from '../types/types';
+import { NewUser, UpdateUserRegular, User, UserRegular } from '../types/types';
 
-const getUsers = async () => {
+const getUsers = async (): Promise<UserRegular[]> => {
   try {
     return await db.selectFrom('users')
       .select(['email', 'user_id', 'name'])
@@ -13,19 +14,24 @@ const getUsers = async () => {
   }
 };
 
-const getUser = async (email: string) => {
+const getUserByEmail = async (email: string): Promise<User> => {
   try {
-    return await db.selectFrom('users')
+    const user = await db.selectFrom('users')
       .where('email', '=', email)
       .selectAll()
       .executeTakeFirst();
+
+    console.log(user?.created_on);
+
+    const parsedUser = toExistingUserEntry(user);
+    return parsedUser;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const insertUser = async (user: NewUser) => {
+const insertUser = async (user: NewUser): Promise<User[]> => {
   try {
     return await db.insertInto('users')
       .values(user)
@@ -37,11 +43,11 @@ const insertUser = async (user: NewUser) => {
   }
 };
 
-const updateUser = async (user: UpdateUserRegular, id: string) => {
+const updateUser = async (user: UpdateUserRegular, id: string): Promise<User> => {
   const { name, email } = user;
 
   try {
-    return await db.updateTable('users')
+    const updatedUser = await db.updateTable('users')
       .set({
         name,
         email
@@ -49,6 +55,8 @@ const updateUser = async (user: UpdateUserRegular, id: string) => {
       .where('user_id', '=', id)
       .returningAll()
       .executeTakeFirst();
+
+    return toExistingUserEntry(updatedUser);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
@@ -57,7 +65,7 @@ const updateUser = async (user: UpdateUserRegular, id: string) => {
 
 export {
   getUsers,
-  getUser,
+  getUserByEmail,
   insertUser,
   updateUser
 };
