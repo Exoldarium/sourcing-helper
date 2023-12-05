@@ -19,7 +19,7 @@ export interface UserTable {
   password_hash: string;
   admin: boolean;
   disabled: boolean;
-  created_on: string | number | Date;
+  created_on: string;
 }
 
 export interface CreateNewUser {

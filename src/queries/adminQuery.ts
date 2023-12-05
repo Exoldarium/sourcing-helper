@@ -1,21 +1,9 @@
+import { toExistingUserEntry } from '../../utils/parseUserData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { UpdateUserAdmin } from '../types/types';
+import { UpdateUserAdmin, User } from '../types/types';
 
-const checkAdmin = async (id: string) => {
-  try {
-    return await db.selectFrom('users')
-      .where('user_id', '=', id)
-      .where('admin', '=', true)
-      .selectAll()
-      .execute();
-  } catch (err) {
-    const error = parseError(err);
-    throw Error(error);
-  }
-};
-
-const getUsersAdmin = async () => {
+const getUsersAdmin = async (): Promise<User[]> => {
   try {
     return await db.selectFrom('users')
       .selectAll('users')
@@ -26,23 +14,25 @@ const getUsersAdmin = async () => {
   }
 };
 
-const getUserAdmin = async (id: string) => {
+const getUserAdmin = async (id: string): Promise<User> => {
   try {
-    return await db.selectFrom('users')
+    const user = await db.selectFrom('users')
       .where('user_id', '=', id)
       .selectAll()
       .executeTakeFirst();
+
+    return toExistingUserEntry(user);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const updateUserAdmin = async (user: UpdateUserAdmin, id: string) => {
+const updateUserAdmin = async (user: UpdateUserAdmin, id: string): Promise<User> => {
   const { name, email, disabled, admin } = user;
 
   try {
-    return await db.updateTable('users')
+    const user = await db.updateTable('users')
       .set({
         name,
         email,
@@ -52,6 +42,8 @@ const updateUserAdmin = async (user: UpdateUserAdmin, id: string) => {
       .where('user_id', '=', id)
       .returningAll()
       .executeTakeFirst();
+
+    return toExistingUserEntry(user);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
@@ -73,6 +65,5 @@ export {
   getUsersAdmin,
   getUserAdmin,
   updateUserAdmin,
-  checkAdmin,
   deleteUser
 };

@@ -21,10 +21,7 @@ const getUserByEmail = async (email: string): Promise<User> => {
       .selectAll()
       .executeTakeFirst();
 
-    console.log(user?.created_on);
-
-    const parsedUser = toExistingUserEntry(user);
-    return parsedUser;
+    return toExistingUserEntry(user);
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

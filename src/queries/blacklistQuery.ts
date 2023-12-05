@@ -1,7 +1,8 @@
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
+import { Blacklist, NewBlacklist } from '../types/types';
 
-const getBlacklistedUsers = async () => {
+const getBlacklistedUsers = async (): Promise<Blacklist[]> => {
   try {
     return await db.selectFrom('blacklist')
       .selectAll('blacklist')
@@ -12,7 +13,7 @@ const getBlacklistedUsers = async () => {
   }
 };
 
-const blacklistUser = async (id: string, email: string) => {
+const blacklistUser = async (id: string, email: string): Promise<NewBlacklist[]> => {
   try {
     return await db.insertInto('blacklist')
       .values({
