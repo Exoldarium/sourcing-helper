@@ -30,6 +30,20 @@ const getUserByEmail = async (email: string): Promise<User> => {
   }
 };
 
+const getSpecificUser = async (id: string): Promise<UserRegular> => {
+  try {
+    const user = await db.selectFrom('users')
+      .where('user_id', '=', id)
+      .selectAll()
+      .executeTakeFirst();
+
+    return toRegularUserentry(user);
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
 const insertUser = async (user: NewUser): Promise<User[]> => {
   try {
     const users = await db.insertInto('users')
@@ -66,6 +80,7 @@ const updateUser = async (user: UpdateUserRegular, id: string): Promise<User> =>
 export {
   getUsers,
   getUserByEmail,
+  getSpecificUser,
   insertUser,
   updateUser
 };

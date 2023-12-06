@@ -16,6 +16,20 @@ const getBlacklistedUsers = async (): Promise<Blacklist[]> => {
   }
 };
 
+const getSpecificBlacklistedUser = async (id: string): Promise<Blacklist> => {
+  try {
+    const blacklistedUser = await db.selectFrom('blacklist')
+      .where('user_id', '=', id)
+      .selectAll()
+      .executeTakeFirst();
+
+    return toExistingBlacklistEntry(blacklistedUser);
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
 const blacklistUser = async (id: string, email: string): Promise<Blacklist[]> => {
   try {
     const blacklist = await db.insertInto('blacklist')
@@ -46,6 +60,7 @@ const removeUserFromBlacklist = async (id: string) => {
 
 export {
   getBlacklistedUsers,
+  getSpecificBlacklistedUser,
   blacklistUser,
   removeUserFromBlacklist
 };

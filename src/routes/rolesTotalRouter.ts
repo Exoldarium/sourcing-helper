@@ -1,11 +1,11 @@
 import express from 'express';
-import { createRole, getAllRoles } from '../queries/roleTotalQuery';
+import { createRole, getAllRoles, getSpecificRole } from '../queries/roleTotalQuery';
 import { toNewRoleEntry } from '../../utils/parseRoleData';
 import { v4 as uuidv4 } from 'uuid';
 import { getDate } from '../../utils/helpers';
 import { CreateNewRole } from '../types/types';
 
-// TODO: get a specific role
+// TODO: join user with the role
 
 const rolesTotalRouter = express.Router();
 
@@ -14,6 +14,16 @@ rolesTotalRouter.get('/', async (_req, res, next) => {
     const allRoles = await getAllRoles();
 
     return res.status(200).send(allRoles);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+rolesTotalRouter.get('/:id', async (req, res, next) => {
+  try {
+    const role = await getSpecificRole(req.params.id);
+
+    return res.status(200).send(role);
   } catch (err) {
     return next(err);
   }

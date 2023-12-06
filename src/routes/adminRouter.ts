@@ -1,12 +1,10 @@
 import express from 'express';
 import { deleteUser, getUserAdmin, getUsersAdmin, updateUserAdmin } from '../queries/adminQuery';
 import { toUpdateUserEntryAdmin } from '../../utils/parseUserData';
-import { blacklistUser, getBlacklistedUsers, removeUserFromBlacklist } from '../queries/blacklistQuery';
+import { blacklistUser, getBlacklistedUsers, getSpecificBlacklistedUser, removeUserFromBlacklist } from '../queries/blacklistQuery';
 import { User } from '../types/types';
 
 const adminRouter = express.Router();
-
-// TODO: get specific blacklisted user
 
 adminRouter.get('/users', async (_req, res, next) => {
   try {
@@ -33,6 +31,16 @@ adminRouter.get('/blacklist', async (_req, res, next) => {
     const blacklistedUsers = await getBlacklistedUsers();
 
     return res.status(200).send(blacklistedUsers);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+adminRouter.get('/blacklist/:id', async (req, res, next) => {
+  try {
+    const blacklistedUser = await getSpecificBlacklistedUser(req.params.id);
+
+    return res.status(200).send(blacklistedUser);
   } catch (err) {
     return next(err);
   }

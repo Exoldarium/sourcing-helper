@@ -1,24 +1,29 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
-import { getUsers, insertUser, updateUser } from '../queries/userQuery';
+import { getSpecificUser, getUsers, insertUser, updateUser } from '../queries/userQuery';
 import { NewUser } from '../types/types';
 import { getDate } from '../../utils/helpers';
 import { toNewUserEntry, toUpdateUserEntry } from '../../utils/parseUserData';
-
-// TODO: get specific user for normal users
+import { validateUser } from '../../utils/middleware';
 
 const userRouter = express.Router();
 
-userRouter.get('/', async (req, res, next) => {
+userRouter.get('/', validateUser, async (_req, res, next) => {
   try {
-    const currentUser = req.session.user;
-
-    if (!currentUser) return res.status(405).send('Must be logged in to access this');
-
     const allUsers = await getUsers();
 
     return res.status(200).json(allUsers);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+userRouter.get('/:id', validateUser, async (req, res, next) => {
+  try {
+    const user = await getSpecificUser(req.params.id);
+
+    return res.status(200).send(user);
   } catch (err) {
     return next(err);
   }
@@ -58,7 +63,7 @@ userRouter.post('/', async (req, res, next) => {
   }
 });
 
-userRouter.put('/:id', async (req, res, next) => {
+userRouter.put('/:id', validateUser, async (req, res, next) => {
   try {
     const currentUser = req.session.user;
 

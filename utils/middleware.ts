@@ -12,6 +12,7 @@ const handleError = (error: Error, res: Response, next: NextFunction) => {
 
 const validateUser = (req: Request, res: Response, next: NextFunction) => {
   if (req.session.disabled) return res.status(403).send('Not allowed');
+  if (!req.session.user) return res.status(403).send('Must be logged in');
 
   return next();
 };

@@ -16,6 +16,20 @@ const getAllRoles = async (): Promise<Role[]> => {
   }
 };
 
+const getSpecificRole = async (id: string): Promise<Role> => {
+  try {
+    const role = await db.selectFrom('roles_total')
+      .where('role_id', '=', id)
+      .selectAll()
+      .executeTakeFirst();
+
+    return toExistingRoleEntry(role);
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
 const createRole = async (role: CreateNewRole): Promise<Role[]> => {
   const roleToInsert: NewRole = {
     ...role,
@@ -43,4 +57,8 @@ const createRole = async (role: CreateNewRole): Promise<Role[]> => {
   }
 };
 
-export { getAllRoles, createRole };
+export {
+  getAllRoles,
+  createRole,
+  getSpecificRole
+};

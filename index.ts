@@ -20,8 +20,8 @@ app.use('/api/ping', (_req, res) => {
 
 app.use('/api/login', loginrouter);
 app.use('/api/admin', validateAdmin, adminRouter);
-app.use('/api/users', validateUser, userRouter);
-app.use('/api/roles', rolesTotalRouter);
+app.use('/api/users', userRouter);
+app.use('/api/roles', validateUser, rolesTotalRouter);
 app.use('/api/logout', logoutRouter);
 
 app.use((error: Error, _req: Request, res: Response, next: NextFunction) => {
