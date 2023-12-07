@@ -28,6 +28,10 @@ export interface CreateNewUser {
   password: string;
 }
 
+export interface UserWithRoles extends User {
+  role: Role[];
+}
+
 export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UpdateUser = Updateable<UserTable>;

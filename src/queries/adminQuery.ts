@@ -1,29 +1,71 @@
+import { toExistingRoleEntry } from '../../utils/parseRoleData';
 import { toExistingUserEntry } from '../../utils/parseUserData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { UpdateUserAdmin, User } from '../types/types';
+import { Role, UpdateUserAdmin, User, UserWithRoles } from '../types/types';
+import { getAllRoles } from './roleTotalQuery';
 
-const getUsersAdmin = async (): Promise<User[]> => {
+const getUsersAdmin = async (): Promise<UserWithRoles[]> => {
   try {
     const users = await db.selectFrom('users')
       .selectAll('users')
       .execute();
 
-    return users.map(toExistingUserEntry);
+    const roles = await getAllRoles();
+
+    const parsedUser = users.map(toExistingUserEntry);
+    const parsedRole = roles.map(toExistingRoleEntry);
+
+    const usersWithRoles = parsedUser.map(user => {
+      const role: Role[] = [];
+
+      const userToAddRoleTo: UserWithRoles = {
+        ...user,
+        role
+      };
+
+      for (const roleKey of parsedRole) {
+        if (user.user_id === roleKey.user_id) {
+          userToAddRoleTo.role.push(roleKey);
+        }
+      }
+
+      return userToAddRoleTo;
+    });
+
+    return usersWithRoles;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const getUserAdmin = async (id: string): Promise<User> => {
+const getUserAdmin = async (id: string): Promise<UserWithRoles> => {
   try {
     const user = await db.selectFrom('users')
       .where('user_id', '=', id)
       .selectAll()
       .executeTakeFirst();
 
-    return toExistingUserEntry(user);
+    const roles = await getAllRoles();
+
+    const parsedUser = toExistingUserEntry(user);
+    const parsedRole = roles.map(toExistingRoleEntry);
+
+    const role: Role[] = [];
+
+    const userToAddRoleTo: UserWithRoles = {
+      ...parsedUser,
+      role
+    };
+
+    for (const roleKey of parsedRole) {
+      if (parsedUser.user_id === roleKey.user_id) {
+        userToAddRoleTo.role.push(roleKey);
+      }
+    }
+
+    return userToAddRoleTo;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

@@ -3,6 +3,8 @@ import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { NewUser, UpdateUserRegular, User, UserRegular } from '../types/types';
 
+// TODO: getUsers and getUser should show roles for that user
+
 const getUsers = async (): Promise<UserRegular[]> => {
   try {
     const users = await db.selectFrom('users')
