@@ -57,9 +57,10 @@ rolesTotalRouter.delete('/:id', async (req, res, next) => {
 
     if (!currentUser) return res.status(400).send('Must be logged in');
 
-    const findPermission = findRole.permission.find(p => p === currentUser.id);
+    const findCreator = findRole.creator.find(p => p.user_id === currentUser.id);
 
-    if (!(findPermission || req.session.admin)) return res.status(403).send('Not allowed');
+    // only the role creator or admin can delete the role
+    if (!(findCreator || req.session.admin)) return res.status(403).send('Not allowed');
 
     await deleteRole(findRole.role_id);
 

@@ -68,9 +68,9 @@ userRouter.put('/:id', async (req, res, next) => {
     const currentUser = req.session.user;
     const findUser = await getSpecificUser(req.params.id);
 
-    // user can only update his own info, admin can update everyone
     if (!currentUser) return res.status(403).send('Must be logged in');
-    if (req.session.user?.id !== req.params.id && !req.session.admin) return res.status(403).send('Not allowed');
+    // logged in user can only update his own info, admin can update everyone
+    if (currentUser.id !== req.params.id && !req.session.admin) return res.status(403).send('Not allowed');
 
     const parsedUserToUpdate = toUpdateUserEntry(req.body);
 
