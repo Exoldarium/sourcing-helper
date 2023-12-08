@@ -29,7 +29,7 @@ export interface CreateNewUser {
 }
 
 export interface UserWithRoles extends User {
-  role: Role[];
+  role: RoleWithoutUserId[];
 }
 
 export type User = Selectable<UserTable>;
@@ -56,7 +56,7 @@ export type UpdateBlacklist = Updateable<BlacklistTable>;
 export interface RoleTotalTable {
   role_id: string;
   user_id: string;
-  name: string;
+  role_name: string;
   created_on: string;
   permission: string[],
   invitation: number;
@@ -71,15 +71,17 @@ export interface RoleTotalTable {
 }
 
 export interface CreateNewRole {
-  name: string;
+  role_name: string;
   permission: string[];
   user_id: string;
   role_id: string;
   created_on: string;
 }
 
+export type RoleWithoutUserId = Omit<Role, 'user_id'>;
+
 export type Role = Selectable<RoleTotalTable>;
 export type NewRole = Insertable<RoleTotalTable>;
 export type UpdateRole = Updateable<RoleTotalTable>;
 
-export type NewRoleEntry = Pick<NewRole, 'name' | 'permission'>;
+export type NewRoleEntry = Pick<NewRole, 'role_name' | 'permission'>;

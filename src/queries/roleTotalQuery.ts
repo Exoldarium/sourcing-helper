@@ -1,13 +1,24 @@
 import { toExistingRoleEntry } from '../../utils/parseRoleData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { CreateNewRole, NewRole, Role } from '../types/types';
+import { CreateNewRole, NewRole, RoleWithoutUserId } from '../types/types';
 
-const getAllRoles = async (): Promise<Role[]> => {
+// TODO: figure out how to update the roles_total table and not create problems when we log each update 
+// because we if we don't allow PUT on roles_total we won't be able to reverse a mistake if it gets submitted
+// we can try having a table that will just log the updates and we PUT on the roles_total
+// the update table should have role_id, user_id and the time it was updated
+// when we need to find the updated dates we could just join all tables
+
+const getAllRoles = async (): Promise<RoleWithoutUserId[]> => {
   try {
+    // TODO: fix this innerJoin
     const roles = await db.selectFrom('roles_total')
-      .selectAll()
+      .innerJoin('users', 'users.user_id', 'roles_total.user_id')
+      .selectAll('roles_total')
+      .select('email')
       .execute();
+
+    console.log(roles);
 
     return roles.map(toExistingRoleEntry);
   } catch (err) {
@@ -16,7 +27,7 @@ const getAllRoles = async (): Promise<Role[]> => {
   }
 };
 
-const getSpecificRole = async (id: string): Promise<Role> => {
+const getSpecificRole = async (id: string): Promise<RoleWithoutUserId> => {
   try {
     const role = await db.selectFrom('roles_total')
       .where('role_id', '=', id)
@@ -30,7 +41,7 @@ const getSpecificRole = async (id: string): Promise<Role> => {
   }
 };
 
-const createRole = async (role: CreateNewRole): Promise<Role[]> => {
+const createRole = async (role: CreateNewRole): Promise<RoleWithoutUserId[]> => {
   const roleToInsert: NewRole = {
     ...role,
     invitation: 0,

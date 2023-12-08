@@ -1,42 +1,48 @@
-import { toExistingRoleEntry } from '../../utils/parseRoleData';
-import { toExistingUserEntry } from '../../utils/parseUserData';
+import { jsonArrayFrom } from 'kysely/helpers/postgres';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { Role, UpdateUserAdmin, User, UserWithRoles } from '../types/types';
-import { getAllRoles } from './roleTotalQuery';
+import { UpdateUserAdmin, User, UserWithRoles } from '../types/types';
+
+// TODO: no need to parse anything, just get the data we need from the db
+// use select() or return() instead of selectAll() and returningAll(), do this for all of the queries
 
 const getUsersAdmin = async (): Promise<UserWithRoles[]> => {
   try {
     const users = await db.selectFrom('users')
-      .selectAll('users')
+      .select((eb) => [
+        'user_id',
+        'email',
+        'name',
+        'users.created_on',
+        'admin',
+        'disabled',
+        'password_hash',
+        jsonArrayFrom(
+          eb.selectFrom('roles_total')
+            .select([
+              'role_id',
+              'role_name',
+              'roles_total.created_on',
+              'permission',
+              'invitation',
+              'initial_contact',
+              'replied',
+              'job_description',
+              'application_reviewed',
+              'proposed',
+              'accepted',
+              'rejected',
+              'follow_up',
+            ])
+            .whereRef('roles_total.user_id', '=', 'users.user_id')
+        ).as('role')
+      ])
       .execute();
 
-    const roles = await getAllRoles();
-
-    const parsedUser = users.map(toExistingUserEntry);
-    const parsedRole = roles.map(toExistingRoleEntry);
-
-    const usersWithRoles = parsedUser.map(user => {
-      const role: Role[] = [];
-
-      const userToAddRoleTo: UserWithRoles = {
-        ...user,
-        role
-      };
-
-      for (const roleKey of parsedRole) {
-        if (user.user_id === roleKey.user_id) {
-          userToAddRoleTo.role.push(roleKey);
-        }
-      }
-
-      return userToAddRoleTo;
-    });
-
-    return usersWithRoles;
+    return users;
   } catch (err) {
     const error = parseError(err);
-    throw Error(error);
+    throw new Error(error);
   }
 };
 
@@ -44,31 +50,40 @@ const getUserAdmin = async (id: string): Promise<UserWithRoles> => {
   try {
     const user = await db.selectFrom('users')
       .where('user_id', '=', id)
-      .selectAll()
-      .executeTakeFirst();
+      .select((eb) => [
+        'user_id',
+        'email',
+        'name',
+        'users.created_on',
+        'admin',
+        'disabled',
+        'password_hash',
+        jsonArrayFrom(
+          eb.selectFrom('roles_total')
+            .select([
+              'role_id',
+              'role_name',
+              'roles_total.created_on',
+              'permission',
+              'invitation',
+              'initial_contact',
+              'replied',
+              'job_description',
+              'application_reviewed',
+              'proposed',
+              'accepted',
+              'rejected',
+              'follow_up',
+            ])
+            .whereRef('roles_total.user_id', '=', 'users.user_id')
+        ).as('role')
+      ])
+      .execute();
 
-    const roles = await getAllRoles();
-
-    const parsedUser = toExistingUserEntry(user);
-    const parsedRole = roles.map(toExistingRoleEntry);
-
-    const role: Role[] = [];
-
-    const userToAddRoleTo: UserWithRoles = {
-      ...parsedUser,
-      role
-    };
-
-    for (const roleKey of parsedRole) {
-      if (parsedUser.user_id === roleKey.user_id) {
-        userToAddRoleTo.role.push(roleKey);
-      }
-    }
-
-    return userToAddRoleTo;
+    return user[0];
   } catch (err) {
     const error = parseError(err);
-    throw Error(error);
+    throw new Error(error);
   }
 };
 
@@ -84,13 +99,23 @@ const updateUserAdmin = async (user: UpdateUserAdmin, id: string): Promise<User>
         disabled
       })
       .where('user_id', '=', id)
-      .returningAll()
+      .returning([
+        'user_id',
+        'email',
+        'name',
+        'password_hash',
+        'admin',
+        'disabled',
+        'created_on',
+      ])
       .executeTakeFirst();
 
-    return toExistingUserEntry(user);
+    if (!user) throw new Error('User not found');
+
+    return user;
   } catch (err) {
     const error = parseError(err);
-    throw Error(error);
+    throw new Error(error);
   }
 };
 
@@ -101,7 +126,7 @@ const deleteUser = async (id: string) => {
       .executeTakeFirst();
   } catch (err) {
     const error = parseError(err);
-    throw Error(error);
+    throw new Error(error);
   }
 };
 

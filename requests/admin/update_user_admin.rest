@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "email": "test@gmail.com",
-  "name": "Testing",
+  "name": "Testoooooooo",
   "admin": false,
-  "disabled": true
+  "disabled": false
 }

@@ -1,7 +1,6 @@
-import { toExistingUserEntry, toRegularUserentry } from '../../utils/parseUserData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { NewUser, UpdateUserRegular, User, UserRegular } from '../types/types';
+import { NewUser, UpdateUser, UpdateUserRegular, User, UserRegular } from '../types/types';
 
 // TODO: getUsers and getUser should show roles for that user
 
@@ -11,7 +10,7 @@ const getUsers = async (): Promise<UserRegular[]> => {
       .select(['email', 'user_id', 'name'])
       .execute();
 
-    return users.map(toRegularUserentry);
+    return users;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
@@ -22,10 +21,20 @@ const getUserByEmail = async (email: string): Promise<User> => {
   try {
     const user = await db.selectFrom('users')
       .where('email', '=', email)
-      .selectAll()
+      .select([
+        'user_id',
+        'email',
+        'name',
+        'password_hash',
+        'admin',
+        'disabled',
+        'created_on',
+      ])
       .executeTakeFirst();
 
-    return toExistingUserEntry(user);
+    if (!user) throw new Error('User not found');
+
+    return user;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
@@ -36,30 +45,47 @@ const getSpecificUser = async (id: string): Promise<UserRegular> => {
   try {
     const user = await db.selectFrom('users')
       .where('user_id', '=', id)
-      .selectAll()
+      .select([
+        'user_id',
+        'email',
+        'name',
+      ])
       .executeTakeFirst();
 
-    return toRegularUserentry(user);
+    if (!user) throw new Error('User not found');
+
+    return user;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const insertUser = async (user: NewUser): Promise<User[]> => {
+const insertUser = async (user: NewUser): Promise<NewUser> => {
   try {
-    const users = await db.insertInto('users')
+    const newUser = await db.insertInto('users')
       .values(user)
-      .returningAll()
+      .returning([
+        'user_id',
+        'email',
+        'name',
+        'password_hash',
+        'admin',
+        'disabled',
+        'created_on',
+      ])
       .execute();
-    return users.map(toExistingUserEntry);
+
+    if (!newUser) throw new Error('User not found');
+
+    return newUser[0];
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const updateUser = async (user: UpdateUserRegular, id: string): Promise<User> => {
+const updateUser = async (user: UpdateUserRegular, id: string): Promise<UpdateUser> => {
   const { name, email } = user;
 
   try {
@@ -69,10 +95,20 @@ const updateUser = async (user: UpdateUserRegular, id: string): Promise<User> =>
         email
       })
       .where('user_id', '=', id)
-      .returningAll()
+      .returning([
+        'user_id',
+        'email',
+        'name',
+        'password_hash',
+        'admin',
+        'disabled',
+        'created_on',
+      ])
       .executeTakeFirst();
 
-    return toExistingUserEntry(updatedUser);
+    if (!updatedUser) throw new Error('User not found');
+
+    return updatedUser;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

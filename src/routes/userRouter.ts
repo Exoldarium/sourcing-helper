@@ -39,7 +39,7 @@ userRouter.post('/', async (req, res, next) => {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(parseNewUser.password, saltRounds);
 
-    const newUser: NewUser = {
+    const userToAdd: NewUser = {
       name: parseNewUser.name,
       email: parseNewUser.email,
       password_hash: passwordHash,
@@ -49,7 +49,7 @@ userRouter.post('/', async (req, res, next) => {
       created_on: getDate()
     };
 
-    await insertUser(newUser);
+    const newUser = await insertUser(userToAdd);
 
     const createdUserToReturn = {
       id: newUser.user_id,
@@ -65,14 +65,15 @@ userRouter.post('/', async (req, res, next) => {
 
 userRouter.put('/:id', validateUser, async (req, res, next) => {
   try {
-    const currentUser = req.session.user;
+    const findUser = await getSpecificUser(req.params.id);
 
-    // user can only update his own info
-    if (!(currentUser && currentUser.id === req.params.id)) return res.status(403).send('Not allowed');
+    // user can only update his own info, admin can update everyone
+    if (!findUser) return res.status(403).send('User not found');
+    if (req.session.user?.id !== req.params.id && !req.session.admin) return res.status(403).send('Not allowed');
 
     const parsedUserToUpdate = toUpdateUserEntry(req.body);
 
-    const updatedUser = await updateUser(parsedUserToUpdate, currentUser.id);
+    const updatedUser = await updateUser(parsedUserToUpdate, findUser.user_id);
 
     const updatedUserToReturn = {
       id: updatedUser.user_id,
