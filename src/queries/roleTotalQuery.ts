@@ -1,7 +1,7 @@
-import { toExistingRoleEntry } from '../../utils/parseRoleData';
+import { jsonArrayFrom } from 'kysely/helpers/postgres';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { CreateNewRole, NewRole, RoleWithoutUserId } from '../types/types';
+import { CreateNewRole, NewRole } from '../types/types';
 
 // TODO: figure out how to update the roles_total table and not create problems when we log each update 
 // because we if we don't allow PUT on roles_total we won't be able to reverse a mistake if it gets submitted
@@ -9,39 +9,82 @@ import { CreateNewRole, NewRole, RoleWithoutUserId } from '../types/types';
 // the update table should have role_id, user_id and the time it was updated
 // when we need to find the updated dates we could just join all tables
 
-const getAllRoles = async (): Promise<RoleWithoutUserId[]> => {
+const getAllRoles = async () => {
   try {
-    // TODO: fix this innerJoin
     const roles = await db.selectFrom('roles_total')
       .innerJoin('users', 'users.user_id', 'roles_total.user_id')
-      .selectAll('roles_total')
-      .select('email')
+      .select((eb) => [
+        'role_id',
+        'role_name',
+        'roles_total.created_on',
+        'permission',
+        'invitation',
+        'initial_contact',
+        'replied',
+        'job_description',
+        'application_reviewed',
+        'proposed',
+        'accepted',
+        'rejected',
+        'follow_up',
+        jsonArrayFrom(
+          eb.selectFrom('users')
+            .select([
+              'user_id',
+              'email',
+              'name'
+            ])
+            .whereRef('roles_total.user_id', '=', 'users.user_id')
+        ).as('creator')
+      ])
       .execute();
 
-    console.log(roles);
-
-    return roles.map(toExistingRoleEntry);
+    return roles;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const getSpecificRole = async (id: string): Promise<RoleWithoutUserId> => {
+const getSpecificRole = async (id: string) => {
   try {
     const role = await db.selectFrom('roles_total')
+      .innerJoin('users', 'users.user_id', 'roles_total.user_id')
       .where('role_id', '=', id)
-      .selectAll()
-      .executeTakeFirst();
+      .select((eb) => [
+        'role_id',
+        'role_name',
+        'roles_total.created_on',
+        'permission',
+        'invitation',
+        'initial_contact',
+        'replied',
+        'job_description',
+        'application_reviewed',
+        'proposed',
+        'accepted',
+        'rejected',
+        'follow_up',
+        jsonArrayFrom(
+          eb.selectFrom('users')
+            .select([
+              'user_id',
+              'email',
+              'name'
+            ])
+            .whereRef('roles_total.user_id', '=', 'users.user_id')
+        ).as('creator')
+      ])
+      .execute();
 
-    return toExistingRoleEntry(role);
+    return role;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const createRole = async (role: CreateNewRole): Promise<RoleWithoutUserId[]> => {
+const createRole = async (role: CreateNewRole) => {
   const roleToInsert: NewRole = {
     ...role,
     invitation: 0,
@@ -58,10 +101,25 @@ const createRole = async (role: CreateNewRole): Promise<RoleWithoutUserId[]> => 
   try {
     const roles = await db.insertInto('roles_total')
       .values(roleToInsert)
-      .returningAll()
+      .returning([
+        'user_id',
+        'created_on',
+        'role_id',
+        'role_name',
+        'permission',
+        'invitation',
+        'initial_contact',
+        'replied',
+        'job_description',
+        'application_reviewed',
+        'proposed',
+        'accepted',
+        'rejected',
+        'follow_up',
+      ])
       .execute();
 
-    return roles.map(toExistingRoleEntry);
+    return roles;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

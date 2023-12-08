@@ -5,5 +5,5 @@ Content-Type: application/json
   "email": "test@gmail.com",
   "name": "Testoooooooo",
   "admin": false,
-  "disabled": false
+  "disabled": true
 }

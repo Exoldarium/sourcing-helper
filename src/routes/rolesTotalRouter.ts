@@ -5,8 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { getDate } from '../../utils/helpers';
 import { CreateNewRole } from '../types/types';
 
-// TODO: join user with the role
-
 const rolesTotalRouter = express.Router();
 
 rolesTotalRouter.get('/', async (_req, res, next) => {
@@ -30,6 +28,7 @@ rolesTotalRouter.get('/:id', async (req, res, next) => {
 });
 
 rolesTotalRouter.post('/', async (req, res, next) => {
+  // TODO: add permission when creating or updating a role
   try {
     const currentUser = req.session.user;
     const parsedNewRole = toNewRoleEntry(req.body);

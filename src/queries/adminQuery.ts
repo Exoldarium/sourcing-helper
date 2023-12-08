@@ -1,12 +1,9 @@
 import { jsonArrayFrom } from 'kysely/helpers/postgres';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { UpdateUserAdmin, User, UserWithRoles } from '../types/types';
+import { UpdateUserAdmin } from '../types/types';
 
-// TODO: no need to parse anything, just get the data we need from the db
-// use select() or return() instead of selectAll() and returningAll(), do this for all of the queries
-
-const getUsersAdmin = async (): Promise<UserWithRoles[]> => {
+const getUsersAdmin = async () => {
   try {
     const users = await db.selectFrom('users')
       .select((eb) => [
@@ -46,7 +43,7 @@ const getUsersAdmin = async (): Promise<UserWithRoles[]> => {
   }
 };
 
-const getUserAdmin = async (id: string): Promise<UserWithRoles> => {
+const getUserAdmin = async (id: string) => {
   try {
     const user = await db.selectFrom('users')
       .where('user_id', '=', id)
@@ -87,7 +84,7 @@ const getUserAdmin = async (id: string): Promise<UserWithRoles> => {
   }
 };
 
-const updateUserAdmin = async (user: UpdateUserAdmin, id: string): Promise<User> => {
+const updateUserAdmin = async (user: UpdateUserAdmin, id: string) => {
   const { name, email, disabled, admin } = user;
 
   try {

@@ -1,10 +1,10 @@
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { NewUser, UpdateUser, UpdateUserRegular, User, UserRegular } from '../types/types';
+import { NewUser, UpdateUserRegular } from '../types/types';
 
 // TODO: getUsers and getUser should show roles for that user
 
-const getUsers = async (): Promise<UserRegular[]> => {
+const getUsers = async () => {
   try {
     const users = await db.selectFrom('users')
       .select(['email', 'user_id', 'name'])
@@ -17,7 +17,7 @@ const getUsers = async (): Promise<UserRegular[]> => {
   }
 };
 
-const getUserByEmail = async (email: string): Promise<User> => {
+const getUserByEmail = async (email: string) => {
   try {
     const user = await db.selectFrom('users')
       .where('email', '=', email)
@@ -41,14 +41,14 @@ const getUserByEmail = async (email: string): Promise<User> => {
   }
 };
 
-const getSpecificUser = async (id: string): Promise<UserRegular> => {
+const getSpecificUser = async (id: string) => {
   try {
     const user = await db.selectFrom('users')
       .where('user_id', '=', id)
       .select([
         'user_id',
         'email',
-        'name',
+        'name'
       ])
       .executeTakeFirst();
 
@@ -61,7 +61,7 @@ const getSpecificUser = async (id: string): Promise<UserRegular> => {
   }
 };
 
-const insertUser = async (user: NewUser): Promise<NewUser> => {
+const insertUser = async (user: NewUser) => {
   try {
     const newUser = await db.insertInto('users')
       .values(user)
@@ -85,7 +85,7 @@ const insertUser = async (user: NewUser): Promise<NewUser> => {
   }
 };
 
-const updateUser = async (user: UpdateUserRegular, id: string): Promise<UpdateUser> => {
+const updateUser = async (user: UpdateUserRegular, id: string) => {
   const { name, email } = user;
 
   try {

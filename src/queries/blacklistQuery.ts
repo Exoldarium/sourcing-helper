@@ -1,46 +1,46 @@
-import { toExistingBlacklistEntry } from '../../utils/parseBlacklistData';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { Blacklist } from '../types/types';
 
-const getBlacklistedUsers = async (): Promise<Blacklist[]> => {
+const getBlacklistedUsers = async () => {
   try {
     const blacklist = await db.selectFrom('blacklist')
-      .selectAll('blacklist')
+      .select(['user_id', 'email'])
       .execute();
 
-    return blacklist.map(toExistingBlacklistEntry);
+    return blacklist;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const getSpecificBlacklistedUser = async (id: string): Promise<Blacklist> => {
+const getSpecificBlacklistedUser = async (id: string) => {
   try {
     const blacklistedUser = await db.selectFrom('blacklist')
       .where('user_id', '=', id)
-      .selectAll()
+      .select(['user_id', 'email'])
       .executeTakeFirst();
 
-    return toExistingBlacklistEntry(blacklistedUser);
+    if (!blacklistedUser) throw new Error('Blacklisted user not found');
+
+    return blacklistedUser;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
   }
 };
 
-const blacklistUser = async (id: string, email: string): Promise<Blacklist[]> => {
+const blacklistUser = async (id: string, email: string) => {
   try {
     const blacklist = await db.insertInto('blacklist')
       .values({
         user_id: id,
         email,
       })
-      .returningAll()
+      .returning(['user_id', 'email'])
       .execute();
 
-    return blacklist.map(toExistingBlacklistEntry);
+    return blacklist;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);

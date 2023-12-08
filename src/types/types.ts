@@ -28,10 +28,6 @@ export interface CreateNewUser {
   password: string;
 }
 
-export interface UserWithRoles extends User {
-  role: RoleWithoutUserId[];
-}
-
 export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UpdateUser = Updateable<UserTable>;
@@ -77,8 +73,6 @@ export interface CreateNewRole {
   role_id: string;
   created_on: string;
 }
-
-export type RoleWithoutUserId = Omit<Role, 'user_id'>;
 
 export type Role = Selectable<RoleTotalTable>;
 export type NewRole = Insertable<RoleTotalTable>;
