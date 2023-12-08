@@ -1,3 +1,4 @@
+import { jsonArrayFrom } from 'kysely/helpers/postgres';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { NewUser, UpdateUserRegular } from '../types/types';
@@ -7,7 +8,30 @@ import { NewUser, UpdateUserRegular } from '../types/types';
 const getUsers = async () => {
   try {
     const users = await db.selectFrom('users')
-      .select(['email', 'user_id', 'name'])
+      .select((eb) => [
+        'user_id',
+        'email',
+        'name',
+        jsonArrayFrom(
+          eb.selectFrom('roles_total')
+            .select([
+              'role_id',
+              'role_name',
+              'roles_total.created_on',
+              'permission',
+              'invitation',
+              'initial_contact',
+              'replied',
+              'job_description',
+              'application_reviewed',
+              'proposed',
+              'accepted',
+              'rejected',
+              'follow_up',
+            ])
+            .whereRef('roles_total.user_id', '=', 'users.user_id')
+        ).as('role')
+      ])
       .execute();
 
     return users;
@@ -30,9 +54,7 @@ const getUserByEmail = async (email: string) => {
         'disabled',
         'created_on',
       ])
-      .executeTakeFirst();
-
-    if (!user) throw new Error('User not found');
+      .executeTakeFirstOrThrow();
 
     return user;
   } catch (err) {
@@ -45,14 +67,31 @@ const getSpecificUser = async (id: string) => {
   try {
     const user = await db.selectFrom('users')
       .where('user_id', '=', id)
-      .select([
+      .select((eb) => [
         'user_id',
         'email',
-        'name'
+        'name',
+        jsonArrayFrom(
+          eb.selectFrom('roles_total')
+            .select([
+              'role_id',
+              'role_name',
+              'roles_total.created_on',
+              'permission',
+              'invitation',
+              'initial_contact',
+              'replied',
+              'job_description',
+              'application_reviewed',
+              'proposed',
+              'accepted',
+              'rejected',
+              'follow_up',
+            ])
+            .whereRef('roles_total.user_id', '=', 'users.user_id')
+        ).as('role')
       ])
-      .executeTakeFirst();
-
-    if (!user) throw new Error('User not found');
+      .executeTakeFirstOrThrow();
 
     return user;
   } catch (err) {
@@ -74,11 +113,9 @@ const insertUser = async (user: NewUser) => {
         'disabled',
         'created_on',
       ])
-      .execute();
+      .executeTakeFirstOrThrow();
 
-    if (!newUser) throw new Error('User not found');
-
-    return newUser[0];
+    return newUser;
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
@@ -104,9 +141,7 @@ const updateUser = async (user: UpdateUserRegular, id: string) => {
         'disabled',
         'created_on',
       ])
-      .executeTakeFirst();
-
-    if (!updatedUser) throw new Error('User not found');
+      .executeTakeFirstOrThrow();
 
     return updatedUser;
   } catch (err) {

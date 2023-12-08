@@ -75,9 +75,9 @@ const getUserAdmin = async (id: string) => {
             .whereRef('roles_total.user_id', '=', 'users.user_id')
         ).as('role')
       ])
-      .execute();
+      .executeTakeFirstOrThrow();
 
-    return user[0];
+    return user;
   } catch (err) {
     const error = parseError(err);
     throw new Error(error);
@@ -105,9 +105,7 @@ const updateUserAdmin = async (user: UpdateUserAdmin, id: string) => {
         'disabled',
         'created_on',
       ])
-      .executeTakeFirst();
-
-    if (!user) throw new Error('User not found');
+      .executeTakeFirstOrThrow();
 
     return user;
   } catch (err) {

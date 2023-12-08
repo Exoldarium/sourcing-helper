@@ -75,7 +75,7 @@ const getSpecificRole = async (id: string) => {
             .whereRef('roles_total.user_id', '=', 'users.user_id')
         ).as('creator')
       ])
-      .execute();
+      .executeTakeFirstOrThrow();
 
     return role;
   } catch (err) {
@@ -117,7 +117,7 @@ const createRole = async (role: CreateNewRole) => {
         'rejected',
         'follow_up',
       ])
-      .execute();
+      .executeTakeFirst();
 
     return roles;
   } catch (err) {

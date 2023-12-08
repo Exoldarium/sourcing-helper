@@ -19,9 +19,7 @@ const getSpecificBlacklistedUser = async (id: string) => {
     const blacklistedUser = await db.selectFrom('blacklist')
       .where('user_id', '=', id)
       .select(['user_id', 'email'])
-      .executeTakeFirst();
-
-    if (!blacklistedUser) throw new Error('Blacklisted user not found');
+      .executeTakeFirstOrThrow();
 
     return blacklistedUser;
   } catch (err) {
@@ -38,7 +36,7 @@ const blacklistUser = async (id: string, email: string) => {
         email,
       })
       .returning(['user_id', 'email'])
-      .execute();
+      .executeTakeFirst();
 
     return blacklist;
   } catch (err) {
@@ -51,7 +49,7 @@ const removeUserFromBlacklist = async (id: string) => {
   try {
     return await db.deleteFrom('blacklist')
       .where('user_id', '=', id)
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
