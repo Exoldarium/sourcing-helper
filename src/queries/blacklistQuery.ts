@@ -36,7 +36,7 @@ const blacklistUser = async (id: string, email: string) => {
         email,
       })
       .returning(['user_id', 'email'])
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
 
     return blacklist;
   } catch (err) {

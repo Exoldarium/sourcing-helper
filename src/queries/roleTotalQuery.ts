@@ -31,7 +31,6 @@ const getAllRoles = async () => {
           eb.selectFrom('users')
             .select([
               'user_id',
-              'email',
               'name'
             ])
             .whereRef('roles_total.user_id', '=', 'users.user_id')
@@ -69,7 +68,6 @@ const getSpecificRole = async (id: string) => {
           eb.selectFrom('users')
             .select([
               'user_id',
-              'email',
               'name'
             ])
             .whereRef('roles_total.user_id', '=', 'users.user_id')
@@ -117,9 +115,20 @@ const createRole = async (role: CreateNewRole) => {
         'rejected',
         'follow_up',
       ])
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
 
     return roles;
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
+const deleteRole = async (id: string) => {
+  try {
+    return await db.deleteFrom('roles_total')
+      .where('role_id', '=', id)
+      .executeTakeFirstOrThrow();
   } catch (err) {
     const error = parseError(err);
     throw Error(error);
@@ -129,5 +138,6 @@ const createRole = async (role: CreateNewRole) => {
 export {
   getAllRoles,
   createRole,
-  getSpecificRole
+  getSpecificRole,
+  deleteRole
 };

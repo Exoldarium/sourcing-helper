@@ -118,7 +118,7 @@ const deleteUser = async (id: string) => {
   try {
     return await db.deleteFrom('users')
       .where('user_id', '=', id)
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
   } catch (err) {
     const error = parseError(err);
     throw new Error(error);

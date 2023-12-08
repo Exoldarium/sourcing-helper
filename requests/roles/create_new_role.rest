@@ -2,6 +2,6 @@ POST http://localhost:53005/api/roles
 Content-Type: application/json
 
 {
-  "role_name": "test role",
-  "permission": ["123456"]
+  "role_name": "another one to test",
+  "permission": ["1234567"]
 }

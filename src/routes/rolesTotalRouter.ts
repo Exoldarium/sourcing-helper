@@ -1,5 +1,5 @@
 import express from 'express';
-import { createRole, getAllRoles, getSpecificRole } from '../queries/roleTotalQuery';
+import { createRole, deleteRole, getAllRoles, getSpecificRole } from '../queries/roleTotalQuery';
 import { toNewRoleEntry } from '../../utils/parseRoleData';
 import { v4 as uuidv4 } from 'uuid';
 import { getDate } from '../../utils/helpers';
@@ -28,7 +28,6 @@ rolesTotalRouter.get('/:id', async (req, res, next) => {
 });
 
 rolesTotalRouter.post('/', async (req, res, next) => {
-  // TODO: add permission when creating or updating a role
   try {
     const currentUser = req.session.user;
     const parsedNewRole = toNewRoleEntry(req.body);
@@ -37,14 +36,34 @@ rolesTotalRouter.post('/', async (req, res, next) => {
 
     const newRole: CreateNewRole = {
       ...parsedNewRole,
-      user_id: currentUser?.id,
+      user_id: currentUser.id,
       role_id: uuidv4(),
-      created_on: getDate()
+      created_on: getDate(),
+      permission: [...parsedNewRole.permission, currentUser.id]
     };
 
     const roleAdded = await createRole(newRole);
 
     return res.status(200).send(roleAdded);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+rolesTotalRouter.delete('/:id', async (req, res, next) => {
+  try {
+    const currentUser = req.session.user;
+    const findRole = await getSpecificRole(req.params.id);
+
+    if (!currentUser) return res.status(400).send('Must be logged in');
+
+    const findPermission = findRole.permission.find(p => p === currentUser.id);
+
+    if (!(findPermission || req.session.admin)) return res.status(403).send('Not allowed');
+
+    await deleteRole(findRole.role_id);
+
+    return res.status(200).end();
   } catch (err) {
     return next(err);
   }
