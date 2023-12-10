@@ -1,9 +1,10 @@
 import express from 'express';
 import { createRole, deleteRole, getAllRoles, getSpecificRole } from '../queries/roleTotalQuery';
-import { toNewRoleEntry } from '../../utils/parseRoleData';
+import { toNewRoleEntry, toNewRoleLogEntry } from '../../utils/parseRoleData';
 import { v4 as uuidv4 } from 'uuid';
 import { getDate } from '../../utils/helpers';
-import { CreateNewRole } from '../types/types';
+import { CreateNewRole, NewRoleLog } from '../types/types';
+import { insertRoleLog } from '../queries/roleLogQuery';
 
 const rolesTotalRouter = express.Router();
 
@@ -45,6 +46,29 @@ rolesTotalRouter.post('/', async (req, res, next) => {
     const roleAdded = await createRole(newRole);
 
     return res.status(200).send(roleAdded);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+rolesTotalRouter.post('/:id', async (req, res, next) => {
+  try {
+    const roleData = toNewRoleLogEntry(req.body);
+    const currentUser = req.session.user;
+
+    if (!currentUser) return res.status(403).send('Must be logged in');
+
+    const roleToAdd: NewRoleLog = {
+      ...roleData,
+      log_id: uuidv4(),
+      user_id: currentUser.id,
+      role_id: req.params.id,
+      created_on: getDate()
+    };
+
+    const newRole = await insertRoleLog(roleToAdd);
+
+    return res.status(200).send(newRole);
   } catch (err) {
     return next(err);
   }

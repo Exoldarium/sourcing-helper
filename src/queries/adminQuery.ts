@@ -16,20 +16,17 @@ const getUsersAdmin = async () => {
         'password_hash',
         jsonArrayFrom(
           eb.selectFrom('roles_total')
-            .select([
-              'role_id',
-              'role_name',
-              'roles_total.created_on',
-              'permission',
-              'invitation',
-              'initial_contact',
-              'replied',
-              'job_description',
-              'application_reviewed',
-              'proposed',
-              'accepted',
-              'rejected',
-              'follow_up',
+            .innerJoin('role_log', 'role_log.role_id', 'roles_total.role_id')
+            .select(({ fn }) => [
+              fn.sum<number>('invitation').as('invitation'),
+              fn.sum<number>('initial_contact').as('initial_contact'),
+              fn.sum<number>('replied').as('replied'),
+              fn.sum<number>('job_description').as('job_description'),
+              fn.sum<number>('application_reviewed').as('application_reviewed'),
+              fn.sum<number>('proposed').as('proposed'),
+              fn.sum<number>('accepted').as('accepted'),
+              fn.sum<number>('rejected').as('rejected'),
+              fn.sum<number>('follow_up').as('follow_up')
             ])
             .whereRef('roles_total.user_id', '=', 'users.user_id')
         ).as('role')
@@ -57,20 +54,17 @@ const getUserAdmin = async (id: string) => {
         'password_hash',
         jsonArrayFrom(
           eb.selectFrom('roles_total')
-            .select([
-              'role_id',
-              'role_name',
-              'roles_total.created_on',
-              'permission',
-              'invitation',
-              'initial_contact',
-              'replied',
-              'job_description',
-              'application_reviewed',
-              'proposed',
-              'accepted',
-              'rejected',
-              'follow_up',
+            .innerJoin('role_log', 'role_log.role_id', 'roles_total.role_id')
+            .select(({ fn }) => [
+              fn.sum<number>('invitation').as('invitation'),
+              fn.sum<number>('initial_contact').as('initial_contact'),
+              fn.sum<number>('replied').as('replied'),
+              fn.sum<number>('job_description').as('job_description'),
+              fn.sum<number>('application_reviewed').as('application_reviewed'),
+              fn.sum<number>('proposed').as('proposed'),
+              fn.sum<number>('accepted').as('accepted'),
+              fn.sum<number>('rejected').as('rejected'),
+              fn.sum<number>('follow_up').as('follow_up')
             ])
             .whereRef('roles_total.user_id', '=', 'users.user_id')
         ).as('role')

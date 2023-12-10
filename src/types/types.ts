@@ -8,7 +8,8 @@ import {
 export interface SourcingHelperDatabase {
   users: UserTable;
   blacklist: BlacklistTable;
-  roles_total: RoleTotalTable
+  roles_total: RoleTotalTable;
+  role_log: RoleLogTable;
 }
 
 // USER SCHEMA
@@ -55,15 +56,6 @@ export interface RoleTotalTable {
   role_name: string;
   created_on: string;
   permission: string[],
-  invitation: number;
-  initial_contact: number;
-  replied: number;
-  job_description: number;
-  application_reviewed: number;
-  proposed: number;
-  accepted: number;
-  rejected: number;
-  follow_up: number;
 }
 
 export interface CreateNewRole {
@@ -79,3 +71,26 @@ export type NewRole = Insertable<RoleTotalTable>;
 export type UpdateRole = Updateable<RoleTotalTable>;
 
 export type NewRoleEntry = Pick<NewRole, 'role_name' | 'permission'>;
+
+// ROLE LOG SCHEMA
+export interface RoleLogTable {
+  log_id: string;
+  user_id: string;
+  role_id: string;
+  created_on: string;
+  invitation: number;
+  initial_contact: number;
+  replied: number;
+  job_description: number;
+  application_reviewed: number;
+  proposed: number;
+  accepted: number;
+  rejected: number;
+  follow_up: number;
+}
+
+export type NewRoleLogEntry = Omit<RoleLog, 'log_id' | 'user_id' | 'role_id' | 'created_on'>;
+
+export type RoleLog = Selectable<RoleLogTable>;
+export type NewRoleLog = Insertable<RoleLogTable>;
+export type UpdateRoleLog = Updateable<RoleLogTable>;
