@@ -1,14 +1,13 @@
 import express from 'express';
 import { createRole, deleteRole, getAllRoles, getSpecificRole } from '../queries/roleTotalQuery';
-import { toNewRoleEntry, toNewRoleLogEntry } from '../../utils/parseRoleData';
+import { toNewRoleEntry } from '../../utils/parseRoleData';
 import { v4 as uuidv4 } from 'uuid';
 import { getDate } from '../../utils/helpers';
-import { CreateNewRole, NewRoleLog } from '../types/types';
-import { insertRoleLog } from '../queries/roleLogQuery';
+import { CreateNewRole } from '../types/types';
 
-const rolesTotalRouter = express.Router();
+const rolesRouter = express.Router();
 
-rolesTotalRouter.get('/', async (_req, res, next) => {
+rolesRouter.get('/', async (_req, res, next) => {
   try {
     const allRoles = await getAllRoles();
 
@@ -18,7 +17,7 @@ rolesTotalRouter.get('/', async (_req, res, next) => {
   }
 });
 
-rolesTotalRouter.get('/:id', async (req, res, next) => {
+rolesRouter.get('/:id', async (req, res, next) => {
   try {
     const role = await getSpecificRole(req.params.id);
 
@@ -28,7 +27,7 @@ rolesTotalRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-rolesTotalRouter.post('/', async (req, res, next) => {
+rolesRouter.post('/', async (req, res, next) => {
   try {
     const currentUser = req.session.user;
     const parsedNewRole = toNewRoleEntry(req.body);
@@ -51,40 +50,15 @@ rolesTotalRouter.post('/', async (req, res, next) => {
   }
 });
 
-rolesTotalRouter.post('/:id', async (req, res, next) => {
-  try {
-    const roleData = toNewRoleLogEntry(req.body);
-    const currentUser = req.session.user;
-
-    if (!currentUser) return res.status(403).send('Must be logged in');
-
-    const roleToAdd: NewRoleLog = {
-      ...roleData,
-      log_id: uuidv4(),
-      user_id: currentUser.id,
-      role_id: req.params.id,
-      created_on: getDate()
-    };
-
-    const newRole = await insertRoleLog(roleToAdd);
-
-    return res.status(200).send(newRole);
-  } catch (err) {
-    return next(err);
-  }
-});
-
-rolesTotalRouter.delete('/:id', async (req, res, next) => {
+rolesRouter.delete('/:id', async (req, res, next) => {
   try {
     const currentUser = req.session.user;
     const findRole = await getSpecificRole(req.params.id);
 
     if (!currentUser) return res.status(400).send('Must be logged in');
 
-    const findCreator = findRole.creator.find(p => p.user_id === currentUser.id);
-
     // only the role creator or admin can delete the role
-    if (!(findCreator || req.session.admin)) return res.status(403).send('Not allowed');
+    if (!(currentUser.id === findRole.user_id || req.session.admin)) return res.status(403).send('Not allowed');
 
     await deleteRole(findRole.role_id);
 
@@ -94,4 +68,4 @@ rolesTotalRouter.delete('/:id', async (req, res, next) => {
   }
 });
 
-export { rolesTotalRouter };
+export { rolesRouter };

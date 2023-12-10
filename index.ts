@@ -6,7 +6,8 @@ import { loginrouter } from './src/routes/loginRouter';
 import { logoutRouter } from './src/routes/logoutRouter';
 import { adminRouter } from './src/routes/adminRouter';
 import { handleError, validateAdmin, validateUser } from './utils/middleware';
-import { rolesTotalRouter } from './src/routes/rolesTotalRouter';
+import { rolesRouter } from './src/routes/rolesRouter';
+import { roleLogRouter } from './src/routes/roleLogRouter';
 
 const app = express();
 
@@ -21,7 +22,8 @@ app.use('/api/ping', (_req, res) => {
 app.use('/api/login', loginrouter);
 app.use('/api/admin', validateAdmin, adminRouter);
 app.use('/api/users', userRouter);
-app.use('/api/roles', validateUser, rolesTotalRouter);
+app.use('/api/roles', validateUser, rolesRouter);
+app.use('/api/roleLog', validateAdmin, roleLogRouter);
 app.use('/api/logout', logoutRouter);
 
 app.use((error: Error, _req: Request, res: Response, next: NextFunction) => {
