@@ -12,8 +12,14 @@ const getUsers = async () => {
         'name',
         jsonArrayFrom(
           eb.selectFrom('roles_total')
+            .groupBy([
+              'roles_total.role_name',
+              'roles_total.role_id'
+            ])
             .innerJoin('role_log', 'role_log.role_id', 'roles_total.role_id')
             .select(({ fn }) => [
+              'roles_total.role_name',
+              'roles_total.role_id',
               fn.sum<number>('invitation').as('invitation'),
               fn.sum<number>('initial_contact').as('initial_contact'),
               fn.sum<number>('replied').as('replied'),
@@ -68,8 +74,14 @@ const getSpecificUser = async (id: string) => {
         'name',
         jsonArrayFrom(
           eb.selectFrom('roles_total')
+            .groupBy([
+              'roles_total.role_name',
+              'roles_total.role_id'
+            ])
             .innerJoin('role_log', 'role_log.role_id', 'roles_total.role_id')
             .select(({ fn }) => [
+              'roles_total.role_name',
+              'roles_total.role_id',
               fn.sum<number>('invitation').as('invitation'),
               fn.sum<number>('initial_contact').as('initial_contact'),
               fn.sum<number>('replied').as('replied'),

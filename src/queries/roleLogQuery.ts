@@ -1,6 +1,7 @@
+import { sql } from 'kysely';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { NewRoleLog } from '../types/types';
+import { NewRoleLog, RoleLog } from '../types/types';
 
 const getAllRoleLogs = async () => {
   try {
@@ -44,10 +45,19 @@ const insertRoleLog = async (role: NewRoleLog) => {
   }
 };
 
-// TODO: delete last log added
+const deleteLastLoggedEntry = async () => {
+  try {
+    await sql<RoleLog>`DELETE FROM role_log WHERE id = (SELECT MAX(id) from role_log);`
+      .execute(db);
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
 
 export {
   getAllRoleLogs,
   getSpecificRoleLog,
   insertRoleLog,
+  deleteLastLoggedEntry
 };

@@ -1,7 +1,7 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { getAllRoleLogs, insertRoleLog } from '../queries/roleLogQuery';
-import { validateAdmin } from '../../utils/middleware';
+import { deleteLastLoggedEntry, getAllRoleLogs, insertRoleLog } from '../queries/roleLogQuery';
+import { validateAdmin, validateUser } from '../../utils/middleware';
 import { getDate } from '../../utils/helpers';
 import { toNewRoleLogEntry } from '../../utils/parseRoleData';
 import { getSpecificRole } from '../queries/roleTotalQuery';
@@ -20,7 +20,7 @@ roleLogRouter.get('/', validateAdmin, async (_req, res, next) => {
 });
 
 // insert new role_log
-roleLogRouter.post('/:id', async (req, res, next) => {
+roleLogRouter.post('/:id', validateUser, async (req, res, next) => {
   try {
     const roleData = toNewRoleLogEntry(req.body);
     const currentUser = req.session.user;
@@ -44,6 +44,16 @@ roleLogRouter.post('/:id', async (req, res, next) => {
     const newRole = await insertRoleLog(roleToAdd);
 
     return res.status(200).send(newRole);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+roleLogRouter.delete('/:id', validateAdmin, async (_req, res, next) => {
+  try {
+    await deleteLastLoggedEntry();
+
+    res.status(200).end();
   } catch (err) {
     return next(err);
   }

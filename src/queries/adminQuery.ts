@@ -3,6 +3,8 @@ import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { UpdateUserAdmin } from '../types/types';
 
+// TODO: add a way to add permissions for roles
+
 const getUsersAdmin = async () => {
   try {
     const users = await db.selectFrom('users')
@@ -16,8 +18,20 @@ const getUsersAdmin = async () => {
         'password_hash',
         jsonArrayFrom(
           eb.selectFrom('roles_total')
+            .groupBy([
+              'roles_total.created_on',
+              'roles_total.permission',
+              'roles_total.role_id',
+              'roles_total.role_name',
+              'roles_total.user_id'
+            ])
             .innerJoin('role_log', 'role_log.role_id', 'roles_total.role_id')
             .select(({ fn }) => [
+              'roles_total.created_on',
+              'roles_total.permission',
+              'roles_total.role_id',
+              'roles_total.role_name',
+              'roles_total.user_id',
               fn.sum<number>('invitation').as('invitation'),
               fn.sum<number>('initial_contact').as('initial_contact'),
               fn.sum<number>('replied').as('replied'),
@@ -54,8 +68,20 @@ const getUserAdmin = async (id: string) => {
         'password_hash',
         jsonArrayFrom(
           eb.selectFrom('roles_total')
+            .groupBy([
+              'roles_total.created_on',
+              'roles_total.permission',
+              'roles_total.role_id',
+              'roles_total.role_name',
+              'roles_total.user_id'
+            ])
             .innerJoin('role_log', 'role_log.role_id', 'roles_total.role_id')
             .select(({ fn }) => [
+              'roles_total.created_on',
+              'roles_total.permission',
+              'roles_total.role_id',
+              'roles_total.role_name',
+              'roles_total.user_id',
               fn.sum<number>('invitation').as('invitation'),
               fn.sum<number>('initial_contact').as('initial_contact'),
               fn.sum<number>('replied').as('replied'),

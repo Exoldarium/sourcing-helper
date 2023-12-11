@@ -1,4 +1,5 @@
 import {
+  Generated,
   Insertable,
   Selectable,
   Updateable
@@ -74,6 +75,7 @@ export type NewRoleEntry = Pick<NewRole, 'role_name' | 'permission'>;
 
 // ROLE LOG SCHEMA
 export interface RoleLogTable {
+  id: Generated<number>;
   log_id: string;
   user_id: string;
   role_id: string;
@@ -89,7 +91,7 @@ export interface RoleLogTable {
   follow_up: number;
 }
 
-export type NewRoleLogEntry = Omit<RoleLog, 'log_id' | 'user_id' | 'role_id' | 'created_on'>;
+export type NewRoleLogEntry = Omit<RoleLog, 'id' | 'log_id' | 'user_id' | 'role_id' | 'created_on'>;
 
 export type RoleLog = Selectable<RoleLogTable>;
 export type NewRoleLog = Insertable<RoleLogTable>;
