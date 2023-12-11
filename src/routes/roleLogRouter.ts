@@ -49,8 +49,10 @@ roleLogRouter.post('/:id', validateUser, async (req, res, next) => {
   }
 });
 
-roleLogRouter.delete('/:id', validateAdmin, async (_req, res, next) => {
+roleLogRouter.delete('/:id', validateUser, async (req, res, next) => {
   try {
+    if (req.params.id !== req.session.user?.id) return res.status(403).send('Not allowed');
+
     await deleteLastLoggedEntry();
 
     res.status(200).end();

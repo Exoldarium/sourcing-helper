@@ -18,6 +18,18 @@ const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
   throw new Error('Some inputs might be missing');
 };
 
+const toNewRolePermissionEntry = (entry: unknown): string[] => {
+  if (!entry || typeof entry !== 'object') throw new Error('Invalid role input');
+
+  if ('permission' in entry && Array.isArray(entry.permission)) {
+    const permission = entry.permission.map(parseToString);
+
+    return permission;
+  }
+
+  throw new Error('Some inputs might be missing');
+};
+
 const toNewRoleLogEntry = (entry: unknown): NewRoleLogEntry => {
   if (!entry || typeof entry !== 'object') throw new Error('Invalid role input');
 
@@ -51,8 +63,8 @@ const toNewRoleLogEntry = (entry: unknown): NewRoleLogEntry => {
   throw new Error('Some inputs might be missing');
 };
 
-
 export {
   toNewRoleEntry,
+  toNewRolePermissionEntry,
   toNewRoleLogEntry
 };

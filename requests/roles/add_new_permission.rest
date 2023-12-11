@@ -1,0 +1,6 @@
+PUT http://localhost:53005/api/roles/addPermission/0bbe2ca8-c167-47d3-8a1a-79f2b0cae57a
+Content-Type: application/json
+
+{
+  "permission": ["1234566456456"]
+}

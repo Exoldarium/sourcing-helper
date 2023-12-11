@@ -3,8 +3,6 @@ import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { UpdateUserAdmin } from '../types/types';
 
-// TODO: add a way to add permissions for roles
-
 const getUsersAdmin = async () => {
   try {
     const users = await db.selectFrom('users')

@@ -78,6 +78,25 @@ const createRole = async (role: CreateNewRole) => {
   }
 };
 
+const addPermission = async (roleId: string, permission: string[]) => {
+  try {
+    const role = await db.updateTable('roles_total')
+      .set({ permission })
+      .where('role_id', '=', roleId)
+      .returning([
+        'user_id',
+        'role_name',
+        'permission'
+      ])
+      .executeTakeFirstOrThrow();
+
+    return role;
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
 const deleteRole = async (id: string) => {
   try {
     return await db.deleteFrom('roles_total')
@@ -93,5 +112,6 @@ export {
   getAllRoles,
   createRole,
   getSpecificRole,
+  addPermission,
   deleteRole
 };
