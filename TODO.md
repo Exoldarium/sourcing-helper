@@ -5,6 +5,8 @@ user (id: primaryKey, name, password, admin)
 Role permissions can be added when the role is created (an id that can be passed to the array)
 When the role is created all the values should default to 0
 
+Move all of the word text to client side. Each role should have copying options for follow ups, job descriptions etc
+
 positionTotal (
   id: primaryKey, 
   userId: foreignKey, 

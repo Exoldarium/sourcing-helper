@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { getSpecificUser, getUsers, insertUser, updateUser } from '../queries/userQuery';
 import { NewUser } from '../types/types';
-import { getDate } from '../../utils/helpers';
 import { toNewUserEntry, toUpdateUserEntry } from '../../utils/parseUserData';
 import { validateUser } from '../../utils/middleware';
 
@@ -45,8 +44,7 @@ userRouter.post('/', async (req, res, next) => {
       password_hash: passwordHash,
       user_id: uuidv4(),
       disabled: false,
-      admin: false,
-      created_on: getDate()
+      admin: false
     };
 
     const newUser = await insertUser(userToAdd);

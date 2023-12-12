@@ -21,7 +21,7 @@ export interface UserTable {
   password_hash: string;
   admin: boolean;
   disabled: boolean;
-  created_on: string;
+  created_on: Generated<Date | string | number>;
 }
 
 export interface CreateNewUser {
@@ -55,8 +55,8 @@ export interface RoleTotalTable {
   role_id: string;
   user_id: string;
   role_name: string;
-  created_on: string;
-  permission: string[],
+  created_on: Generated<Date | string | number>;
+  permission: string[];
 }
 
 export interface CreateNewRole {
@@ -64,7 +64,6 @@ export interface CreateNewRole {
   permission: string[];
   user_id: string;
   role_id: string;
-  created_on: string;
 }
 
 export type Role = Selectable<RoleTotalTable>;
@@ -79,7 +78,7 @@ export interface RoleLogTable {
   log_id: string;
   user_id: string;
   role_id: string;
-  created_on: string;
+  created_on: Generated<Date | string | number>;
   invitation: number;
   initial_contact: number;
   replied: number;

@@ -1,6 +1,6 @@
-const getDate = (): string => {
-  const epoch = Date.now();
-  const date = new Date(epoch).toUTCString();
+const getDate = (dateToParse: number): string => {
+  // const epoch = Date.now();
+  const date = new Date(dateToParse).toISOString();
 
   return date;
 };

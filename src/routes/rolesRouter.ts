@@ -2,7 +2,6 @@ import express from 'express';
 import { addPermission, createRole, deleteRole, getAllRoles, getSpecificRole } from '../queries/roleTotalQuery';
 import { toNewRoleEntry, toNewRolePermissionEntry } from '../../utils/parseRoleData';
 import { v4 as uuidv4 } from 'uuid';
-import { getDate } from '../../utils/helpers';
 import { CreateNewRole } from '../types/types';
 
 const rolesRouter = express.Router();
@@ -38,7 +37,6 @@ rolesRouter.post('/', async (req, res, next) => {
       ...parsedNewRole,
       user_id: currentUser.id,
       role_id: uuidv4(),
-      created_on: getDate(),
       permission: [...parsedNewRole.permission, currentUser.id]
     };
 

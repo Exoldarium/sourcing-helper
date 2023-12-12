@@ -2,7 +2,7 @@ POST http://localhost:53005/api/users
 Content-Type: application/json
 
 {
-  "name": "Anothertest",
-  "email": "anothertest@gmail.com",
+  "name": "Test",
+  "email": "test@gmail.com",
   "password": "testing"
 }

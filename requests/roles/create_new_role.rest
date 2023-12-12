@@ -2,6 +2,6 @@ POST http://localhost:53005/api/roles
 Content-Type: application/json
 
 {
-  "role_name": "usert test role",
-  "permission": ["1234567"]
+  "role_name": "PHP Dev",
+  "permission": ["ec53f8a4-7ec1-4eec-833f-138f78eee0de"]
 }

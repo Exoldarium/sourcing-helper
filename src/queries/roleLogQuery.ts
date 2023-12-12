@@ -31,6 +31,27 @@ const getSpecificRoleLog = async (id: string) => {
   }
 };
 
+const getSpecificLogsBasedOnDate = async (dateFrom: string, dateTo: string) => {
+  try {
+    if (dateFrom === dateTo) {
+      const roleLogs = await sql<RoleLog>`SELECT * FROM role_log 
+        WHERE DATE(created_on) = ${dateFrom};`
+        .execute(db);
+
+      return roleLogs;
+    } else {
+      const roleLogs = await sql<RoleLog>`SELECT * FROM role_log 
+        WHERE created_on BETWEEN ${dateFrom} AND ${dateTo};`
+        .execute(db);
+
+      return roleLogs;
+    }
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
 const insertRoleLog = async (role: NewRoleLog) => {
   try {
     const roleLog = await db.insertInto('role_log')
@@ -45,9 +66,16 @@ const insertRoleLog = async (role: NewRoleLog) => {
   }
 };
 
-const deleteLastLoggedEntry = async () => {
+const deleteLastLoggedEntry = async (id: string) => {
   try {
-    await sql<RoleLog>`DELETE FROM role_log WHERE id = (SELECT MAX(id) from role_log);`
+    // raw query, because i was lazy to search how to do it with kysely
+    await sql<RoleLog>`DELETE FROM role_log
+      WHERE user_id = ${id}
+      AND id = (
+        SELECT MAX(id)
+        FROM role_log
+        WHERE user_id = ${id}
+      );`
       .execute(db);
   } catch (err) {
     const error = parseError(err);
@@ -58,6 +86,7 @@ const deleteLastLoggedEntry = async () => {
 export {
   getAllRoleLogs,
   getSpecificRoleLog,
+  getSpecificLogsBasedOnDate,
   insertRoleLog,
   deleteLastLoggedEntry
 };
