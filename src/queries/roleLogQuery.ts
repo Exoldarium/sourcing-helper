@@ -9,8 +9,6 @@ const getAllRoleLogs = async () => {
       .selectAll()
       .execute();
 
-    console.log(roleLogs);
-
     return roleLogs;
   } catch (err) {
     const error = parseError(err);

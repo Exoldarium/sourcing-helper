@@ -24,8 +24,6 @@ roleLogRouter.get('/date', async (req, res, next) => {
     const dateFrom = new Date(parseToString(req.query.dateFrom)).toISOString();
     const dateTo = new Date(parseToString(req.query.dateTo)).toISOString();
 
-    console.log(dateFrom, dateTo);
-
     const roleLogs = await getSpecificLogsBasedOnDate(dateFrom, dateTo);
 
     return res.status(200).send(roleLogs);
@@ -63,7 +61,6 @@ roleLogRouter.post('/:id', validateUser, async (req, res, next) => {
   }
 });
 
-// TODO: abstract some of the repeating code 
 roleLogRouter.delete('/:id', validateUser, async (req, res, next) => {
   try {
     const currentUser = req.session.user;

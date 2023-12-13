@@ -23,7 +23,7 @@ app.use('/api/login', loginrouter);
 app.use('/api/admin', validateAdmin, adminRouter);
 app.use('/api/users', userRouter);
 app.use('/api/roles', validateUser, rolesRouter);
-app.use('/api/roleLog', roleLogRouter);
+app.use('/api/roleLog', validateUser, roleLogRouter);
 app.use('/api/logout', logoutRouter);
 
 app.use((error: Error, _req: Request, res: Response, next: NextFunction) => {

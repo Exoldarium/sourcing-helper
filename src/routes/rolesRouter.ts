@@ -50,7 +50,6 @@ rolesRouter.post('/', async (req, res, next) => {
 
 rolesRouter.put('/addPermission/:id', async (req, res, next) => {
   try {
-    // TODO: try to refactor some of the repeating conditionals
     const currentUser = req.session.user;
     const findRole = await getSpecificRole(req.params.id);
 
