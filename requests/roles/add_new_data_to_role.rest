@@ -1,0 +1,14 @@
+POST http://localhost:53005/api/roleLog/5ba646d2-183e-4878-93fc-d9b60a362917
+Content-Type: application/json
+
+{
+  "invitation": 1,
+  "initial_contact": 5,
+  "replied": 3,
+  "job_description": 4,
+  "application_reviewed": 22,
+  "proposed": 10,
+  "accepted": 7,
+  "rejected": 8,
+  "follow_up": 12
+}
