@@ -1,16 +1,17 @@
-import { useGetUsers } from './hooks/useGetUsers';
+import { useQuery } from '@tanstack/react-query';
+import { services } from './services/users';
 
-// TODO: move data fetching into a hook and add loading, error etc
 const App = () => {
-  const { error, loading, users } = useGetUsers();
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => services.getUsers()
+  });
 
   if (error) return <p>There was an error</p>;
-  if (loading) return <p>Loading...</p>;
-  if (!users) return null;
+  if (isLoading) return <p>Loading...</p>;
+  if (!data) return null;
 
-  console.log(loading);
-
-  console.log(users);
+  console.log(data);
   return (
     <div>Heloooo!</div>
   );
