@@ -1,1 +1,0 @@
-DELETE http://localhost:53005/api/roleLog/9e383d63-e612-4cdd-a64d-a5e3db5c49ae

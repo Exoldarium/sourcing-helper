@@ -1,1 +1,0 @@
-GET http://localhost:53005/api/users/9f6723cc-dfdf-4af6-bd6d-76b6345e3f06
