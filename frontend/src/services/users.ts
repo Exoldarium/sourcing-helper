@@ -1,17 +1,13 @@
-import { API } from '../constants';
 import { RegularUser } from '../types';
+import { request } from '../utils/axiosRequest';
 import { parseRegularUserData } from '../utils/parseRegularUserData';
 
 const getUsers = async (): Promise<RegularUser[]> => {
-  const res = await fetch(`${API}/users`);
+  const res = await request.get('/users');
 
-  if (!res.ok) throw new Error('Error! No response from the server');
+  if (!(res && Array.isArray(res.data))) throw new Error('Invalid or missing user input');
 
-  const allUsers = (await res.json()) as unknown;
-
-  if (!(allUsers && Array.isArray(allUsers))) throw new Error('Invalid or missing user input');
-
-  const parseUsers = allUsers.map(user => parseRegularUserData.toUserEntry(user));
+  const parseUsers = res.data.map(user => parseRegularUserData.toUserEntry(user));
 
   return parseUsers;
 };

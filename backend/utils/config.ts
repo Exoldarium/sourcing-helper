@@ -14,11 +14,18 @@ const DB_CONFIG = {
 const SESSION = {
   secret: parseToString(process.env.COOKIESECRET),
   saveUninitialized: true,
-  cookie: { maxAge: 60 * 60 * 24 * 8 },
   resave: false,
-  secure: process.env.NODE_ENV === 'development' ? false : true,
-  httpOnly: process.env.NODE_ENV === 'development' ? false : true,
-  sameSite: process.env.NODE_ENV === 'development' ? false : 'none',
+  name: 'myApp', // session id's will conflict if the name is not set, had problems with cookies because of that
+  cookie: {
+    maxAge: 3600000,
+    httpOnly: false,
+    sameSite: false,
+    secure: false
+    // TODO: add these in prod
+    // secure: process.env.NODE_ENV === 'development' ? false : true,
+    // httpOnly: process.env.NODE_ENV === 'development' ? false : true,
+    // sameSite: process.env.NODE_ENV === 'development' ? false : 'none' as const,
+  },
 };
 
 export {

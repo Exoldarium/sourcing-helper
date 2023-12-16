@@ -2,18 +2,14 @@ import express from 'express';
 
 const logoutRouter = express.Router();
 
-logoutRouter.get('/', (req, res, next) => {
-  const user = req.session.user;
-
-  if (!user) return res.status(400).send('Already logged out');
-
+logoutRouter.post('/', (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {
       return next(err);
     }
   });
 
-  return res.status(200).end();
+  return res.redirect('/login');
 });
 
 export { logoutRouter };

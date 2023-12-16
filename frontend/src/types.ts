@@ -22,6 +22,7 @@ export type UpdateUserRegular = Pick<User, 'email' | 'name'>;
 export type UserRegular = Pick<User, 'email' | 'user_id' | 'name'>;
 
 export type UserLogin = Omit<CreateNewUser, 'name'>;
+export type LoggedUser = Pick<User, 'email' | 'user_id'>;
 
 export interface Blacklist {
   user_id: string;

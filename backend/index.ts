@@ -12,7 +12,10 @@ import { roleLogRouter } from './src/routes/roleLogRouter';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: true
+}));
 app.use(express.json());
 app.use(session(SESSION));
 

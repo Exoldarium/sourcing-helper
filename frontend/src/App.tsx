@@ -1,19 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
-import { services } from './services/users';
+import { Route, Routes } from 'react-router-dom';
+import { UserLogin } from './components/Login';
+import { Users } from './components/Users';
 
 const App = () => {
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => services.getUsers()
-  });
-
-  if (error) return <p>There was an error</p>;
-  if (isLoading) return <p>Loading...</p>;
-  if (!data) return null;
-
-  console.log(data);
   return (
-    <div>Heloooo!</div>
+    <>
+      <Routes>
+        <Route path='/' element={<Users />} />
+        <Route path='/login' element={<UserLogin />} />
+      </Routes>
+    </>
   );
 };
 

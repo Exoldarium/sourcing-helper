@@ -11,20 +11,21 @@ const handleError = (error: Error, res: Response, next: NextFunction) => {
 };
 
 const validateUser = (req: Request, res: Response, next: NextFunction) => {
-  const currentUser = req.session.user;
-  const userDisabled = req.session.disabled;
-
-  if (!currentUser || userDisabled) return res.status(403).send('Not allowed');
+  if (!req.session.user || req.session.disabled) {
+    return res.status(403).send('Not allowed');
+  }
 
   return next();
 };
 
 const validateAdmin = (req: Request, res: Response, next: NextFunction) => {
-  const currentUser = req.session.user;
-  const admin = req.session.admin;
-  const userDisabled = req.session.disabled;
+  // const currentUser = req.session.user;
+  // const admin = req.session.admin;
+  // const userDisabled = req.session.disabled;
 
-  if (!(currentUser && admin) || userDisabled) return res.status(403).send('Not allowed');
+  if (!(req.session.user && req.session.admin) || req.session.disabled) {
+    return res.status(403).send('Not allowed');
+  }
 
   return next();
 };

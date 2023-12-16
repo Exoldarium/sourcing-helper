@@ -8,8 +8,7 @@ import { validateUser } from '../../utils/middleware';
 
 const userRouter = express.Router();
 
-// TODO: add validate user
-userRouter.get('/', async (_req, res, next) => {
+userRouter.get('/', validateUser, async (_req, res, next) => {
   try {
     const allUsers = await getUsers();
 

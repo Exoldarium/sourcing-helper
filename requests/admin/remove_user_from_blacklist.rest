@@ -1,1 +1,0 @@
-DELETE http://localhost:53005/api/admin/blacklist/d560cd5f-4be3-4160-bbb4-5f1df9c99810
