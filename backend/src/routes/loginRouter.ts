@@ -20,14 +20,14 @@ loginrouter.post('/', async (req, res, next) => {
 
     const loggedUser = {
       email: user.email,
-      id: user.user_id,
+      user_id: user.user_id,
     };
 
     req.session.user = loggedUser;
     req.session.admin = user.admin;
     req.session.disabled = user.disabled;
 
-    return res.status(200).send(loggedUser);
+    return res.status(200).send({ ...loggedUser, name: user.name });
   } catch (err) {
     return next(err);
   }

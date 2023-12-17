@@ -7,7 +7,7 @@ declare module 'express-session' {
   interface SessionData {
     user: {
       email: string;
-      id: string;
+      user_id: string;
     };
     admin: boolean;
     disabled: boolean;

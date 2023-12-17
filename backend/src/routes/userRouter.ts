@@ -68,7 +68,7 @@ userRouter.put('/:id', async (req, res, next) => {
 
     if (!currentUser) return res.status(403).send('Must be logged in');
     // logged in user can only update his own info, admin can update everyone
-    if (currentUser.id !== req.params.id && !req.session.admin) return res.status(403).send('Not allowed');
+    if (currentUser.user_id !== req.params.id && !req.session.admin) return res.status(403).send('Not allowed');
 
     const parsedUserToUpdate = toUpdateUserEntry(req.body);
 

@@ -41,7 +41,7 @@ roleLogRouter.post('/:id', validateUser, async (req, res, next) => {
 
     if (!currentUser) return res.status(403).send('Must be logged in');
 
-    const checkPermission = findRole.permission.find(id => id === currentUser.id);
+    const checkPermission = findRole.permission.find(id => id === currentUser.user_id);
 
     // only the admin or users with permissions can add logs
     if (!(checkPermission || req.session.admin)) return res.status(403).send('Not allowed');
@@ -49,7 +49,7 @@ roleLogRouter.post('/:id', validateUser, async (req, res, next) => {
     const roleToAdd: NewRoleLog = {
       ...roleData,
       log_id: uuidv4(),
-      user_id: currentUser.id,
+      user_id: currentUser.user_id,
       role_id: req.params.id
     };
 
@@ -68,7 +68,7 @@ roleLogRouter.delete('/:id', validateUser, async (req, res, next) => {
 
     if (!currentUser) return res.status(403).send('Must be logged in');
 
-    const checkPermission = findRole.permission.find(id => id === currentUser.id);
+    const checkPermission = findRole.permission.find(id => id === currentUser.user_id);
 
     // only the admin or users with permissions can add logs
     if (!(checkPermission || req.session.admin)) return res.status(403).send('Not allowed');

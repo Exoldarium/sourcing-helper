@@ -35,9 +35,9 @@ rolesRouter.post('/', async (req, res, next) => {
 
     const newRole: CreateNewRole = {
       ...parsedNewRole,
-      user_id: currentUser.id,
+      user_id: currentUser.user_id,
       role_id: uuidv4(),
-      permission: [...parsedNewRole.permission, currentUser.id]
+      permission: [...parsedNewRole.permission, currentUser.user_id]
     };
 
     const roleAdded = await createRole(newRole);
@@ -62,7 +62,7 @@ rolesRouter.put('/addPermission/:id', async (req, res, next) => {
     if (!currentUser) return res.status(400).send('Must be logged in');
 
     // only the role creator or admin can add new permissions to the role
-    if (!(currentUser.id === findRole.user_id || req.session.admin)) return res.status(403).send('Not allowed');
+    if (!(currentUser.user_id === findRole.user_id || req.session.admin)) return res.status(403).send('Not allowed');
 
     const newPermissions = findRole.permission.concat(parsedPermission);
 
@@ -82,7 +82,7 @@ rolesRouter.delete('/:id', async (req, res, next) => {
     if (!currentUser) return res.status(400).send('Must be logged in');
 
     // only the role creator or admin can delete the role
-    if (!(currentUser.id === findRole.user_id || req.session.admin)) return res.status(403).send('Not allowed');
+    if (!(currentUser.user_id === findRole.user_id || req.session.admin)) return res.status(403).send('Not allowed');
 
     await deleteRole(findRole.role_id);
 

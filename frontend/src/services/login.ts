@@ -6,7 +6,6 @@ import { request } from '../utils/axiosRequest';
 const login = async (credentials: UserLogin): Promise<LoggedUser> => {
   try {
     const res = await request.post('login', credentials);
-
     return parseRegularUserData.toLoginEntry(res.data);
   } catch (err) {
     const error = parseError(err);

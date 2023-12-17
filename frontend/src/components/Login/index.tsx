@@ -13,7 +13,10 @@ const UserLogin = () => {
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
-    mutationFn: () => loginService.login(inputs),
+    mutationFn: async () => {
+      const res = await loginService.login(inputs);
+      localStorage.setItem('loggedUser', JSON.stringify(res));
+    },
     onSuccess: () => navigate('/'),
     onError: (err) => {
       dispatch({

@@ -25,11 +25,13 @@ const toLoginEntry = (entry: unknown): LoggedUser => {
   if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
 
   if (
-    'id' in entry &&
+    'user_id' in entry &&
+    'name' in entry &&
     'email' in entry
   ) {
     const loggedUser: LoggedUser = {
-      user_id: parseToString(entry.id),
+      user_id: parseToString(entry.user_id),
+      name: parseToString(entry.name),
       email: parseToString(entry.email)
     };
 
