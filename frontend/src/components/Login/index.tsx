@@ -1,21 +1,34 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { loginService } from '../../services/login';
+import { useMutation } from '@tanstack/react-query';
+import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 
 const UserLogin = () => {
   const { inputs, handleInputs } = useForm({
     email: '',
     password: ''
   });
+  const dispatch = useDispatchValue();
   const navigate = useNavigate();
+
+  const loginMutation = useMutation({
+    mutationFn: () => loginService.login(inputs),
+    onSuccess: () => navigate('/'),
+    onError: (err) => {
+      dispatch({
+        type: 'ERROR',
+        payload: err.message
+      });
+    }
+  });
 
   const userLoginOnClick = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    void loginService.login(inputs);
-    navigate('/');
-
-    console.log(inputs);
+    loginMutation.mutate();
   };
+
+  if (loginMutation.isPending) return <p>Logging you in...</p>;
 
   return (
     <form

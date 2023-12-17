@@ -9,7 +9,7 @@ logoutRouter.post('/', (req, res, next) => {
     }
   });
 
-  return res.redirect('/login');
+  return res.status(200).end();
 });
 
 export { logoutRouter };

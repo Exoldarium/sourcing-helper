@@ -1,25 +1,35 @@
-import { useQuery } from '@tanstack/react-query';
-import { services } from '../../services/users';
 import { logoutService } from '../../services/logout';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../hooks/useUser';
+import { useMutation } from '@tanstack/react-query';
+import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 
 const Users = () => {
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => services.getUsers()
-  });
+  const { user, isLoading, error } = useUser();
+  const dispatch = useDispatchValue();
   const navigate = useNavigate();
 
-  if (error) return <p>There was an error</p>;
-  if (isLoading) return <p>Loading...</p>;
-  if (!data) return null;
+  console.log(user);
 
-  console.log(data);
+  const logoutMutation = useMutation({
+    mutationFn: () => logoutService.logout(),
+    onError: (err) => {
+      console.log(err);
+      dispatch({
+        type: 'ERROR',
+        payload: err.message
+      });
+    }
+  });
+
   const logoutOnClick = () => {
-    void logoutService.logout();
+    logoutMutation.mutate();
     navigate('/login');
-
   };
+
+  if (error) return <p>{error.message}</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (!user) return null;
 
   return (
     <>

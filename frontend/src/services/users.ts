@@ -1,15 +1,21 @@
 import { RegularUser } from '../types';
 import { request } from '../utils/axiosRequest';
 import { parseRegularUserData } from '../utils/parseRegularUserData';
+import { parseError } from '../utils/parsingHelpers';
 
 const getUsers = async (): Promise<RegularUser[]> => {
-  const res = await request.get('/users');
+  try {
+    const res = await request.get('/users');
 
-  if (!(res && Array.isArray(res.data))) throw new Error('Invalid or missing user input');
+    if (!(res && Array.isArray(res.data))) throw new Error('Invalid or missing user input');
 
-  const parseUsers = res.data.map(user => parseRegularUserData.toUserEntry(user));
+    const parseUsers = res.data.map(user => parseRegularUserData.toUserEntry(user));
 
-  return parseUsers;
+    return parseUsers;
+  } catch (err) {
+    const error = parseError(err);
+    throw new Error(error);
+  }
 };
 
 export const services = {

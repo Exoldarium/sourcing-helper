@@ -1,3 +1,4 @@
+// USER
 export interface User {
   user_id: string;
   email: string;
@@ -24,11 +25,13 @@ export type UserRegular = Pick<User, 'email' | 'user_id' | 'name'>;
 export type UserLogin = Omit<CreateNewUser, 'name'>;
 export type LoggedUser = Pick<User, 'email' | 'user_id'>;
 
+// BLACKLIST
 export interface Blacklist {
   user_id: string;
   email: string;
 }
 
+// ROLES
 export interface RoleTotal {
   role_id: string;
   user_id: string;

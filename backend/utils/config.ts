@@ -15,7 +15,6 @@ const SESSION = {
   secret: parseToString(process.env.COOKIESECRET),
   saveUninitialized: true,
   resave: false,
-  name: 'myApp', // session id's will conflict if the name is not set, had problems with cookies because of that
   cookie: {
     maxAge: 3600000,
     httpOnly: false,
