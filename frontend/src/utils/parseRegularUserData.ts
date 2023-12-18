@@ -1,4 +1,4 @@
-import { LoggedUser, RegularUser } from '../types';
+import { RegularUser } from '../types';
 import { parseToString } from './parsingHelpers';
 
 const toUserEntry = (entry: unknown): RegularUser => {
@@ -21,27 +21,6 @@ const toUserEntry = (entry: unknown): RegularUser => {
   throw new Error('Invalid user input or some fields might be missing');
 };
 
-const toLoginEntry = (entry: unknown): LoggedUser => {
-  if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
-
-  if (
-    'user_id' in entry &&
-    'name' in entry &&
-    'email' in entry
-  ) {
-    const loggedUser: LoggedUser = {
-      user_id: parseToString(entry.user_id),
-      name: parseToString(entry.name),
-      email: parseToString(entry.email)
-    };
-
-    return loggedUser;
-  }
-
-  throw new Error('Invalid user input or some fields might be missing');
-};
-
 export const parseRegularUserData = {
-  toUserEntry,
-  toLoginEntry
+  toUserEntry
 };

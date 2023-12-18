@@ -1,32 +1,21 @@
 import { logoutService } from '../../services/logout';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { UserStyles } from './UserStyles';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../hooks/useUser';
-import { useMutation } from '@tanstack/react-query';
-import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
-import { useEffect, useState } from 'react';
-import { parseRegularUserData } from '../../utils/parseRegularUserData';
-import { LoggedUser } from '../../types';
 
 const Users = () => {
-  const { user, isLoading, error } = useUser();
-  const [loggedUser, setLoggedUser] = useState<LoggedUser>();
+  const { user } = useUser();
   const dispatch = useDispatchValue();
   const navigate = useNavigate();
-
-
-  useEffect(() => {
-    const userFromStorage = localStorage.getItem('loggedUser');
-
-    if (userFromStorage) {
-      const parsedUser = JSON.parse(userFromStorage) as unknown;
-      const userToSet = parseRegularUserData.toLoginEntry(parsedUser);
-
-      setLoggedUser(userToSet);
-    }
-  }, []);
+  const queryClient = useQueryClient();
 
   const logoutMutation = useMutation({
     mutationFn: () => logoutService.logout(),
+    onSuccess: () => {
+      queryClient.setQueryData(['loggedUser'], null);
+    },
     onError: (err) => {
       console.log(err);
       dispatch({
@@ -38,22 +27,19 @@ const Users = () => {
 
   const logoutOnClick = () => {
     logoutMutation.mutate();
-    localStorage.removeItem('loggedUser');
     navigate('/login');
   };
 
-  if (error) return <p>{error.message}</p>;
-  if (isLoading) return <p>Loading...</p>;
-  if (!user) return null;
-
-  return (
-    <>
-      <nav>
-        <div>{loggedUser?.name} logged in</div>
-        <button onClick={logoutOnClick}>Logout</button >
-      </nav>
-    </>
-  );
+  if (user) {
+    return (
+      <>
+        <UserStyles>
+          <div>{user.name}</div>
+          <button onClick={logoutOnClick}>Logout</button >
+        </UserStyles>
+      </>
+    );
+  }
 };
 
 export { Users };

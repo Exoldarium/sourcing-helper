@@ -23,7 +23,6 @@ export type UpdateUserRegular = Pick<User, 'email' | 'name'>;
 export type UserRegular = Pick<User, 'email' | 'user_id' | 'name'>;
 
 export type UserLogin = Omit<CreateNewUser, 'name'>;
-export type LoggedUser = Pick<User, 'email' | 'user_id' | 'name'>;
 
 // BLACKLIST
 export interface Blacklist {
@@ -64,6 +63,10 @@ export interface RoleLog {
   accepted: number;
   rejected: number;
   follow_up: number;
+}
+
+export interface Role extends RoleTotal {
+  role_data: NewRoleLogEntry[]
 }
 
 export type NewRoleLogEntry = Omit<RoleLog, 'id' | 'log_id' | 'user_id' | 'role_id' | 'created_on'>;

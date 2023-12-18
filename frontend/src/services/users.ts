@@ -18,6 +18,20 @@ const getUsers = async (): Promise<RegularUser[]> => {
   }
 };
 
-export const services = {
-  getUsers
+const getLoggedInUser = async (): Promise<RegularUser> => {
+  try {
+    const res = await request.get('/loggedUser');
+
+    const parseUsers = parseRegularUserData.toUserEntry(res.data);
+
+    return parseUsers;
+  } catch (err) {
+    const error = parseError(err);
+    throw new Error(error);
+  }
+};
+
+export const userService = {
+  getUsers,
+  getLoggedInUser
 };

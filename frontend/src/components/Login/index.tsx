@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { loginService } from '../../services/login';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 
 const UserLogin = () => {
@@ -11,13 +11,14 @@ const UserLogin = () => {
   });
   const dispatch = useDispatchValue();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const loginMutation = useMutation({
-    mutationFn: async () => {
-      const res = await loginService.login(inputs);
-      localStorage.setItem('loggedUser', JSON.stringify(res));
+    mutationFn: async () => loginService.login(inputs),
+    onSuccess: (data) => {
+      queryClient.setQueryData(['loggedUser'], data);
+      navigate('/');
     },
-    onSuccess: () => navigate('/'),
     onError: (err) => {
       dispatch({
         type: 'ERROR',
