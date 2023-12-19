@@ -15,8 +15,8 @@ const UserLogin = () => {
 
   const loginMutation = useMutation({
     mutationFn: async () => loginService.login(inputs),
-    onSuccess: (data) => {
-      queryClient.setQueryData(['loggedUser'], data);
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['loggedUser'] });
       navigate('/');
     },
     onError: (err) => {

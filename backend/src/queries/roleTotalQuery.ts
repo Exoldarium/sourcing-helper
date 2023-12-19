@@ -1,7 +1,10 @@
 import { jsonArrayFrom } from 'kysely/helpers/postgres';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { CreateNewRole } from '../types/types';
+import { CreateNewRole, NewRoleEntry } from '../types/types';
+
+// TODO: 
+// add content and link columns to role_total db
 
 const getAllRoles = async () => {
   try {
@@ -78,6 +81,26 @@ const createRole = async (role: CreateNewRole) => {
   }
 };
 
+const updateRole = async (id: string, role: NewRoleEntry) => {
+  try {
+    const updatedRole = await db.updateTable('roles_total')
+      .set({
+        content: role.content,
+        link: role.link,
+        role_name: role.role_name,
+        permission: role.permission
+      })
+      .where('role_id', '=', id)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+
+    return updatedRole;
+  } catch (err) {
+    const error = parseError(err);
+    throw Error(error);
+  }
+};
+
 const addPermission = async (roleId: string, permission: string[]) => {
   try {
     const role = await db.updateTable('roles_total')
@@ -112,6 +135,7 @@ export {
   getAllRoles,
   createRole,
   getSpecificRole,
+  updateRole,
   addPermission,
   deleteRole
 };

@@ -57,20 +57,17 @@ export interface RoleTotalTable {
   role_name: string;
   created_on: Generated<Date | string | number>;
   permission: string[];
+  content: string;
+  link: string;
 }
 
-export interface CreateNewRole {
-  role_name: string;
-  permission: string[];
-  user_id: string;
-  role_id: string;
-}
+export type CreateNewRole = Omit<RoleTotalTable, 'created_on'>;
 
 export type Role = Selectable<RoleTotalTable>;
 export type NewRole = Insertable<RoleTotalTable>;
 export type UpdateRole = Updateable<RoleTotalTable>;
 
-export type NewRoleEntry = Pick<NewRole, 'role_name' | 'permission'>;
+export type NewRoleEntry = Pick<NewRole, 'role_name' | 'permission' | 'link' | 'content'>;
 
 // ROLE LOG SCHEMA
 export interface RoleLogTable {

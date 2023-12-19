@@ -8,4 +8,7 @@ export const UserStyles = styled.nav`
   div {
     padding: 0.2rem;
   }
+  a {
+    flex: 1;
+  }
 `;

@@ -18,6 +18,18 @@ const getRoles = async (): Promise<Role[]> => {
   }
 };
 
+const getRole = async (id: string) => {
+  try {
+    const res = await request.get(`/roles/${id}`);
+
+    return parseRoleData.toRoleEntry(res.data);
+  } catch (err) {
+    const error = parseError(err);
+    throw new Error(error);
+  }
+};
+
 export const roleService = {
-  getRoles
+  getRoles,
+  getRole
 };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { addPermission, createRole, deleteRole, getAllRoles, getSpecificRole } from '../queries/roleTotalQuery';
+import { addPermission, createRole, deleteRole, getAllRoles, getSpecificRole, updateRole } from '../queries/roleTotalQuery';
 import { toNewRoleEntry, toNewRolePermissionEntry } from '../../utils/parseRoleData';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateNewRole } from '../types/types';
@@ -43,6 +43,29 @@ rolesRouter.post('/', async (req, res, next) => {
     const roleAdded = await createRole(newRole);
 
     return res.status(200).send(roleAdded);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+rolesRouter.put('/:id', async (req, res, next) => {
+  try {
+    const currentUser = req.session.user;
+    const findRole = await getSpecificRole(req.params.id);
+
+    if (!currentUser) return res.status(400).send('Must be logged in');
+
+    const checkPermission = findRole.permission.find(id => id === currentUser.user_id);
+
+    if (!checkPermission || !req.session.admin) return res.status(400).send('Permission required');
+
+    const parsedRole = toNewRoleEntry(req.body);
+
+    console.log(parsedRole, 'parsedRole');
+
+    const updatedRole = await updateRole(req.params.id, parsedRole);
+
+    return res.status(200).send(updatedRole);
   } catch (err) {
     return next(err);
   }
