@@ -2,8 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import { UserLogin } from './components/Login';
 import { Users } from './components/Users';
 import { NotificationMessage } from './components/NotificationMessage';
-import { Roles } from './components/Roles';
-import { SpecificRole } from './components/Roles/SpecificRole';
+import { Roles } from './components/AllRoles';
+import { SpecificRole } from './components/SpecificRole';
 
 const App = () => {
   return (

@@ -60,8 +60,13 @@ rolesRouter.put('/:id', async (req, res, next) => {
     if (!checkPermission || !req.session.admin) return res.status(400).send('Permission required');
 
     const parsedRole = toNewRoleEntry(req.body);
+    console.log(parsedRole, 'parsed');
+    const roleToUpdate = {
+      ...parsedRole,
+      permission: [...findRole.permission]
+    };
 
-    const updatedRole = await updateRole(req.params.id, parsedRole);
+    const updatedRole = await updateRole(req.params.id, roleToUpdate);
 
     return res.status(200).send(updatedRole);
   } catch (err) {

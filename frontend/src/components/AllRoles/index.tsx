@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { roleService } from '../../services/roles';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -14,15 +14,19 @@ const Roles = () => {
     content: '',
     permission: [],
   });
+
+  const dispatch = useDispatchValue();
+  const queryClient = useQueryClient();
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['roles'],
     queryFn: () => roleService.getRoles()
   });
-  const dispatch = useDispatchValue();
-
   const newRoleMutation = useMutation({
-    mutationFn: async () => roleService.newRole(inputs),
-    onSuccess: (role) => console.log(role),
+    mutationFn: () => roleService.newRole(inputs),
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['roles'] });
+    },
     onError: (err) => {
       dispatch({
         type: 'ERROR',
@@ -62,16 +66,16 @@ const Roles = () => {
             value={inputs.role_name}
             onChange={handleInputs}
           />
-          <label htmlFor="url">Link: </label>
+          <label htmlFor="link">Link: </label>
           <input
-            type="url"
+            type="text"
             name="link"
             value={inputs.link}
             onChange={handleInputs}
           />
           <label htmlFor="content">Content: </label>
           <input
-            type="textbox"
+            type="text"
             name="content"
             value={inputs.content}
             onChange={handleInputs}
