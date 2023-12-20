@@ -1,8 +1,29 @@
 import { useState } from 'react';
 import { parseToString } from '../utils/parsingHelpers';
-import { UserLogin } from '../types';
+import { NewRoleEntry, UserLogin } from '../types';
 
-export const useForm = (initialState: UserLogin) => {
+type FormInput = UserLogin | NewRoleEntry;
+
+export const useForm = <T extends FormInput>(initialState: T) => {
+  const [inputs, setInputs] = useState(initialState);
+
+  const handleInputs = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = parseToString(e.target.name);
+    const value = parseToString(e.target.value);
+
+    setInputs({
+      ...inputs,
+      [name]: value
+    });
+  };
+
+  return {
+    handleInputs,
+    inputs
+  };
+};
+
+export const useRoleForm = (initialState: NewRoleEntry) => {
   const [inputs, setInputs] = useState(initialState);
 
   const handleInputs = (e: React.ChangeEvent<HTMLInputElement>) => {

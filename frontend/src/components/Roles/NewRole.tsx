@@ -9,6 +9,7 @@ const NewRole = () => {
       <input type="url" name="link" />
       <label htmlFor="content">Content: </label>
       <input type="textbox" name="content" />
+      <button type="submit">Add</button>
     </NewRoleStyles>
   );
 };

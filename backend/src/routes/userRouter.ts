@@ -31,7 +31,6 @@ userRouter.get('/:id', validateUser, async (req, res, next) => {
 userRouter.get('/currentUser', validateUser, async (req, res, next) => {
   try {
     const currentUser = req.session.user;
-    console.log(currentUser);
 
     if (!currentUser) return res.status(404).send('Logged in user not found');
 

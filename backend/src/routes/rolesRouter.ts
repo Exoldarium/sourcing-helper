@@ -61,8 +61,6 @@ rolesRouter.put('/:id', async (req, res, next) => {
 
     const parsedRole = toNewRoleEntry(req.body);
 
-    console.log(parsedRole, 'parsedRole');
-
     const updatedRole = await updateRole(req.params.id, parsedRole);
 
     return res.status(200).send(updatedRole);

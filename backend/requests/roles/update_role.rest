@@ -1,11 +1,11 @@
-PUT http://localhost:53005/api/roles/9e383d63-e612-4cdd-a64d-a5e3db5c49ae
+PUT http://localhost:53005/api/roles/5ba646d2-183e-4878-93fc-d9b60a362917
 Content-Type: application/json
 
 {
-  "role_name": "Level 1 Support",
+  "role_name": "PHP Dev",
   "permission": [
     "83c3fc6b-e22e-47af-9b2b-f5e4dee1719a"
   ],
-  "content": "Some random content that will be updated",
-  "link": "example.link.com"
+  "content": "this is added so it's not null",
+  "link": "linklinklink.com"
 }

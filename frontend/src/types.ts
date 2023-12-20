@@ -37,16 +37,11 @@ export interface RoleTotal {
   role_name: string;
   created_on: Date | string | number;
   permission: string[];
+  content: string;
+  link: string;
 }
 
-export interface CreateNewRole {
-  role_name: string;
-  permission: string[];
-  user_id: string;
-  role_id: string;
-}
-
-export type NewRoleEntry = Pick<RoleTotal, 'role_name' | 'permission'>;
+export type NewRoleEntry = Pick<RoleTotal, 'role_name' | 'permission' | 'link' | 'content'>;
 
 export interface RoleLog {
   id: number;

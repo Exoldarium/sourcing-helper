@@ -2,6 +2,7 @@ import { jsonArrayFrom } from 'kysely/helpers/postgres';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { NewUser, UpdateUserRegular } from '../types/types';
+import { sql } from 'kysely';
 
 const getUsers = async () => {
   try {
@@ -20,15 +21,15 @@ const getUsers = async () => {
             .select(({ fn }) => [
               'roles_total.role_name',
               'roles_total.role_id',
-              fn.sum<number>('invitation').as('invitation'),
-              fn.sum<number>('initial_contact').as('initial_contact'),
-              fn.sum<number>('replied').as('replied'),
-              fn.sum<number>('job_description').as('job_description'),
-              fn.sum<number>('application_reviewed').as('application_reviewed'),
-              fn.sum<number>('proposed').as('proposed'),
-              fn.sum<number>('accepted').as('accepted'),
-              fn.sum<number>('rejected').as('rejected'),
-              fn.sum<number>('follow_up').as('follow_up')
+              fn.coalesce(fn.sum<number | null>('invitation'), sql<number>`0`).as('invitation'),
+              fn.coalesce(fn.sum<number | null>('initial_contact'), sql<number>`0`).as('initial_contact'),
+              fn.coalesce(fn.sum<number | null>('replied'), sql<number>`0`).as('replied'),
+              fn.coalesce(fn.sum<number | null>('job_description'), sql<number>`0`).as('job_description'),
+              fn.coalesce(fn.sum<number | null>('application_reviewed'), sql<number>`0`).as('application_reviewed'),
+              fn.coalesce(fn.sum<number | null>('proposed'), sql<number>`0`).as('proposed'),
+              fn.coalesce(fn.sum<number | null>('accepted'), sql<number>`0`).as('accepted'),
+              fn.coalesce(fn.sum<number | null>('rejected'), sql<number>`0`).as('rejected'),
+              fn.coalesce(fn.sum<number | null>('follow_up'), sql<number>`0`).as('follow_up'),
             ])
             .whereRef('roles_total.user_id', '=', 'users.user_id')
         ).as('role')
@@ -82,15 +83,15 @@ const getSpecificUser = async (id: string) => {
             .select(({ fn }) => [
               'roles_total.role_name',
               'roles_total.role_id',
-              fn.sum<number>('invitation').as('invitation'),
-              fn.sum<number>('initial_contact').as('initial_contact'),
-              fn.sum<number>('replied').as('replied'),
-              fn.sum<number>('job_description').as('job_description'),
-              fn.sum<number>('application_reviewed').as('application_reviewed'),
-              fn.sum<number>('proposed').as('proposed'),
-              fn.sum<number>('accepted').as('accepted'),
-              fn.sum<number>('rejected').as('rejected'),
-              fn.sum<number>('follow_up').as('follow_up')
+              fn.coalesce(fn.sum<number | null>('invitation'), sql<number>`0`).as('invitation'),
+              fn.coalesce(fn.sum<number | null>('initial_contact'), sql<number>`0`).as('initial_contact'),
+              fn.coalesce(fn.sum<number | null>('replied'), sql<number>`0`).as('replied'),
+              fn.coalesce(fn.sum<number | null>('job_description'), sql<number>`0`).as('job_description'),
+              fn.coalesce(fn.sum<number | null>('application_reviewed'), sql<number>`0`).as('application_reviewed'),
+              fn.coalesce(fn.sum<number | null>('proposed'), sql<number>`0`).as('proposed'),
+              fn.coalesce(fn.sum<number | null>('accepted'), sql<number>`0`).as('accepted'),
+              fn.coalesce(fn.sum<number | null>('rejected'), sql<number>`0`).as('rejected'),
+              fn.coalesce(fn.sum<number | null>('follow_up'), sql<number>`0`).as('follow_up'),
             ])
             .whereRef('roles_total.user_id', '=', 'users.user_id')
         ).as('role')

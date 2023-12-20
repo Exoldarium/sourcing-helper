@@ -3,6 +3,7 @@ import { useForm } from '../../hooks/useForm';
 import { loginService } from '../../services/login';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { UserLogin } from '../../types';
 
 const UserLogin = () => {
   const { inputs, handleInputs } = useForm({
@@ -14,7 +15,7 @@ const UserLogin = () => {
   const queryClient = useQueryClient();
 
   const loginMutation = useMutation({
-    mutationFn: async () => loginService.login(inputs),
+    mutationFn: async () => loginService.login(inputs as UserLogin),
     onSuccess: async () => {
       await queryClient.refetchQueries({ queryKey: ['loggedUser'] });
       navigate('/');
