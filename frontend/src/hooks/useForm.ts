@@ -22,22 +22,3 @@ export const useForm = <T extends FormInput>(initialState: T) => {
     inputs
   };
 };
-
-export const useRoleForm = (initialState: NewRoleEntry) => {
-  const [inputs, setInputs] = useState(initialState);
-
-  const handleInputs = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = parseToString(e.target.name);
-    const value = parseToString(e.target.value);
-
-    setInputs({
-      ...inputs,
-      [name]: value
-    });
-  };
-
-  return {
-    handleInputs,
-    inputs
-  };
-};

@@ -13,10 +13,10 @@ interface Props {
 const RoleInfo = ({ data }: Props) => {
   const [updateRole, setUpdateRole] = useState(false);
   const { inputs, handleInputs } = useForm({
-    role_name: '',
-    link: '',
-    content: '',
-    permission: [],
+    role_name: data.role_name,
+    link: data.link,
+    content: data.content,
+    permission: data.permission
   });
   const queryClient = useQueryClient();
   const dispatch = useDispatchValue();
@@ -39,7 +39,6 @@ const RoleInfo = ({ data }: Props) => {
     e.preventDefault();
     updateRoleMutation.mutate();
   };
-
 
   return (
     <>
