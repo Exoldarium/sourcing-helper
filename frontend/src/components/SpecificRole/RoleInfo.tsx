@@ -16,7 +16,8 @@ const RoleInfo = ({ data }: Props) => {
     role_name: data.role_name,
     link: data.link,
     content: data.content,
-    permission: data.permission
+    permission: data.permission,
+    initial_msg: data.initial_msg
   });
   const queryClient = useQueryClient();
   const dispatch = useDispatchValue();
@@ -45,6 +46,7 @@ const RoleInfo = ({ data }: Props) => {
       <div>
         <h1>{data.role_name}</h1>
         <p>{data.link}</p>
+        <p>{data.initial_msg}</p>
         <p>{data.content}</p>
       </div>
       <div>
@@ -69,6 +71,13 @@ const RoleInfo = ({ data }: Props) => {
               type="text"
               name="content"
               value={inputs.content}
+              onChange={handleInputs}
+            />
+            <label htmlFor="initial_msg">Initial message: </label>
+            <input
+              type="text"
+              name="initial_msg"
+              value={inputs.initial_msg}
               onChange={handleInputs}
             />
             <button type="submit">Update</button>

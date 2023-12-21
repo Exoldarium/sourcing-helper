@@ -39,6 +39,7 @@ export interface RoleTotal {
   permission: string[];
   content: string;
   link: string;
+  initial_msg: string;
 }
 
 export type NewRoleEntry = Pick<RoleTotal, 'role_name' | 'permission' | 'link' | 'content'>;

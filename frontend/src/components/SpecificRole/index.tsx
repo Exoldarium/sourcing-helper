@@ -2,14 +2,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { roleService } from '../../services/roles';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { parseToString } from '../../utils/parsingHelpers';
-import { useState } from 'react';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 import { RoleInfo } from './RoleInfo';
 import { AddRoleData } from './AddRoleData';
 
 const SpecificRole = () => {
-  const [updateRoles, setUpdateRoles] = useState(false);
-
   const match = useMatch('/:id');
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -50,18 +47,13 @@ const SpecificRole = () => {
   return (
     <div>
       <RoleInfo data={data} />
-      <AddRoleData data={data} />
-      <button
-        type="button"
-        onClick={() => setUpdateRoles(!updateRoles)}>
-        Update
-      </button>
       <button
         type="button"
         onClick={deleteRole}
       >
-        Delete
+        Delete Role
       </button>
+      <AddRoleData data={data} />
     </div>
   );
 };

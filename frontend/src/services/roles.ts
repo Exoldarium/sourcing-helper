@@ -18,7 +18,7 @@ const getRoles = async (): Promise<Role[]> => {
   }
 };
 
-const getRole = async (id: string) => {
+const getRole = async (id: string): Promise<Role> => {
   try {
     const res = await request.get(`/roles/${id}`);
 

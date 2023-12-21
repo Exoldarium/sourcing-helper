@@ -46,6 +46,7 @@ const toRoleEntry = (entry: unknown): Role => {
     'role_data' in entry &&
     'content' in entry &&
     'link' in entry &&
+    'initial_msg' in entry &&
     Array.isArray(entry.permission) &&
     Array.isArray(entry.role_data)
   ) {
@@ -59,6 +60,7 @@ const toRoleEntry = (entry: unknown): Role => {
       created_on: parseDate(entry.created_on),
       content: parseToString(entry.content),
       link: parseToString(entry.link),
+      initial_msg: parseToString(entry.initial_msg),
       permission,
       role_data
     };
@@ -96,5 +98,6 @@ const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
 
 export const parseRoleData = {
   toRoleEntry,
-  toNewRoleEntry
+  toNewRoleEntry,
+  toRoleLogEntry
 };
