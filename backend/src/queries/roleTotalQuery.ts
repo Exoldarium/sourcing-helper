@@ -86,7 +86,8 @@ const updateRole = async (id: string, role: NewRoleEntry) => {
         content: role.content,
         link: role.link,
         role_name: role.role_name,
-        permission: role.permission
+        permission: role.permission,
+        initial_msg: role.initial_msg
       })
       .where('role_id', '=', id)
       .returningAll()

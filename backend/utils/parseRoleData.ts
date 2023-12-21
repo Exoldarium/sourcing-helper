@@ -9,6 +9,7 @@ const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
     'permission' in entry &&
     'content' in entry &&
     'link' in entry &&
+    'initial_msg' in entry &&
     Array.isArray(entry.permission)
   ) {
     const parsePermissions = entry.permission.map(parseToString);
@@ -17,7 +18,8 @@ const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
       role_name: parseToString(entry.role_name),
       permission: parsePermissions,
       content: parseToString(entry.content),
-      link: parseToString(entry.link)
+      link: parseToString(entry.link),
+      initial_msg: parseToString(entry.initial_msg)
     };
 
     return newRole;

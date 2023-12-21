@@ -37,7 +37,7 @@ rolesRouter.post('/', async (req, res, next) => {
       ...parsedNewRole,
       user_id: currentUser.user_id,
       role_id: uuidv4(),
-      permission: [...parsedNewRole.permission, currentUser.user_id]
+      permission: [...parsedNewRole.permission, currentUser.user_id],
     };
 
     const roleAdded = await createRole(newRole);

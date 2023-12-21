@@ -1,11 +1,12 @@
-PUT http://localhost:53005/api/roles/5ba646d2-183e-4878-93fc-d9b60a362917
+PUT http://localhost:53005/api/roles/966f2f74-34c8-43cf-b9c1-df28628d45fc
 Content-Type: application/json
 
 {
-  "role_name": "PHP Dev",
+  "role_name": "Node JS",
   "permission": [
     "83c3fc6b-e22e-47af-9b2b-f5e4dee1719a"
   ],
   "content": "this is added so it's not null",
-  "link": "linklinklink.com"
+  "link": "linklinklink.com",
+  "initial_msg": "Some initial message"
 }
