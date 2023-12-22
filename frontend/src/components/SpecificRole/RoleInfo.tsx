@@ -5,6 +5,9 @@ import { useForm } from '../../hooks/useForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { roleService } from '../../services/roles';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { RoleInfoStyles } from './styles/RoleInforStyles';
+import { useMatch, useNavigate } from 'react-router-dom';
+import { parseToString } from '../../utils/parsingHelpers';
 
 interface Props {
   data: Role;
@@ -19,8 +22,11 @@ const RoleInfo = ({ data }: Props) => {
     permission: data.permission,
     initial_msg: data.initial_msg
   });
+  const match = useMatch('/:id');
   const queryClient = useQueryClient();
   const dispatch = useDispatchValue();
+  const parsedMatch = parseToString(match?.params.id);
+  const navigate = useNavigate();
 
   const updateRoleMutation = useMutation({
     mutationFn: () => roleService.updateRole(data.role_id, inputs),
@@ -35,20 +41,41 @@ const RoleInfo = ({ data }: Props) => {
       });
     }
   });
+  const deleteRoleMutation = useMutation({
+    mutationFn: () => roleService.deleteRole(parsedMatch),
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['roles'] });
+      navigate('/');
+    },
+    onError: (err) => {
+      dispatch({
+        type: 'ERROR',
+        payload: err.message
+      });
+    }
+  });
 
   const updateRolenClick = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateRoleMutation.mutate();
   };
 
+  const deleteRole = () => {
+    if (window.confirm('Are you sure you want to delete the role?')) {
+      deleteRoleMutation.mutate();
+    }
+  };
+
   return (
-    <>
-      <div>
-        <h1>{data.role_name}</h1>
-        <p>{data.link}</p>
-        <p>{data.initial_msg}</p>
-        <p>{data.content}</p>
-      </div>
+    <RoleInfoStyles>
+      {!updateRole &&
+        <div>
+          <h1>{data.role_name}</h1>
+          <p>{data.link}</p>
+          <p>{data.initial_msg}</p>
+          <p>{data.content}</p>
+        </div>
+      }
       <div>
         {updateRole &&
           <NewRoleStyles onSubmit={updateRolenClick}>
@@ -90,7 +117,13 @@ const RoleInfo = ({ data }: Props) => {
       >
         {updateRole ? 'Cancel' : 'Update role'}
       </button>
-    </>
+      <button
+        type="button"
+        onClick={deleteRole}
+      >
+        Delete Role
+      </button>
+    </RoleInfoStyles>
   );
 };
 

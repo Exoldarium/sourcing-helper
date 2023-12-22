@@ -73,7 +73,7 @@ roleLogRouter.delete('/:id', validateUser, async (req, res, next) => {
     // only the admin or users with permissions can add logs
     if (!(checkPermission || req.session.admin)) return res.status(403).send('Not allowed');
 
-    await deleteLastLoggedEntry(req.params.id);
+    await deleteLastLoggedEntry(currentUser.user_id);
 
     res.status(200).end();
   } catch (err) {

@@ -8,8 +8,8 @@ import { SpecificRole } from './components/SpecificRole';
 const App = () => {
   return (
     <>
-      <NotificationMessage />
       <Users />
+      <NotificationMessage />
       <Routes>
         <Route path="/" element={<Roles />} />
         <Route path="/:id" element={<SpecificRole />} />

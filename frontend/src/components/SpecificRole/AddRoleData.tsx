@@ -3,6 +3,7 @@ import { useForm } from '../../hooks/useForm';
 import { NewRoleLogEntry, Role } from '../../types';
 import { roleLogService } from '../../services/roleLog';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { AddRoleDataStyles } from './styles/AddRoleDataStyles';
 
 // TODO: add a way to display current total data on click
 // TODO: add a button to undo(delete) role logs that were added
@@ -28,9 +29,17 @@ const AddRoleData = ({ data }: Props) => {
   const dispatch = useDispatchValue();
 
   const addDataMutation = useMutation({
-    mutationFn: async () => {
-      await roleLogService.addNewDataToRole(inputs, data.role_id);
-    },
+    mutationFn: () => roleLogService.addNewDataToRole(inputs, data.role_id),
+    onSuccess: async () => await queryClient.refetchQueries({ queryKey: ['roles'] }),
+    onError: (error) => {
+      dispatch({
+        type: 'ERROR',
+        payload: error.message
+      });
+    }
+  });
+  const undoLastDataAdded = useMutation({
+    mutationFn: async () => await roleLogService.removeLastDataAdded(data.role_id),
     onSuccess: async () => await queryClient.refetchQueries({ queryKey: ['roles'] }),
     onError: (error) => {
       dispatch({
@@ -45,8 +54,14 @@ const AddRoleData = ({ data }: Props) => {
     addDataMutation.mutate();
   };
 
+  const undoLastLogAdded = () => {
+    if (window.confirm('Are you sure you want to undo last log added?')) {
+      undoLastDataAdded.mutate();
+    }
+  };
+
   return (
-    <form onSubmit={addRoleData}>
+    <AddRoleDataStyles onSubmit={addRoleData}>
       {Object.keys(data.role_data[0]).map((stage, i) => {
         const stageWithoutUnderscore = stage.replace('_', ' ');
         const getInput = inputs[stage as keyof NewRoleLogEntry];
@@ -70,7 +85,13 @@ const AddRoleData = ({ data }: Props) => {
       >
         Update
       </button>
-    </form>
+      <button
+        type="button"
+        onClick={undoLastLogAdded}
+      >
+        Undo
+      </button>
+    </AddRoleDataStyles>
   );
 };
 

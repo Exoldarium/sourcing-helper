@@ -17,6 +17,16 @@ const addNewDataToRole = async (data: NewRoleLogEntry, id: string): Promise<NewR
   }
 };
 
+const removeLastDataAdded = async (id: string) => {
+  try {
+    await request.delete(`/roleLog/${id}`);
+  } catch (err) {
+    const error = parseError(err);
+    throw new Error(error);
+  }
+};
+
 export const roleLogService = {
   addNewDataToRole,
+  removeLastDataAdded
 };

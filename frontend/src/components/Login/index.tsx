@@ -4,6 +4,7 @@ import { loginService } from '../../services/login';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 import { UserLogin } from '../../types';
+import { LoginStyles } from './styles/LoginStyles';
 
 const UserLogin = () => {
   const { inputs, handleInputs } = useForm({
@@ -37,7 +38,7 @@ const UserLogin = () => {
   if (loginMutation.isPending) return <p>Logging you in...</p>;
 
   return (
-    <form
+    <LoginStyles
       style={{ display: 'flex', flexDirection: 'column', width: '30vw' }}
       method="post"
       onSubmit={userLoginOnClick}
@@ -57,7 +58,7 @@ const UserLogin = () => {
         onChange={handleInputs}
       />
       <button type="submit">Log in</button>
-    </form>
+    </LoginStyles>
   );
 };
 

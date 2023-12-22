@@ -1,7 +1,7 @@
 import { logoutService } from '../../services/logout';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
-import { UserStyles } from './UserStyles';
+import { UserStyles } from './styles/UserStyles';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../hooks/useUser';
 
@@ -32,13 +32,11 @@ const Users = () => {
 
   if (user) {
     return (
-      <>
-        <UserStyles>
-          <Link to={'/'}>Home</Link>
-          <div>{user.name}</div>
-          <button onClick={logoutOnClick}>Logout</button >
-        </UserStyles>
-      </>
+      <UserStyles>
+        <Link to={'/'}>Home</Link>
+        <div>{user.name}</div>
+        <button onClick={logoutOnClick}>Logout</button >
+      </UserStyles>
     );
   }
 };

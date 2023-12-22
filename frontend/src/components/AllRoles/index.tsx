@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { NewRoleStyles } from './styles/NewRoleStyles';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 import { useForm } from '../../hooks/useForm';
+import { AllRolesStyles } from './styles/AllRolesStyles';
 
 const Roles = () => {
   const [newRole, setNewRole] = useState(false);
@@ -47,8 +48,14 @@ const Roles = () => {
   console.log(data);
 
   return (
-    <>
-      <ul>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <AllRolesStyles>
+        <button
+          type="button"
+          onClick={() => setNewRole(!newRole)}
+        >
+          {newRole ? 'Cancel' : 'New role'}
+        </button>
         {data.map(role => (
           <li key={role.role_id}>
             <Link to={`/${role.role_id}`}>
@@ -56,7 +63,7 @@ const Roles = () => {
             </Link>
           </li>
         ))}
-      </ul>
+      </AllRolesStyles>
       {newRole &&
         <NewRoleStyles onSubmit={addNewRole}>
           <label htmlFor="role-name">Name: </label>
@@ -83,13 +90,7 @@ const Roles = () => {
           <button type="submit">Add</button>
         </NewRoleStyles>
       }
-      <button
-        type="button"
-        onClick={() => setNewRole(!newRole)}
-      >
-        {newRole ? 'Cancel' : 'New role'}
-      </button>
-    </>
+    </div>
   );
 };
 
