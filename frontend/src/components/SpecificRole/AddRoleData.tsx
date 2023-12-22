@@ -6,7 +6,8 @@ import { useDispatchValue } from '../../contexts/Notification/useNotificationCon
 import { AddRoleDataStyles } from './styles/AddRoleDataStyles';
 
 // TODO: add a way to display current total data on click
-// TODO: add a button to undo(delete) role logs that were added
+// TODO: display calendar and total on the same page, next to the inputs where logs are added
+// or just a calendar that will allow us to show data for a specific day
 // TODO: add a way to sort by date
 
 interface Props {
@@ -80,17 +81,19 @@ const AddRoleData = ({ data }: Props) => {
           </div>
         );
       })}
-      <button
-        type="submit"
-      >
-        Update
-      </button>
-      <button
-        type="button"
-        onClick={undoLastLogAdded}
-      >
-        Undo
-      </button>
+      <div className="button-div">
+        <button
+          type="submit"
+        >
+          Add
+        </button>
+        <button
+          type="button"
+          onClick={undoLastLogAdded}
+        >
+          Undo
+        </button>
+      </div>
     </AddRoleDataStyles>
   );
 };

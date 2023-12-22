@@ -22,10 +22,13 @@ const SpecificRole = () => {
   console.log(data.role_data);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <RoleInfo data={data} />
-      <AddRoleData data={data} />
-    </div>
+    <>
+      <h1 style={{ margin: 0, paddingLeft: '2rem' }}>{data.role_name}</h1>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <AddRoleData data={data} />
+        <RoleInfo data={data} />
+      </div>
+    </>
   );
 };
 

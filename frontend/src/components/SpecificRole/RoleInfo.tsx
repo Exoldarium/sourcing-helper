@@ -68,12 +68,23 @@ const RoleInfo = ({ data }: Props) => {
 
   return (
     <RoleInfoStyles>
+      <button
+        type="button"
+        onClick={() => setUpdateRole(!updateRole)}
+      >
+        {updateRole ? 'Cancel' : 'Update role'}
+      </button>
+      <button
+        type="button"
+        onClick={deleteRole}
+      >
+        Delete Role
+      </button>
       {!updateRole &&
-        <div>
-          <h1>{data.role_name}</h1>
-          <p>{data.link}</p>
-          <p>{data.initial_msg}</p>
-          <p>{data.content}</p>
+        <div className="role-info">
+          <p>{data.link.slice(0, 30) + '...'}</p>
+          <p>{data.initial_msg.slice(0, 60) + '...'}</p>
+          <p>{data.content.slice(0, 60) + '...'}</p>
         </div>
       }
       <div>
@@ -111,18 +122,6 @@ const RoleInfo = ({ data }: Props) => {
           </NewRoleStyles>
         }
       </div>
-      <button
-        type="button"
-        onClick={() => setUpdateRole(!updateRole)}
-      >
-        {updateRole ? 'Cancel' : 'Update role'}
-      </button>
-      <button
-        type="button"
-        onClick={deleteRole}
-      >
-        Delete Role
-      </button>
     </RoleInfoStyles>
   );
 };
