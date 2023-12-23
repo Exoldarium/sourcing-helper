@@ -9,6 +9,7 @@ import { AddRoleDataStyles } from './styles/AddRoleDataStyles';
 // TODO: display calendar and total on the same page, next to the inputs where logs are added
 // or just a calendar that will allow us to show data for a specific day
 // TODO: add a way to sort by date
+// TODO: consider adding dark mode instead of using all white and gray background
 
 interface Props {
   data: Role;
@@ -74,6 +75,7 @@ const AddRoleData = ({ data }: Props) => {
             </label>
             <input
               type="number"
+              min="0"
               name={stage}
               value={getInput}
               onChange={handleInputs}

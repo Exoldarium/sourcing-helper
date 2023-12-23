@@ -20,6 +20,8 @@ export const useForm = <T extends FormInput>(initialState: T) => {
       ...inputs,
       [name]: value
     });
+
+    return true;
   };
 
   return {

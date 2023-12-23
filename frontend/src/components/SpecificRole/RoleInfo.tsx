@@ -8,6 +8,7 @@ import { useDispatchValue } from '../../contexts/Notification/useNotificationCon
 import { RoleInfoStyles } from './styles/RoleInforStyles';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { parseToString } from '../../utils/parsingHelpers';
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 
 interface Props {
   data: Role;
@@ -15,6 +16,8 @@ interface Props {
 
 const RoleInfo = ({ data }: Props) => {
   const [updateRole, setUpdateRole] = useState(false);
+
+  const { copyText } = useCopyToClipboard();
   const { inputs, handleInputs } = useForm({
     role_name: data.role_name,
     link: data.link,
@@ -22,6 +25,7 @@ const RoleInfo = ({ data }: Props) => {
     permission: data.permission,
     initial_msg: data.initial_msg
   });
+
   const match = useMatch('/:id');
   const queryClient = useQueryClient();
   const dispatch = useDispatchValue();
@@ -41,6 +45,7 @@ const RoleInfo = ({ data }: Props) => {
       });
     }
   });
+
   const deleteRoleMutation = useMutation({
     mutationFn: () => roleService.deleteRole(parsedMatch),
     onSuccess: async () => {
@@ -66,6 +71,15 @@ const RoleInfo = ({ data }: Props) => {
     }
   };
 
+  const copyOnClick = (string: string) => {
+    void copyText(string);
+
+    dispatch({
+      type: 'MESSAGE',
+      payload: 'Copied!'
+    });
+  };
+
   return (
     <RoleInfoStyles>
       <button
@@ -82,9 +96,9 @@ const RoleInfo = ({ data }: Props) => {
       </button>
       {!updateRole &&
         <div className="role-info">
-          <p>{data.link.slice(0, 30) + '...'}</p>
-          <p>{data.initial_msg.slice(0, 60) + '...'}</p>
-          <p>{data.content.slice(0, 60) + '...'}</p>
+          <p onClick={() => copyOnClick(data.link)}>{data.link.slice(0, 30) + '...'}</p>
+          <p onClick={() => copyOnClick(data.initial_msg)}>{data.initial_msg.slice(0, 60) + '...'}</p>
+          <p onClick={() => copyOnClick(data.content)}>{data.content.slice(0, 60) + '...'}</p>
         </div>
       }
       <div>

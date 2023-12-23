@@ -6,13 +6,15 @@ const NotificationMessage = () => {
   const dispatch = useDispatchValue();
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch({
-        type: 'CLEAR',
-        payload: ''
-      });
-    }, 5000);
-  }, [dispatch]);
+    if (notification) {
+      setTimeout(() => {
+        dispatch({
+          type: 'CLEAR',
+          payload: ''
+        });
+      }, 5000);
+    }
+  }, [dispatch, notification]);
 
   if (notification) {
     return (

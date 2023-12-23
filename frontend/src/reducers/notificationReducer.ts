@@ -16,7 +16,7 @@ const notificationReducer = (state: NotificationState, action: NotificationActio
     case ('ERROR'):
       return { ...state, message: action.payload };
     case ('CLEAR'):
-      return { ...state, message: '' };
+      return '';
     default:
       return state;
   }

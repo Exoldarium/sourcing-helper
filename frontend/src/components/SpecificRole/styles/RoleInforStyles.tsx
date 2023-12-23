@@ -12,6 +12,7 @@ export const RoleInfoStyles = styled.div`
     grid-template-rows: 150px auto 150px; 
     column-gap: 10px;
     row-gap: 10px;
+    cursor: pointer;
   }
   .role-info > *{
     border-radius: 5px;
