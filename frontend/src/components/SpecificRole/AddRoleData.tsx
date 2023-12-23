@@ -64,25 +64,28 @@ const AddRoleData = ({ data }: Props) => {
 
   return (
     <AddRoleDataStyles onSubmit={addRoleData}>
-      {Object.keys(data.role_data[0]).map((stage, i) => {
-        const stageWithoutUnderscore = stage.replace('_', ' ');
-        const getInput = inputs[stage as keyof NewRoleLogEntry];
+      <h3>Input candidate data</h3>
+      <div className='addData-div'>
+        {Object.keys(data.role_data[0]).map((stage, i) => {
+          const stageWithoutUnderscore = stage.replace('_', ' ');
+          const getInput = inputs[stage as keyof NewRoleLogEntry];
 
-        return (
-          <div key={i}>
-            <label htmlFor={stage}>
-              {stageWithoutUnderscore.charAt(0).toUpperCase() + stageWithoutUnderscore.slice(1)}:
-            </label>
-            <input
-              type="number"
-              min="0"
-              name={stage}
-              value={getInput}
-              onChange={handleInputs}
-            />
-          </div>
-        );
-      })}
+          return (
+            <div key={i}>
+              <label htmlFor={stage}>
+                {stageWithoutUnderscore.charAt(0).toUpperCase() + stageWithoutUnderscore.slice(1)}:
+              </label>
+              <input
+                type="number"
+                min="0"
+                name={stage}
+                value={getInput}
+                onChange={handleInputs}
+              />
+            </div>
+          );
+        })}
+      </div>
       <div className="button-div">
         <button
           type="submit"

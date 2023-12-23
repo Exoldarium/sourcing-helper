@@ -82,6 +82,7 @@ const RoleInfo = ({ data }: Props) => {
 
   return (
     <RoleInfoStyles>
+      <h3>Messages</h3>
       <button
         type="button"
         onClick={() => setUpdateRole(!updateRole)}
