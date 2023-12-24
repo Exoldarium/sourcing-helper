@@ -19,7 +19,7 @@ roleLogRouter.get('/', validateAdmin, async (_req, res, next) => {
   }
 });
 
-roleLogRouter.get('/date/:id', async (req, res, next) => {
+roleLogRouter.get('/date/:id', validateUser, async (req, res, next) => {
   try {
     const dateFrom = new Date(parseToString(req.query.dateFrom)).toISOString();
     const dateTo = new Date(parseToString(req.query.dateTo)).toISOString();

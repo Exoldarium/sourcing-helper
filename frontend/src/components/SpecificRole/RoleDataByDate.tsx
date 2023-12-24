@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { useMutation } from '@tanstack/react-query';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
@@ -13,7 +12,7 @@ interface Props {
 }
 
 const RoleDataByDate = ({ data }: Props) => {
-  const [roleLogData, setRoleLogData] = useState<NewRoleLogEntry[]>();
+  const [roleLogData, setRoleLogData] = useState<NewRoleLogEntry[] | null>(null);
   const { copyText } = useCopyToClipboard();
   const { inputs, handleInputs } = useForm({
     dateTo: '',
@@ -39,7 +38,11 @@ const RoleDataByDate = ({ data }: Props) => {
   });
 
   const displayDataOnClick = () => {
-    getLogsMutation.mutate();
+    if (inputs.dateFrom === '' && inputs.dateTo === '') {
+      setRoleLogData(null);
+    } else {
+      getLogsMutation.mutate();
+    }
   };
 
   const copyOnClick = () => {
@@ -61,8 +64,6 @@ const RoleDataByDate = ({ data }: Props) => {
       });
     }
   };
-
-  console.log(roleLogData);
 
   return (
     <RoleDataByDateStyles>

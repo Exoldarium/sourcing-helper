@@ -25,7 +25,7 @@ const SpecificRole = () => {
   return (
     <>
       <h1 style={{ margin: 0, paddingLeft: '3rem' }}>{data.role_name}</h1>
-      <div style={{ display: 'flex', flexDirection: 'row', padding: '2rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', padding: '2rem', height: '80vh' }}>
         <AddRoleData data={data} />
         <RoleDataByDate data={data} />
         <RoleInfo data={data} />

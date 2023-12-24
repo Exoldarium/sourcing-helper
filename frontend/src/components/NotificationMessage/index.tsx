@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatchValue, useNotificationValue } from '../../contexts/Notification/useNotificationContext';
+import { NotificationMessageStyles } from './styles/NotificationMessageStyles';
 
 const NotificationMessage = () => {
   const notification = useNotificationValue();
@@ -18,9 +19,9 @@ const NotificationMessage = () => {
 
   if (notification) {
     return (
-      <div>
-        <p style={{ color: 'red' }}>{notification.message}</p>
-      </div>
+      <NotificationMessageStyles $notification={notification}>
+        <p>{notification.message}</p>
+      </NotificationMessageStyles>
     );
   }
 };

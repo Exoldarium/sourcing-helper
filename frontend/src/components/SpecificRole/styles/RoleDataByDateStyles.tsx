@@ -23,9 +23,13 @@ export const RoleDataByDateStyles = styled.div`
     background: whitesmoke;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
+    margin-top: 1rem;
   }
   .date-div {
     display: flex;
     flex-direction: column;
+  }
+  button {
+    margin-top: 2rem;
   }
 `;
