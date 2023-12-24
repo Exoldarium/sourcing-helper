@@ -66,3 +66,8 @@ export interface Role extends RoleTotal {
 }
 
 export type NewRoleLogEntry = Omit<RoleLog, 'id' | 'log_id' | 'user_id' | 'role_id' | 'created_on'>;
+
+export interface RoleLogDate {
+  dateTo: string;
+  dateFrom: string;
+}

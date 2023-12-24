@@ -1,53 +1,102 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import { useMutation } from '@tanstack/react-query';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
-import { Role } from '../../types';
+import { useForm } from '../../hooks/useForm';
+import { NewRoleLogEntry, Role } from '../../types';
 import { RoleDataByDateStyles } from './styles/RoleDataByDateStyles';
+import { roleLogService } from '../../services/roleLog';
+import { useState } from 'react';
 
 interface Props {
   data: Role;
 }
 
-// TODO: data here should not be passed through props, we should use a query to get data for a specific date
 const RoleDataByDate = ({ data }: Props) => {
+  const [roleLogData, setRoleLogData] = useState<NewRoleLogEntry[]>();
   const { copyText } = useCopyToClipboard();
+  const { inputs, handleInputs } = useForm({
+    dateTo: '',
+    dateFrom: ''
+  });
   const dispatch = useDispatchValue();
 
-  const copyOnClick = () => {
-    const format = Object
-      .entries(data.role_data[0])
-      .map(([key, value]) => {
-        const formattedKey = key
-          .replace(/_/g, ' ')
-          .replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
-
-        return `${formattedKey}: ${value}`;
-      })
-      .join('\n');
-
-    console.log(format);
-
-    void copyText(format);
-
-    dispatch({
-      type: 'MESSAGE',
-      payload: 'Copied!'
-    });
+  const params = {
+    dateFrom: inputs.dateFrom,
+    dateTo: inputs.dateTo,
+    roleId: data.role_id,
   };
+
+  const getLogsMutation = useMutation({
+    mutationFn: () => roleLogService.getSpecificDateData(params),
+    onSuccess: (data) => setRoleLogData(data),
+    onError: (err) => {
+      dispatch({
+        type: 'ERROR',
+        payload: err.message
+      });
+    }
+  });
+
+  const displayDataOnClick = () => {
+    getLogsMutation.mutate();
+  };
+
+  const copyOnClick = () => {
+    if (roleLogData) {
+      const format = Object.entries(roleLogData[0])
+        .map(([key, value]) => {
+          const formattedKey = key.replace(/_/g, ' ')
+            .replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
+
+          return `${formattedKey}: ${value}`;
+        })
+        .join('\n');
+
+      void copyText(format);
+
+      dispatch({
+        type: 'MESSAGE',
+        payload: 'Copied!'
+      });
+    }
+  };
+
+  console.log(roleLogData);
 
   return (
     <RoleDataByDateStyles>
       <h3>Generate report</h3>
-      <div className="generateReport-div" onClick={() => copyOnClick()}>
-        {Object.entries(data.role_data[0]).map(([key, value], i) => {
-          const stageWithoutUnderscore = key.replace('_', ' ');
-
-          return (
-            <div key={i}>
-              <p>{stageWithoutUnderscore.charAt(0).toUpperCase() + stageWithoutUnderscore.slice(1)}: {value}</p>
-            </div>
-          );
-        })}
+      <div className="date-div">
+        <label htmlFor="dateFrom">Date from:</label>
+        <input
+          type="date"
+          name="dateFrom"
+          value={inputs.dateFrom}
+          onChange={handleInputs}
+        />
+        <label htmlFor="dateTo">Date to:</label>
+        <input
+          type="date"
+          name="dateTo"
+          value={inputs.dateTo}
+          onChange={handleInputs}
+        />
+        <button type="button" onClick={displayDataOnClick}>Show data</button>
       </div>
+      {roleLogData &&
+        <div className="generateReport-div" onClick={() => copyOnClick()}>
+          {Object.entries(roleLogData[0]).map(([key, value], i) => {
+            const stageWithoutUnderscore = key.replace('_', ' ');
+
+            return (
+              <div key={i}>
+                <p>{stageWithoutUnderscore.charAt(0).toUpperCase() + stageWithoutUnderscore.slice(1)}: {value}</p>
+              </div>
+            );
+          })}
+        </div>
+      }
     </RoleDataByDateStyles>
   );
 };

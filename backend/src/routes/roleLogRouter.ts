@@ -19,14 +19,24 @@ roleLogRouter.get('/', validateAdmin, async (_req, res, next) => {
   }
 });
 
-roleLogRouter.get('/date', async (req, res, next) => {
+roleLogRouter.get('/date/:id', async (req, res, next) => {
   try {
     const dateFrom = new Date(parseToString(req.query.dateFrom)).toISOString();
     const dateTo = new Date(parseToString(req.query.dateTo)).toISOString();
+    const currentUser = req.session.user;
 
-    const roleLogs = await getSpecificLogsBasedOnDate(dateFrom, dateTo);
+    if (!currentUser) return res.status(404).send('User not found');
 
-    return res.status(200).send(roleLogs);
+    const params = {
+      dateFrom,
+      dateTo,
+      userId: currentUser.user_id,
+      roleId: req.params.id
+    };
+
+    const roleLogs = await getSpecificLogsBasedOnDate(params);
+
+    return res.status(200).send(roleLogs.rows);
   } catch (err) {
     return next(err);
   }

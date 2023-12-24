@@ -3,6 +3,13 @@ import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
 import { NewRoleLog, RoleLog } from '../types/types';
 
+interface Params {
+  dateFrom: string | Date | number;
+  dateTo: string | Date | number;
+  userId: string;
+  roleId: string;
+}
+
 const getAllRoleLogs = async () => {
   try {
     const roleLogs = await db.selectFrom('role_log')
@@ -29,17 +36,42 @@ const getSpecificRoleLog = async (id: string) => {
   }
 };
 
-const getSpecificLogsBasedOnDate = async (dateFrom: string, dateTo: string) => {
+// i'm using raw query here because i wanted to see how kysely works with raw queries
+const getSpecificLogsBasedOnDate = async (params: Params) => {
   try {
-    if (dateFrom === dateTo) {
-      const roleLogs = await sql<RoleLog>`SELECT * FROM role_log 
-        WHERE DATE(created_on) = ${dateFrom};`
+    if (params.dateFrom === params.dateTo) {
+      const roleLogs = await sql<RoleLog>`SELECT
+        COALESCE(CAST(SUM(invitation) AS INT), 0) AS invitation,
+        COALESCE(CAST(SUM (initial_contact) AS INT), 0) AS initial_contact,
+        COALESCE(CAST(SUM (replied) AS INT), 0) AS replied,
+        COALESCE(CAST(SUM(job_description) AS INT), 0) AS job_description,
+        COALESCE(CAST(SUM(application_reviewed) AS INT), 0) AS application_reviewed,
+        COALESCE(CAST(SUM(proposed) AS INT), 0) AS proposed,
+        COALESCE(CAST(SUM(accepted) AS INT), 0) AS accepted,
+        COALESCE(CAST(SUM(rejected) AS INT), 0) AS rejected,
+        COALESCE(CAST(SUM(follow_up) AS INT), 0) AS follow_up
+        FROM role_log 
+        WHERE user_id = ${params.userId}
+        AND role_id = ${params.roleId}
+        AND DATE(created_on) = ${params.dateFrom};`
         .execute(db);
 
       return roleLogs;
     } else {
-      const roleLogs = await sql<RoleLog>`SELECT * FROM role_log 
-        WHERE created_on BETWEEN ${dateFrom} AND ${dateTo};`
+      const roleLogs = await sql<RoleLog>`SELECT 
+        COALESCE(CAST(SUM(invitation) AS INT), 0) AS invitation,
+        COALESCE(CAST(SUM (initial_contact) AS INT), 0) AS initial_contact,
+        COALESCE(CAST(SUM (replied) AS INT), 0) AS replied,
+        COALESCE(CAST(SUM(job_description) AS INT), 0) AS job_description,
+        COALESCE(CAST(SUM(application_reviewed) AS INT), 0) AS application_reviewed,
+        COALESCE(CAST(SUM(proposed) AS INT), 0) AS proposed,
+        COALESCE(CAST(SUM(accepted) AS INT), 0) AS accepted,
+        COALESCE(CAST(SUM(rejected) AS INT), 0) AS rejected,
+        COALESCE(CAST(SUM(follow_up) AS INT), 0) AS follow_up
+        FROM role_log 
+        WHERE user_id = ${params.userId} 
+        AND role_id = ${params.roleId}
+        AND created_on BETWEEN ${params.dateFrom} AND ${params.dateTo};`
         .execute(db);
 
       return roleLogs;
