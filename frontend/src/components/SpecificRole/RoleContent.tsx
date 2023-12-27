@@ -54,7 +54,10 @@ const RoleContent = ({ data, updateRole, copyOnClick, setUpdatedRoleContent }: P
     <RoleContentStyles>
       <>
         {!updateRole &&
-          <p onClick={() => copyOnClick(textFromStorage)}>{editor.getText().slice(0, 60) + '...'}</p>
+          <p onClick={() => copyOnClick(textFromStorage)}>
+            <h4>Description</h4>
+            {editor.getText().slice(0, 60) + '...'}
+          </p>
         }
         {updateRole &&
           <>

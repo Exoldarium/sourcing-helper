@@ -9,6 +9,7 @@ import { useMatch, useNavigate } from 'react-router-dom';
 import { parseToString } from '../../utils/parsingHelpers';
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 import { RoleContent } from './RoleContent';
+import { APPLY_MSG, BENEFITS_MSG, GDPR_MSG, INTERVIEW_MSG, REJECTION_MSG, generateApplyMessage, generateFollowUp } from '../../utils/messageData';
 
 interface Props {
   data: Role;
@@ -100,14 +101,46 @@ const RoleInfo = ({ data }: Props) => {
       </button>
       {!updateRole &&
         <div className="role-info">
-          <p onClick={() => copyOnClick(data.link)}>{data.link.slice(0, 30) + '...'}</p>
+          <p onClick={() => copyOnClick(data.link)}>
+            <h4>Link</h4>
+            {data.link.slice(0, 30) + '...'}
+          </p>
+          <p onClick={() => copyOnClick(data.initial_msg)}>
+            <h4>Initial</h4>
+            {data.initial_msg.slice(0, 60) + '...'}
+          </p>
           <RoleContent
             data={data}
             updateRole={updateRole}
             copyOnClick={copyOnClick}
             setUpdatedRoleContent={setUpdatedRoleContent}
           />
-          <p onClick={() => copyOnClick(data.initial_msg)}>{data.initial_msg.slice(0, 60) + '...'}</p>
+          {generateFollowUp(data.link).map((followUp, i) => (
+            <p key={i} onClick={() => copyOnClick(followUp)}>
+              <h4>Follow up {i + 1}</h4>
+              {followUp.slice(0, 30) + '...'}
+            </p>
+          ))}
+          <p onClick={() => copyOnClick(REJECTION_MSG)}>
+            <h4>Rejection</h4>
+            {REJECTION_MSG.slice(0, 30) + '...'}
+          </p>
+          <p onClick={() => copyOnClick(generateApplyMessage(data.link))}>
+            <h4>Apply</h4>
+            {APPLY_MSG.slice(0, 30) + '...'}
+          </p>
+          <p onClick={() => copyOnClick(INTERVIEW_MSG)}>
+            <h4>Interview</h4>
+            {INTERVIEW_MSG.slice(0, 30) + '...'}
+          </p>
+          <p onClick={() => copyOnClick(GDPR_MSG)}>
+            <h4>GDPR</h4>
+            {GDPR_MSG.slice(0, 30) + '...'}
+          </p>
+          <p onClick={() => copyOnClick(BENEFITS_MSG)}>
+            <h4>Benefits</h4>
+            {BENEFITS_MSG.slice(0, 30) + '...'}
+          </p>
         </div>
       }
       <div>
