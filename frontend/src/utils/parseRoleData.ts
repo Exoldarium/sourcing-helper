@@ -1,4 +1,4 @@
-import { NewRoleEntry, NewRoleLogEntry, Role } from '../types';
+import { NewRoleEntry, NewRoleLogEntry, Role, UpdateRoleEntry } from '../types';
 import { parseDate, parseToNumber, parseToString } from './parsingHelpers';
 
 const toRoleLogEntry = (entry: unknown): NewRoleLogEntry => {
@@ -77,16 +77,39 @@ const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
   if (
     'role_name' in entry &&
     'permission' in entry &&
-    'content' in entry &&
-    'link' in entry &&
     Array.isArray(entry.permission)
   ) {
     const permission = entry.permission.map(parseToString);
 
     const regularUser: NewRoleEntry = {
       role_name: parseToString(entry.role_name),
+      permission
+    };
+
+    return regularUser;
+  }
+
+  throw new Error('Invalid user input or some fields might be missing');
+};
+
+const toUpdateRoleEntry = (entry: unknown): UpdateRoleEntry => {
+  if (!entry || typeof entry !== 'object') throw new Error('Invalid user input');
+
+  if (
+    'role_name' in entry &&
+    'permission' in entry &&
+    'content' in entry &&
+    'link' in entry &&
+    'initial_msg' in entry &&
+    Array.isArray(entry.permission)
+  ) {
+    const permission = entry.permission.map(parseToString);
+
+    const regularUser: UpdateRoleEntry = {
+      role_name: parseToString(entry.role_name),
       content: parseToString(entry.content),
       link: parseToString(entry.link),
+      initial_msg: parseToString(entry.initial_msg),
       permission
     };
 
@@ -99,5 +122,6 @@ const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
 export const parseRoleData = {
   toRoleEntry,
   toNewRoleEntry,
+  toUpdateRoleEntry,
   toRoleLogEntry
 };

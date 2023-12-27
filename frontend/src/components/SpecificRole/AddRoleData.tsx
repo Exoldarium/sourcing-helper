@@ -5,9 +5,6 @@ import { roleLogService } from '../../services/roleLog';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 import { AddRoleDataStyles } from './styles/AddRoleDataStyles';
 
-// TODO: add a way to display current total data on click
-// TODO: display calendar and total on the same page, next to the inputs where logs are added
-// or just a calendar that will allow us to show data for a specific day
 // TODO: add a way to sort by date
 // TODO: consider adding dark mode instead of using all white and gray background
 

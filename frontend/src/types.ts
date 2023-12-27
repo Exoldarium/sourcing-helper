@@ -42,7 +42,8 @@ export interface RoleTotal {
   initial_msg: string;
 }
 
-export type NewRoleEntry = Pick<RoleTotal, 'role_name' | 'permission' | 'link' | 'content'>;
+export type NewRoleEntry = Pick<RoleTotal, 'role_name' | 'permission'>;
+export type UpdateRoleEntry = Pick<RoleTotal, 'role_name' | 'permission' | 'link' | 'content' | 'initial_msg'>;
 
 export interface RoleLog {
   id: number;

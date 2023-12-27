@@ -1,7 +1,7 @@
 import { jsonArrayFrom } from 'kysely/helpers/postgres';
 import { parseError } from '../../utils/parsingHelpers';
 import { db } from '../db';
-import { CreateNewRole, NewRoleEntry } from '../types/types';
+import { CreateNewRole, UpdateRoleEntry } from '../types/types';
 import { sql } from 'kysely';
 
 const getAllRoles = async () => {
@@ -79,7 +79,7 @@ const createRole = async (role: CreateNewRole) => {
   }
 };
 
-const updateRole = async (id: string, role: NewRoleEntry) => {
+const updateRole = async (id: string, role: UpdateRoleEntry) => {
   try {
     const updatedRole = await db.updateTable('roles_total')
       .set({

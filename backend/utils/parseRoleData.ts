@@ -1,7 +1,31 @@
-import { NewRoleEntry, NewRoleLogEntry } from '../src/types/types';
+import { NewRoleEntry, NewRoleLogEntry, UpdateRoleEntry } from '../src/types/types';
 import { parseToNumber, parseToString } from './parsingHelpers';
 
+// TODO: initial message link and content don't need to be added when creating a new role on the client
+// add a new parser that only takes in the role name and permission, add the rest when updating the role
+
 const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
+  if (!entry || typeof entry !== 'object') throw new Error('Invalid role input');
+
+  if (
+    'role_name' in entry &&
+    'permission' in entry &&
+    Array.isArray(entry.permission)
+  ) {
+    const parsePermissions = entry.permission.map(parseToString);
+
+    const newRole: NewRoleEntry = {
+      role_name: parseToString(entry.role_name),
+      permission: parsePermissions,
+    };
+
+    return newRole;
+  }
+
+  throw new Error('Some inputs might be missing');
+};
+
+const toUpdateRoleEntry = (entry: unknown): UpdateRoleEntry => {
   if (!entry || typeof entry !== 'object') throw new Error('Invalid role input');
 
   if (
@@ -14,7 +38,7 @@ const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
   ) {
     const parsePermissions = entry.permission.map(parseToString);
 
-    const newRole: NewRoleEntry = {
+    const newRole: UpdateRoleEntry = {
       role_name: parseToString(entry.role_name),
       permission: parsePermissions,
       content: parseToString(entry.content),
@@ -75,6 +99,7 @@ const toNewRoleLogEntry = (entry: unknown): NewRoleLogEntry => {
 
 export {
   toNewRoleEntry,
+  toUpdateRoleEntry,
   toNewRolePermissionEntry,
   toNewRoleLogEntry
 };

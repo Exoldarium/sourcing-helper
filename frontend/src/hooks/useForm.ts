@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { parseToString } from '../utils/parsingHelpers';
-import { NewRoleEntry, NewRoleLogEntry, RoleLogDate, UserLogin } from '../types';
+import { NewRoleEntry, NewRoleLogEntry, RoleLogDate, UpdateRoleEntry, UserLogin } from '../types';
 
-type FormInput = UserLogin | NewRoleEntry | NewRoleLogEntry | RoleLogDate;
+type FormInput = UserLogin | UpdateRoleEntry | NewRoleEntry | NewRoleLogEntry | RoleLogDate;
 
 export const useForm = <T extends FormInput>(initialState: T) => {
   const [inputs, setInputs] = useState(initialState);

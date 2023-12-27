@@ -11,8 +11,6 @@ const Roles = () => {
   const [newRole, setNewRole] = useState(false);
   const { inputs, handleInputs } = useForm({
     role_name: '',
-    link: '',
-    content: '',
     permission: [],
   });
 
@@ -23,9 +21,11 @@ const Roles = () => {
     queryKey: ['roles'],
     queryFn: () => roleService.getRoles()
   });
+
   const newRoleMutation = useMutation({
     mutationFn: () => roleService.newRole(inputs),
     onSuccess: async () => {
+      setNewRole(false);
       await queryClient.refetchQueries({ queryKey: ['roles'] });
     },
     onError: (err) => {
@@ -49,21 +49,23 @@ const Roles = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <AllRolesStyles>
-        <button
-          type="button"
-          onClick={() => setNewRole(!newRole)}
-        >
-          {newRole ? 'Cancel' : 'New role'}
-        </button>
-        {data.map(role => (
-          <li key={role.role_id}>
-            <Link to={`/${role.role_id}`}>
-              {role.role_name}
-            </Link>
-          </li>
-        ))}
-      </AllRolesStyles>
+      {!newRole &&
+        <AllRolesStyles>
+          {data.map(role => (
+            <li key={role.role_id}>
+              <Link to={`/${role.role_id}`}>
+                {role.role_name}
+              </Link>
+            </li>
+          ))}
+          <button
+            type="button"
+            onClick={() => setNewRole(!newRole)}
+          >
+            New role
+          </button>
+        </AllRolesStyles>
+      }
       {newRole &&
         <NewRoleStyles onSubmit={addNewRole}>
           <label htmlFor="role-name">Name: </label>
@@ -73,21 +75,13 @@ const Roles = () => {
             value={inputs.role_name}
             onChange={handleInputs}
           />
-          <label htmlFor="link">Link: </label>
-          <input
-            type="text"
-            name="link"
-            value={inputs.link}
-            onChange={handleInputs}
-          />
-          <label htmlFor="content">Content: </label>
-          <input
-            type="text"
-            name="content"
-            value={inputs.content}
-            onChange={handleInputs}
-          />
           <button type="submit">Add</button>
+          <button
+            type="button"
+            onClick={() => setNewRole(!newRole)}
+          >
+            Cancel
+          </button>
         </NewRoleStyles>
       }
     </div>

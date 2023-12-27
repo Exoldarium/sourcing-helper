@@ -1,4 +1,4 @@
-import { NewRoleEntry, Role } from '../types';
+import { NewRoleEntry, Role, UpdateRoleEntry } from '../types';
 import { request } from '../utils/axiosRequest';
 import { parseRoleData } from '../utils/parseRoleData';
 import { parseError } from '../utils/parsingHelpers';
@@ -42,11 +42,11 @@ const newRole = async (role: NewRoleEntry): Promise<NewRoleEntry> => {
   }
 };
 
-const updateRole = async (id: string, role: NewRoleEntry): Promise<NewRoleEntry> => {
+const updateRole = async (id: string, role: UpdateRoleEntry): Promise<UpdateRoleEntry> => {
   try {
     const res = await request.put(`/roles/${id}`, role);
 
-    const parsedRole = parseRoleData.toNewRoleEntry(res.data);
+    const parsedRole = parseRoleData.toUpdateRoleEntry(res.data);
 
     return parsedRole;
   } catch (err) {

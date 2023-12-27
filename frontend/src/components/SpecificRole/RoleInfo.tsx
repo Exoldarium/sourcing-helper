@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Role } from '../../types';
-import { NewRoleStyles } from '../AllRoles/styles/NewRoleStyles';
 import { useForm } from '../../hooks/useForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { roleService } from '../../services/roles';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
-import { RoleInfoStyles } from './styles/RoleInforStyles';
+import { RoleInfoStyles, UpdateRoleInfo } from './styles/RoleInforStyles';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { parseToString } from '../../utils/parsingHelpers';
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
+import { RoleContent } from './RoleContent';
 
 interface Props {
   data: Role;
@@ -16,12 +16,13 @@ interface Props {
 
 const RoleInfo = ({ data }: Props) => {
   const [updateRole, setUpdateRole] = useState(false);
+  const [updatedRoleContent, setUpdatedRoleContent] = useState('');
 
   const { copyText } = useCopyToClipboard();
   const { inputs, handleInputs } = useForm({
     role_name: data.role_name,
     link: data.link,
-    content: data.content,
+    content: '',
     permission: data.permission,
     initial_msg: data.initial_msg
   });
@@ -29,11 +30,12 @@ const RoleInfo = ({ data }: Props) => {
   const match = useMatch('/:id');
   const queryClient = useQueryClient();
   const dispatch = useDispatchValue();
-  const parsedMatch = parseToString(match?.params.id);
   const navigate = useNavigate();
 
+  const parsedMatch = parseToString(match?.params.id);
+
   const updateRoleMutation = useMutation({
-    mutationFn: () => roleService.updateRole(data.role_id, inputs),
+    mutationFn: () => roleService.updateRole(data.role_id, { ...inputs, content: updatedRoleContent }),
     onSuccess: async () => {
       await queryClient.refetchQueries({ queryKey: ['role'] });
       setUpdateRole(false);
@@ -79,6 +81,7 @@ const RoleInfo = ({ data }: Props) => {
       payload: 'Copied!'
     });
   };
+  console.log(updatedRoleContent);
 
   return (
     <RoleInfoStyles>
@@ -98,13 +101,18 @@ const RoleInfo = ({ data }: Props) => {
       {!updateRole &&
         <div className="role-info">
           <p onClick={() => copyOnClick(data.link)}>{data.link.slice(0, 30) + '...'}</p>
+          <RoleContent
+            data={data}
+            updateRole={updateRole}
+            copyOnClick={copyOnClick}
+            setUpdatedRoleContent={setUpdatedRoleContent}
+          />
           <p onClick={() => copyOnClick(data.initial_msg)}>{data.initial_msg.slice(0, 60) + '...'}</p>
-          <p onClick={() => copyOnClick(data.content)}>{data.content.slice(0, 60) + '...'}</p>
         </div>
       }
       <div>
         {updateRole &&
-          <NewRoleStyles onSubmit={updateRolenClick}>
+          <UpdateRoleInfo onSubmit={updateRolenClick}>
             <label htmlFor="role-name">Name: </label>
             <input
               type="text"
@@ -119,12 +127,11 @@ const RoleInfo = ({ data }: Props) => {
               value={inputs.link}
               onChange={handleInputs}
             />
-            <label htmlFor="content">Content: </label>
-            <input
-              type="text"
-              name="content"
-              value={inputs.content}
-              onChange={handleInputs}
+            <RoleContent
+              data={data}
+              updateRole={updateRole}
+              copyOnClick={copyOnClick}
+              setUpdatedRoleContent={setUpdatedRoleContent}
             />
             <label htmlFor="initial_msg">Initial message: </label>
             <input
@@ -134,7 +141,7 @@ const RoleInfo = ({ data }: Props) => {
               onChange={handleInputs}
             />
             <button type="submit">Update</button>
-          </NewRoleStyles>
+          </UpdateRoleInfo>
         }
       </div>
     </RoleInfoStyles>

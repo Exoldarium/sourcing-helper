@@ -9,12 +9,12 @@ import { RoleDataByDate } from './RoleDataByDate';
 const SpecificRole = () => {
   const match = useMatch('/:id');
 
-  const parsedMatch = parseToString(match?.params.id);
-
   const { data, isLoading, error } = useQuery({
     queryKey: ['role'],
     queryFn: () => roleService.getRole(parsedMatch)
   });
+
+  const parsedMatch = parseToString(match?.params.id);
 
   if (isLoading) return <p>Loading</p>;
   if (error) return <p>{error.message}</p>;

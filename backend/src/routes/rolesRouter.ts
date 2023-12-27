@@ -1,6 +1,6 @@
 import express from 'express';
 import { addPermission, createRole, deleteRole, getAllRoles, getSpecificRole, updateRole } from '../queries/roleTotalQuery';
-import { toNewRoleEntry, toNewRolePermissionEntry } from '../../utils/parseRoleData';
+import { toNewRoleEntry, toNewRolePermissionEntry, toUpdateRoleEntry } from '../../utils/parseRoleData';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateNewRole } from '../types/types';
 
@@ -38,6 +38,9 @@ rolesRouter.post('/', async (req, res, next) => {
       user_id: currentUser.user_id,
       role_id: uuidv4(),
       permission: [...parsedNewRole.permission, currentUser.user_id],
+      content: '',
+      link: '',
+      initial_msg: ''
     };
 
     const roleAdded = await createRole(newRole);
@@ -59,7 +62,7 @@ rolesRouter.put('/:id', async (req, res, next) => {
 
     if (!checkPermission || !req.session.admin) return res.status(400).send('Permission required');
 
-    const parsedRole = toNewRoleEntry(req.body);
+    const parsedRole = toUpdateRoleEntry(req.body);
     console.log(parsedRole, 'parsed');
     const roleToUpdate = {
       ...parsedRole,

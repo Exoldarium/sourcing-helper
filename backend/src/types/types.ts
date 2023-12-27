@@ -68,7 +68,8 @@ export type Role = Selectable<RoleTotalTable>;
 export type NewRole = Insertable<RoleTotalTable>;
 export type UpdateRole = Updateable<RoleTotalTable>;
 
-export type NewRoleEntry = Pick<NewRole, 'role_name' | 'permission' | 'link' | 'content' | 'initial_msg'>;
+export type NewRoleEntry = Pick<NewRole, 'role_name' | 'permission'>;
+export type UpdateRoleEntry = Pick<UpdateRole, 'role_name' | 'permission' | 'link' | 'content' | 'initial_msg'>;
 
 // ROLE LOG SCHEMA
 export interface RoleLogTable {
