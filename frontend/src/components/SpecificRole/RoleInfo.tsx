@@ -9,7 +9,15 @@ import { useMatch, useNavigate } from 'react-router-dom';
 import { parseToString } from '../../utils/parsingHelpers';
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 import { RoleContent } from './RoleContent';
-import { APPLY_MSG, BENEFITS_MSG, GDPR_MSG, INTERVIEW_MSG, REJECTION_MSG, generateApplyMessage, generateFollowUp } from '../../utils/messageData';
+import {
+  APPLY_MSG,
+  BENEFITS_MSG,
+  GDPR_MSG,
+  INTERVIEW_MSG,
+  REJECTION_MSG,
+  generateApplyMessage,
+  generateFollowUp
+} from '../../utils/messageData';
 
 interface Props {
   data: Role;
@@ -53,6 +61,7 @@ const RoleInfo = ({ data }: Props) => {
     mutationFn: () => roleService.deleteRole(parsedMatch),
     onSuccess: async () => {
       await queryClient.refetchQueries({ queryKey: ['roles'] });
+      localStorage.removeItem(data.role_id);
       navigate('/');
     },
     onError: (err) => {
@@ -102,11 +111,11 @@ const RoleInfo = ({ data }: Props) => {
       {!updateRole &&
         <div className="role-info">
           <p onClick={() => copyOnClick(data.link)}>
-            <h4>Link</h4>
+            <strong>Link</strong><br></br>
             {data.link.slice(0, 30) + '...'}
           </p>
           <p onClick={() => copyOnClick(data.initial_msg)}>
-            <h4>Initial</h4>
+            <strong>Initial</strong><br></br>
             {data.initial_msg.slice(0, 60) + '...'}
           </p>
           <RoleContent
@@ -115,30 +124,30 @@ const RoleInfo = ({ data }: Props) => {
             copyOnClick={copyOnClick}
             setUpdatedRoleContent={setUpdatedRoleContent}
           />
-          {generateFollowUp(data.link).map((followUp, i) => (
+          {generateFollowUp(data.role_name, data.link).map((followUp, i) => (
             <p key={i} onClick={() => copyOnClick(followUp)}>
-              <h4>Follow up {i + 1}</h4>
+              <strong>Follow up {i + 1}</strong><br></br>
               {followUp.slice(0, 30) + '...'}
             </p>
           ))}
           <p onClick={() => copyOnClick(REJECTION_MSG)}>
-            <h4>Rejection</h4>
+            <strong>Rejection</strong><br></br>
             {REJECTION_MSG.slice(0, 30) + '...'}
           </p>
           <p onClick={() => copyOnClick(generateApplyMessage(data.link))}>
-            <h4>Apply</h4>
+            <strong>Apply</strong><br></br>
             {APPLY_MSG.slice(0, 30) + '...'}
           </p>
           <p onClick={() => copyOnClick(INTERVIEW_MSG)}>
-            <h4>Interview</h4>
+            <strong>Interview</strong><br></br>
             {INTERVIEW_MSG.slice(0, 30) + '...'}
           </p>
           <p onClick={() => copyOnClick(GDPR_MSG)}>
-            <h4>GDPR</h4>
+            <strong>GDPR</strong><br></br>
             {GDPR_MSG.slice(0, 30) + '...'}
           </p>
           <p onClick={() => copyOnClick(BENEFITS_MSG)}>
-            <h4>Benefits</h4>
+            <strong>Benefits</strong><br></br>
             {BENEFITS_MSG.slice(0, 30) + '...'}
           </p>
         </div>

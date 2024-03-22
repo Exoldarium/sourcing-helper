@@ -10,7 +10,7 @@ export const RoleInfoStyles = styled.div`
   width: fit-content;
   overflow-y: scroll;
   overflow-x: hidden;
-  h1, h3, h4 {
+  h1, h3 {
     margin: 0;
   }
   .role-info {

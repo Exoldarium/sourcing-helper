@@ -5,6 +5,11 @@ import { NotificationMessage } from './components/NotificationMessage';
 import { Roles } from './components/AllRoles';
 import { SpecificRole } from './components/SpecificRole';
 
+// TODO: we can also add an option to add in the sales navigator search link
+// TODO: add a loading animation when a new data is added (inv, inital etc)
+// TODO: fix the inputs at the moment when creating a new role the previous input is saved (not a priority)
+// TODO: fix routing, the home route should be login
+
 const App = () => {
   return (
     <>

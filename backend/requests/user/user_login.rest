@@ -5,3 +5,6 @@ Content-Type: application/json
   "email": "dusan@gmail.com",
   "password": "testing"
 }
+
+//  "email": "dusan@gmail.com",
+//  "password": "testing"

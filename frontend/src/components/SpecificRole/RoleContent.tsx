@@ -11,10 +11,6 @@ interface Props {
   setUpdatedRoleContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
-// TODO: try to use document.execCommand to copy formatted text, if not working just add a scroll bar to paragraph and select all
-// try also grabbing innerText from the div and see what we can do with it
-// https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent/clipboardData
-
 const RoleContent = ({ data, updateRole, copyOnClick, setUpdatedRoleContent }: Props) => {
   const [textFromStorage, setTextFromStorage] = useState('');
   const content = data.content.slice(0, 60) + '...';
@@ -31,22 +27,26 @@ const RoleContent = ({ data, updateRole, copyOnClick, setUpdatedRoleContent }: P
       const content = editor.getHTML();
       const textOnlyContent = editor.getText();
 
-      localStorage.setItem('textContent', textOnlyContent);
+      localStorage.setItem(data.role_id, textOnlyContent);
 
       setUpdatedRoleContent(content);
     }
   });
 
+  console.log(textFromStorage);
+
   useEffect(() => {
     if (editor?.isEditable) {
       editor.commands.setContent(data.content);
     }
-    const textContent = localStorage.getItem('textContent');
+
+    const textContent = localStorage.getItem(data.role_id);
 
     if (textContent) {
       setTextFromStorage(textContent);
     }
-  }, [editor]);
+
+  }, [data.content, data.role_id, editor]);
 
   if (!editor) return null;
 
@@ -55,7 +55,7 @@ const RoleContent = ({ data, updateRole, copyOnClick, setUpdatedRoleContent }: P
       <>
         {!updateRole &&
           <p onClick={() => copyOnClick(textFromStorage)}>
-            <h4>Description</h4>
+            <strong>Description</strong><br></br>
             {editor.getText().slice(0, 60) + '...'}
           </p>
         }

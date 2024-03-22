@@ -13,11 +13,11 @@ export const GDPR_MSG =
 export const BENEFITS_MSG =
   'If hired you will work as an independent contractor. Regarding the benefits, we offer paid leaves, time off for holidays and unpaid leaves.';
 
-export const generateFollowUp = (link: string) => {
+export const generateFollowUp = (roleName: string, link: string) => {
   return [
-    `Hi again XXXXX! I'm not sure if you received my message but we are still on the search for a XXXXXXX! Feel free to ask any questions you might have or you can use this link to apply for the position!\n\nRegards,\n\nDusan Milosavljevic\nRecruiter at DistantJob\n\n${link}`,
-    `Hello XXXXXX! We are still in need of a XXXXXX, are you still interested? You can send me a message if you have any questions or you can use this link to apply for the position!\n\nRegards,\n\nDusan Milosavljevic\nRecruiter at DistantJobn\n${link}`,
-    `Hello XXXX! We are still waiting for you answer regarding the XXXXX position. You can use the link to apply for the position or you can send me your CV here in LinkedIn. If you have any questions, feel free to send me a message.\n\n Regards,\n\nDusan Milosavljevic\nRecruiter at DistantJobn\n${link}`
+    `Hi again XXXXX! I'm not sure if you received my message but we are still on the search for a ${roleName}! Feel free to ask any questions you might have or you can use this link to apply for the position!\n\nRegards,\n\nDusan Milosavljevic\nRecruiter at DistantJob\n\n${link}`,
+    `Hello XXXXXX! We are still in need of a ${roleName}, are you still interested? You can send me a message if you have any questions or you can use this link to apply for the position!\n\nRegards,\n\nDusan Milosavljevic\nRecruiter at DistantJob\n\n${link}`,
+    `Hello XXXX! We are still waiting for you answer regarding the ${roleName} position. You can use the link to apply for the position or you can send me your CV here in LinkedIn. If you have any questions, feel free to send me a message.\n\n Regards,\n\nDusan Milosavljevic\nRecruiter at DistantJob\n\n${link}`
   ];
 };
 

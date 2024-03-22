@@ -1,8 +1,7 @@
 import { NewRoleEntry, NewRoleLogEntry, UpdateRoleEntry } from '../src/types/types';
 import { parseToNumber, parseToString } from './parsingHelpers';
 
-// TODO: initial message link and content don't need to be added when creating a new role on the client
-// add a new parser that only takes in the role name and permission, add the rest when updating the role
+// TODO: see why sometimes when the role info is updated the network error occurs
 
 const toNewRoleEntry = (entry: unknown): NewRoleEntry => {
   if (!entry || typeof entry !== 'object') throw new Error('Invalid role input');

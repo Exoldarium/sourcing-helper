@@ -7,11 +7,13 @@
   "license": "MIT",
   "scripts": {
     "start": "concurrently \"npm run dev\" \"npm run client\"",
+    "start-build": "concurrently \"npm run buld\" \"npm run build-client\"",
     "build": "node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
     "dev": "tsc && ts-node-dev --transpile-only index.ts",
     "client": "cd ../frontend && npm run dev",
+    "build-client": "cd ../frontend && npm run build",
     "lint": "eslint --ext .ts .",
     "ts-node": "ts-node"
   },

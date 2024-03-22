@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { roleService } from '../../services/roles';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { NewRoleStyles } from './styles/NewRoleStyles';
 import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
 import { useForm } from '../../hooks/useForm';
@@ -16,6 +16,7 @@ const Roles = () => {
 
   const dispatch = useDispatchValue();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['roles'],
@@ -35,6 +36,12 @@ const Roles = () => {
       });
     }
   });
+
+  useEffect(() => {
+    if (error) {
+      navigate('/login');
+    }
+  }, [error, navigate]);
 
   if (isLoading) return <p>Loading</p>;
   if (error) return <p>{error.message}</p>;

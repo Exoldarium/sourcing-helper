@@ -4,6 +4,8 @@ import { db } from '../db';
 import { CreateNewRole, UpdateRoleEntry } from '../types/types';
 import { sql } from 'kysely';
 
+// TODO: add pagination when grabbing all roles and role logs (cursor based?)
+
 const getAllRoles = async () => {
   try {
     const roles = await db.selectFrom('roles_total')
@@ -80,9 +82,11 @@ const createRole = async (role: CreateNewRole) => {
 };
 
 const updateRole = async (id: string, role: UpdateRoleEntry) => {
+  console.log(id, 'this is id');
   try {
     const updatedRole = await db.updateTable('roles_total')
       .set({
+        ...role,
         content: role.content,
         link: role.link,
         role_name: role.role_name,
