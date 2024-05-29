@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 import { useForm } from '../../hooks/useForm';
 import { NewRoleLogEntry, Role } from '../../types';

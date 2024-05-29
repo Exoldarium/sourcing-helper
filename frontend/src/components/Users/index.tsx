@@ -1,6 +1,6 @@
 import { logoutService } from '../../services/logout';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { UserStyles } from './styles/UserStyles';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../hooks/useUser';

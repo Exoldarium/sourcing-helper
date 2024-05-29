@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from '../../hooks/useForm';
 import { NewRoleLogEntry, Role } from '../../types';
 import { roleLogService } from '../../services/roleLog';
-import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { AddRoleDataStyles } from './styles/AddRoleDataStyles';
 
 // TODO: add a way to sort by date

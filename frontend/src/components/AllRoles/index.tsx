@@ -3,7 +3,7 @@ import { roleService } from '../../services/roles';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { NewRoleStyles } from './styles/NewRoleStyles';
-import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { useForm } from '../../hooks/useForm';
 import { AllRolesStyles } from './styles/AllRolesStyles';
 
@@ -51,8 +51,6 @@ const Roles = () => {
     e.preventDefault();
     newRoleMutation.mutate();
   };
-
-  console.log(data);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>

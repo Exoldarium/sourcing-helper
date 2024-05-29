@@ -16,7 +16,7 @@ const SESSION = {
   saveUninitialized: true,
   resave: false,
   cookie: {
-    maxAge: 3600000,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
     httpOnly: false,
     sameSite: false,
     secure: false

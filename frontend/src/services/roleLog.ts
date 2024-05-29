@@ -11,7 +11,6 @@ interface Params {
 
 const addNewDataToRole = async (data: NewRoleLogEntry, id: string): Promise<NewRoleLogEntry> => {
   try {
-    console.log(data, 'this is data');
     const res = await request.post(`/roleLog/${id}`, data);
 
     const parsedData = parseRoleData.toRoleLogEntry(res.data);

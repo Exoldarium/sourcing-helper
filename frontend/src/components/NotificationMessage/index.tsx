@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatchValue, useNotificationValue } from '../../contexts/Notification/useNotificationContext';
+import { useDispatchValue, useNotificationValue } from '../../hooks/useNotificationContext';
 import { NotificationMessageStyles } from './styles/NotificationMessageStyles';
 
 const NotificationMessage = () => {

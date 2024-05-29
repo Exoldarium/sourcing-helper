@@ -33,8 +33,6 @@ const RoleContent = ({ data, updateRole, copyOnClick, setUpdatedRoleContent }: P
     }
   });
 
-  console.log(textFromStorage);
-
   useEffect(() => {
     if (editor?.isEditable) {
       editor.commands.setContent(data.content);

@@ -20,8 +20,6 @@ const SpecificRole = () => {
   if (error) return <p>{error.message}</p>;
   if (!data) return null;
 
-  console.log(data.role_data);
-
   return (
     <>
       <h1 style={{ margin: 0, paddingLeft: '3rem' }}>{data.role_name}</h1>

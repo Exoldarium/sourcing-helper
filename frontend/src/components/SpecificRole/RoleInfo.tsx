@@ -3,7 +3,7 @@ import { Role } from '../../types';
 import { useForm } from '../../hooks/useForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { roleService } from '../../services/roles';
-import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { RoleInfoStyles, UpdateRoleInfo } from './styles/RoleInforStyles';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { parseToString } from '../../utils/parsingHelpers';
@@ -35,6 +35,8 @@ const RoleInfo = ({ data }: Props) => {
     permission: data.permission,
     initial_msg: data.initial_msg
   });
+  console.log(data.role_name, 'data role name');
+  console.log(inputs.role_name, 'inputs role name');
 
   const match = useMatch('/:id');
   const queryClient = useQueryClient();
@@ -91,7 +93,6 @@ const RoleInfo = ({ data }: Props) => {
       payload: 'Copied!'
     });
   };
-  console.log(updatedRoleContent);
 
   return (
     <RoleInfoStyles>

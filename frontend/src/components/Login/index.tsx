@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { loginService } from '../../services/login';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useDispatchValue } from '../../contexts/Notification/useNotificationContext';
+import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { UserLogin } from '../../types';
 import { LoginStyles } from './styles/LoginStyles';
 
