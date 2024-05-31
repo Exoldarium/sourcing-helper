@@ -7,7 +7,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', "vite.config.ts"],
+  ignorePatterns: ['dist', '.eslintrc.cjs', "vite.config.ts", "tailwind.config.js"],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', "@typescript-eslint"],
   parserOptions: {

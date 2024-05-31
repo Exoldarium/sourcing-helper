@@ -5,8 +5,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { UserLogin } from '../../types';
 import { LoginStyles } from './styles/LoginStyles';
+import { ButtonStyles } from '../CustomStyles/ButtonStyles';
 
-const UserLogin = () => {
+const UserLoginView = () => {
   const { inputs, handleInputs } = useForm({
     email: '',
     password: ''
@@ -39,7 +40,6 @@ const UserLogin = () => {
 
   return (
     <LoginStyles
-      style={{ display: 'flex', flexDirection: 'column', width: '30vw' }}
       method="post"
       onSubmit={userLoginOnClick}
     >
@@ -57,9 +57,9 @@ const UserLogin = () => {
         value={inputs.password}
         onChange={handleInputs}
       />
-      <button type="submit">Log in</button>
+      <ButtonStyles type="submit">Log in</ButtonStyles>
     </LoginStyles>
   );
 };
 
-export { UserLogin };
+export { UserLoginView };
