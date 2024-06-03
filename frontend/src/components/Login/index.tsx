@@ -8,6 +8,9 @@ import { LoginStyles } from './styles/LoginStyles';
 import { ButtonStyles } from '../CustomStyles/ButtonStyles';
 import { useState } from 'react';
 
+// TODO: add a login indicator, button can be greyed out while the user is being logged
+// use loginMutation.isPending for a button color prop check
+
 const UserLoginView = () => {
   const { inputs, handleInputs } = useForm({
     email: '',
@@ -62,6 +65,7 @@ const UserLoginView = () => {
       <ButtonStyles
         type="submit"
         $buttonClicked={buttonClicked}
+        aria-disabled={loginMutation.isPending}
         onMouseDown={() => setButtonClicked(true)}
         onMouseUp={() => setButtonClicked(false)}
       >
