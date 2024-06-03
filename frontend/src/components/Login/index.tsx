@@ -6,12 +6,14 @@ import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { UserLogin } from '../../types';
 import { LoginStyles } from './styles/LoginStyles';
 import { ButtonStyles } from '../CustomStyles/ButtonStyles';
+import { useState } from 'react';
 
 const UserLoginView = () => {
   const { inputs, handleInputs } = useForm({
     email: '',
     password: ''
   });
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const dispatch = useDispatchValue();
   const navigate = useNavigate();
@@ -57,7 +59,14 @@ const UserLoginView = () => {
         value={inputs.password}
         onChange={handleInputs}
       />
-      <ButtonStyles type="submit">Log in</ButtonStyles>
+      <ButtonStyles
+        type="submit"
+        $buttonClicked={buttonClicked}
+        onMouseDown={() => setButtonClicked(true)}
+        onMouseUp={() => setButtonClicked(false)}
+      >
+        Log in
+      </ButtonStyles>
     </LoginStyles>
   );
 };
