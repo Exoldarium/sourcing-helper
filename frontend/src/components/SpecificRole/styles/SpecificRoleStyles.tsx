@@ -5,7 +5,9 @@ const SpecificRoleStyles = styled.div`
      margin: 0;
      font-size: var(--font-lg);
      text-align: left;
+     text-decoration: underline;
      padding: 0 var(--space-xl) 0 var(--space-xl);
+     cursor: default;
   }
   .specific-role-div {
     display: flex;

@@ -5,7 +5,7 @@ import { Role } from '../../../types';
 import { roleService } from '../../../services/roles';
 import { useForm } from '../../../hooks/useForm';
 import { useDispatchValue } from '../../../hooks/useNotificationContext';
-import { RoleInfoStyles } from '../styles/RoleInforStyles';
+import { RoleInfoStyles } from '../styles/RoleInfoStyles';
 import { parseToString } from '../../../utils/parsingHelpers';
 import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
 import { UpdateRoleMessageContent } from './UpdateRoleMessageContent';

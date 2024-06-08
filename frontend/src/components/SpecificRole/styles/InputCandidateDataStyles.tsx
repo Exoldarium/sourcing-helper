@@ -8,11 +8,11 @@ export const InputCandidateDataStyles = styled.form`
   padding: var(--space-sm);
   font-size: var(--font-md);
   color: var(--neutral-900);
-  /* background: white; */
   border-radius: 5px;
   margin: 0;
   h3 {
     margin: 0;
+    cursor: default;
   }
   .addData-div {
     padding: var(--space-sm);
