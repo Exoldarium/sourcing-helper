@@ -4,6 +4,8 @@ import { NewRoleLogEntry, Role } from '../../types';
 import { roleLogService } from '../../services/roleLog';
 import { useDispatchValue } from '../../hooks/useNotificationContext';
 import { AddRoleDataStyles } from './styles/AddRoleDataStyles';
+import { ButtonStyles } from '../ReusableStyles/ButtonStyles';
+import { useState } from 'react';
 
 // TODO: add a way to sort by date
 // TODO: consider adding dark mode instead of using all white and gray background
@@ -13,6 +15,7 @@ interface Props {
 }
 
 const AddRoleData = ({ data }: Props) => {
+  const [buttonClicked, setButtonClicked] = useState(false);
   const { inputs, handleInputs } = useForm({
     invitation: 0,
     initial_contact: 0,
@@ -82,19 +85,26 @@ const AddRoleData = ({ data }: Props) => {
             </div>
           );
         })}
-      </div>
-      <div className="button-div">
-        <button
-          type="submit"
-        >
-          Add
-        </button>
-        <button
-          type="button"
-          onClick={undoLastLogAdded}
-        >
-          Undo
-        </button>
+        <div className="button-div">
+          <ButtonStyles
+            type="submit"
+            className="add-role-data-button"
+            $backgroundColor='var(--primary-300)'
+            $buttonClicked={buttonClicked}
+            onMouseDown={() => setButtonClicked(true)}
+            onMouseUp={() => setButtonClicked(false)}
+          >
+            Add
+          </ButtonStyles>
+          <ButtonStyles
+            type="button"
+            className="add-role-data-button"
+            $backgroundColor='var(--primary-300)'
+            onClick={undoLastLogAdded}
+          >
+            Undo
+          </ButtonStyles>
+        </div>
       </div>
     </AddRoleDataStyles>
   );

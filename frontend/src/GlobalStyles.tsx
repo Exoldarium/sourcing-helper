@@ -32,23 +32,23 @@ export const GlobalStyles = createGlobalStyle`
     --accent-red-900: hsl(360, 100%, 13%);
     --accent-red-800: hsl(360, 100%, 7%);
 
-    --accent-green-100: hsl(156, 100%, 88%)
+    --accent-green-100: hsl(156, 100%, 88%);
     --accent-green-200: hsl(156, 100%, 78%);
-    --accent-green-300: hsl(156, 72%, 60%)
-    --accent-green-400: hsl(156, 48%, 47%)
+    --accent-green-300: hsl(156, 72%, 60%);
+    --accent-green-400: hsl(156, 48%, 47%);
     --accent-green-500: hsl(156, 48%, 36%);
-    --accent-green-600: hsl(156, 48%, 22%)
-    --accent-green-700: hsl(156, 48%, 14%)
+    --accent-green-600: hsl(156, 48%, 22%);
+    --accent-green-700: hsl(156, 48%, 14%);
     --accent-green-800: hsl(156, 69%, 9%);
     --accent-green-900: hsl(156, 69%, 6%);
 
-    --accent-yellow-100: hsl(43, 100%, 86%)
-    --accent-yellow-200: hsl(43, 100%, 80%)
-    --accent-yellow-300: hsl(43, 80%, 70%)
-    --accent-yellow-400: hsl(43, 86%, 57%)
+    --accent-yellow-100: hsl(43, 100%, 86%);
+    --accent-yellow-200: hsl(43, 100%, 80%);
+    --accent-yellow-300: hsl(43, 80%, 70%);
+    --accent-yellow-400: hsl(43, 86%, 57%);
     --accent-yellow-500: hsl(43, 100%, 42%);
-    --accent-yellow-600: hsl(43, 100%, 32%)
-    --accent-yellow-700: hsl(43, 100%, 20%)
+    --accent-yellow-600: hsl(43, 100%, 32%);
+    --accent-yellow-700: hsl(43, 100%, 20%);
     --accent-yellow-800: hsl(43, 100%, 13%);
     --accent-yellow-900: hsl(43, 100%, 7%);
 

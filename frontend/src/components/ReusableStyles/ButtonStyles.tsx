@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-const ButtonStyles = styled.button<{ $buttonClicked?: boolean; $backgroundColor?: string; }>`
+const ButtonStyles = styled.button<{
+  $buttonClicked?: boolean;
+  $backgroundColor?: string;
+}>`
   height: var(--space-lg);
   width: auto;
   background-color: ${props => props.$buttonClicked ? 'var(--neutral-400)' : props.$backgroundColor};
