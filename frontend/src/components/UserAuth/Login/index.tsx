@@ -1,17 +1,17 @@
-import { useNavigate } from 'react-router-dom';
-import { useForm } from '../../hooks/useForm';
-import { loginService } from '../../services/login';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useDispatchValue } from '../../hooks/useNotificationContext';
-import { UserLogin } from '../../types';
-import { LoginStyles } from './styles/LoginStyles';
-import { ButtonStyles } from '../CustomStyles/ButtonStyles';
 import { useState } from 'react';
+import { useForm } from '../../../hooks/useForm';
+import { useDispatchValue } from '../../../hooks/useNotificationContext';
+import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { loginService } from '../../../services/login';
+import { UserLogin } from '../../../types';
+import { LoginStyles } from '../styles/LoginStyles';
+import { ButtonStyles } from '../../ReusableStyles/ButtonStyles';
 
 // TODO: add a login indicator, button can be greyed out while the user is being logged
 // use loginMutation.isPending for a button color prop check
 
-const UserLoginView = () => {
+const Login = () => {
   const { inputs, handleInputs } = useForm({
     email: '',
     password: ''
@@ -65,6 +65,7 @@ const UserLoginView = () => {
       <ButtonStyles
         type="submit"
         $buttonClicked={buttonClicked}
+        $backgroundColor='var(--primary-300)'
         aria-disabled={loginMutation.isPending}
         onMouseDown={() => setButtonClicked(true)}
         onMouseUp={() => setButtonClicked(false)}
@@ -75,4 +76,4 @@ const UserLoginView = () => {
   );
 };
 
-export { UserLoginView };
+export { Login };

@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { UserLoginView } from './components/Login';
+import { UserAuth } from './components/UserAuth';
 import { Users } from './components/Users';
 import { NotificationMessage } from './components/NotificationMessage';
 import { Roles } from './components/AllRoles';
@@ -17,7 +17,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Roles />} />
         <Route path="/:id" element={<SpecificRole />} />
-        <Route path="/login" element={<UserLoginView />} />
+        <Route path="/login" element={<UserAuth />} />
       </Routes>
     </>
   );
