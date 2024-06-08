@@ -2,9 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { roleService } from '../../services/roles';
 import { useMatch } from 'react-router-dom';
 import { parseToString } from '../../utils/parsingHelpers';
-import { RoleInfo } from './RoleInfo';
+import { RoleMessageContent } from './RoleMessageContent';
 import { AddRoleData } from './AddRoleData';
 import { RoleDataByDate } from './RoleDataByDate';
+import { SpecificRoleStyles } from './styles/SpecificRoleStyles';
 
 const SpecificRole = () => {
   const match = useMatch('/:id');
@@ -21,14 +22,14 @@ const SpecificRole = () => {
   if (!data) return null;
 
   return (
-    <>
-      <h1 style={{ margin: 0, paddingLeft: '3rem' }}>{data.role_name}</h1>
-      <div style={{ display: 'flex', flexDirection: 'row', padding: '2rem', height: '80vh' }}>
+    <SpecificRoleStyles>
+      <h1 className="specific-role-header">{data.role_name}</h1>
+      <div className="specific-role-div">
         <AddRoleData data={data} />
         <RoleDataByDate data={data} />
-        <RoleInfo data={data} />
+        <RoleMessageContent data={data} />
       </div>
-    </>
+    </SpecificRoleStyles>
   );
 };
 

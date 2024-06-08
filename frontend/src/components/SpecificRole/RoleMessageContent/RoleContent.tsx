@@ -1,8 +1,8 @@
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect, useState } from 'react';
-import { Role } from '../../types';
-import { RoleContentStyles } from './styles/RoleContentStyles';
+import { Role } from '../../../types';
+import { RoleContentStyles } from '../styles/RoleContentStyles';
 
 interface Props {
   data: Role;

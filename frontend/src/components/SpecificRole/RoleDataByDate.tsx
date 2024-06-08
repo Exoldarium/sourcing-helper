@@ -92,7 +92,7 @@ const RoleDataByDate = ({ data }: Props) => {
 
             return (
               <div key={i}>
-                <p>{stageWithoutUnderscore.charAt(0).toUpperCase() + stageWithoutUnderscore.slice(1)}: {value}</p>
+                <p>{value} {stageWithoutUnderscore.charAt(0).toUpperCase() + stageWithoutUnderscore.slice(1)}</p>
               </div>
             );
           })}

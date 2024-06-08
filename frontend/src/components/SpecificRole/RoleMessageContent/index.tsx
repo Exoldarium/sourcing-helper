@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Role } from '../../types';
-import { useForm } from '../../hooks/useForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { roleService } from '../../services/roles';
-import { useDispatchValue } from '../../hooks/useNotificationContext';
-import { RoleInfoStyles, UpdateRoleInfo } from './styles/RoleInforStyles';
 import { useMatch, useNavigate } from 'react-router-dom';
-import { parseToString } from '../../utils/parsingHelpers';
-import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
+import { Role } from '../../../types';
+import { roleService } from '../../../services/roles';
+import { useForm } from '../../../hooks/useForm';
+import { useDispatchValue } from '../../../hooks/useNotificationContext';
+import { RoleInfoStyles } from '../styles/RoleInforStyles';
+import { parseToString } from '../../../utils/parsingHelpers';
+import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
+import { UpdateRoleMessageContent } from './UpdateRoleMessageContent';
 import { RoleContent } from './RoleContent';
 import {
   APPLY_MSG,
@@ -17,26 +18,26 @@ import {
   REJECTION_MSG,
   generateApplyMessage,
   generateFollowUp
-} from '../../utils/messageData';
+} from '../../../utils/messageData';
 
 interface Props {
   data: Role;
 }
 
-const RoleInfo = ({ data }: Props) => {
+const RoleMessageContent = ({ data }: Props) => {
   const [updateRole, setUpdateRole] = useState(false);
   const [updatedRoleContent, setUpdatedRoleContent] = useState('');
 
   const { copyText } = useCopyToClipboard();
-  const { inputs, handleInputs } = useForm({
+  const { inputs } = useForm({
     role_name: data.role_name,
     link: data.link,
     content: '',
     permission: data.permission,
     initial_msg: data.initial_msg
   });
-  console.log(data.role_name, 'data role name');
-  console.log(inputs.role_name, 'inputs role name');
+  // console.log(data.role_name, 'data role name');
+  // console.log(inputs.role_name, 'inputs role name');
 
   const match = useMatch('/:id');
   const queryClient = useQueryClient();
@@ -74,7 +75,7 @@ const RoleInfo = ({ data }: Props) => {
     }
   });
 
-  const updateRolenClick = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const updateRoleOnClick = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateRoleMutation.mutate();
   };
@@ -119,12 +120,6 @@ const RoleInfo = ({ data }: Props) => {
             <strong>Initial</strong><br></br>
             {data.initial_msg.slice(0, 60) + '...'}
           </p>
-          <RoleContent
-            data={data}
-            updateRole={updateRole}
-            copyOnClick={copyOnClick}
-            setUpdatedRoleContent={setUpdatedRoleContent}
-          />
           {generateFollowUp(data.role_name, data.link).map((followUp, i) => (
             <p key={i} onClick={() => copyOnClick(followUp)}>
               <strong>Follow up {i + 1}</strong><br></br>
@@ -153,42 +148,21 @@ const RoleInfo = ({ data }: Props) => {
           </p>
         </div>
       }
-      <div>
-        {updateRole &&
-          <UpdateRoleInfo onSubmit={updateRolenClick}>
-            <label htmlFor="role-name">Name: </label>
-            <input
-              type="text"
-              name="role_name"
-              value={inputs.role_name}
-              onChange={handleInputs}
-            />
-            <label htmlFor="link">Link: </label>
-            <input
-              type="text"
-              name="link"
-              value={inputs.link}
-              onChange={handleInputs}
-            />
-            <RoleContent
-              data={data}
-              updateRole={updateRole}
-              copyOnClick={copyOnClick}
-              setUpdatedRoleContent={setUpdatedRoleContent}
-            />
-            <label htmlFor="initial_msg">Initial message: </label>
-            <input
-              type="text"
-              name="initial_msg"
-              value={inputs.initial_msg}
-              onChange={handleInputs}
-            />
-            <button type="submit">Update</button>
-          </UpdateRoleInfo>
-        }
-      </div>
+      {updateRole &&
+        <UpdateRoleMessageContent
+          data={data}
+          updateRoleOnClick={updateRoleOnClick}
+        >
+          <RoleContent
+            data={data}
+            updateRole={updateRole}
+            copyOnClick={copyOnClick}
+            setUpdatedRoleContent={setUpdatedRoleContent}
+          />
+        </UpdateRoleMessageContent>
+      }
     </RoleInfoStyles>
   );
 };
 
-export { RoleInfo };
+export { RoleMessageContent };
