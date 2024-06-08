@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import { ButtonStyles } from '../../ReusableStyles/ButtonStyles';
 import { CreateNewAccountStyles } from '../styles/CreateNewAccountStyles';
+import { useNavigate } from 'react-router-dom';
 
 const CreateNewAccount = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
+  const navigate = useNavigate();
+
+  const navigateToCreateAccount = () => {
+    setButtonClicked(true);
+    navigate('/users');
+  };
 
   return (
     <CreateNewAccountStyles>
@@ -13,7 +20,7 @@ const CreateNewAccount = () => {
         $buttonClicked={buttonClicked}
         $backgroundColor='var(--neutral-100)'
         // aria-disabled={loginMutation.isPending}
-        onMouseDown={() => setButtonClicked(true)}
+        onMouseDown={navigateToCreateAccount}
         onMouseUp={() => setButtonClicked(false)}
       >
         Sing up
