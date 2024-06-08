@@ -3,7 +3,7 @@ import { useForm } from '../../hooks/useForm';
 import { NewRoleLogEntry, Role } from '../../types';
 import { roleLogService } from '../../services/roleLog';
 import { useDispatchValue } from '../../hooks/useNotificationContext';
-import { AddRoleDataStyles } from './styles/AddRoleDataStyles';
+import { InputCandidateDataStyles } from './styles/InputCandidateDataStyles';
 import { ButtonStyles } from '../ReusableStyles/ButtonStyles';
 import { useState } from 'react';
 
@@ -14,7 +14,7 @@ interface Props {
   data: Role;
 }
 
-const AddRoleData = ({ data }: Props) => {
+const InputCandidateData = ({ data }: Props) => {
   const [buttonClicked, setButtonClicked] = useState(false);
   const { inputs, handleInputs } = useForm({
     invitation: 0,
@@ -63,7 +63,7 @@ const AddRoleData = ({ data }: Props) => {
   };
 
   return (
-    <AddRoleDataStyles onSubmit={addRoleData}>
+    <InputCandidateDataStyles onSubmit={addRoleData}>
       <h3>Input candidate data</h3>
       <div className='addData-div'>
         {Object.keys(data.role_data[0]).map((stage, i) => {
@@ -106,8 +106,8 @@ const AddRoleData = ({ data }: Props) => {
           </ButtonStyles>
         </div>
       </div>
-    </AddRoleDataStyles>
+    </InputCandidateDataStyles>
   );
 };
 
-export { AddRoleData };
+export { InputCandidateData };

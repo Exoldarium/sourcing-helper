@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AddRoleDataStyles = styled.form`
+export const InputCandidateDataStyles = styled.form`
   display: flex;
   flex-direction: column;
   flex: 1;
