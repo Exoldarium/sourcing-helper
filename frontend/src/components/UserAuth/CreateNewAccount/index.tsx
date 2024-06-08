@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ButtonStyles } from '../../ReusableStyles/ButtonStyles';
-import { CreateNewAccountStyles } from '../Login/CreateNewAccountStyles';
+import { CreateNewAccountStyles } from '../styles/CreateNewAccountStyles';
 
 const CreateNewAccount = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
