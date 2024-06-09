@@ -56,7 +56,7 @@ const RoleDataByDate = ({ data }: Props) => {
           const formattedKey = key.replace(/_/g, ' ')
             .replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
 
-          return `${formattedKey}: ${value}`;
+          return `${value} ${formattedKey}`;
         })
         .join('\n');
 
