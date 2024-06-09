@@ -6,6 +6,9 @@ import { NewRoleLogEntry, Role } from '../../types';
 import { RoleDataByDateStyles } from './styles/RoleDataByDateStyles';
 import { roleLogService } from '../../services/roleLog';
 import { useState } from 'react';
+import { ButtonStyles } from '../ReusableStyles/ButtonStyles';
+
+// TODO: consider using some library for calendar so that we can customize it
 
 interface Props {
   data: Role;
@@ -13,6 +16,7 @@ interface Props {
 
 const RoleDataByDate = ({ data }: Props) => {
   const [roleLogData, setRoleLogData] = useState<NewRoleLogEntry[] | null>(null);
+  const [buttonClicked, setButtonClicked] = useState(false);
   const { copyText } = useCopyToClipboard();
   const { inputs, handleInputs } = useForm({
     dateTo: '',
@@ -83,7 +87,17 @@ const RoleDataByDate = ({ data }: Props) => {
           value={inputs.dateTo}
           onChange={handleInputs}
         />
-        <button type="button" onClick={displayDataOnClick}>Show data</button>
+        <ButtonStyles
+          type="button"
+          className="show-data-by-date-button"
+          onClick={displayDataOnClick}
+          onMouseDown={() => setButtonClicked(true)}
+          onMouseUp={() => setButtonClicked(false)}
+          $backgroundColor='var(--primary-300)'
+          $buttonClicked={buttonClicked}
+        >
+          Show
+        </ButtonStyles>
       </div>
       {roleLogData &&
         <div className="generateReport-div" onClick={() => copyOnClick()}>

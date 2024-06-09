@@ -16,7 +16,7 @@ const SpecificRoleStyles = styled.div`
     height: 80vh;
   }
 
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1065px) {
     .specific-role-div {
       display: flex;
       flex-direction: column;
