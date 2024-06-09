@@ -4,7 +4,7 @@ const SpecificRoleStyles = styled.div`
   .specific-role-header {
      margin: 0;
      font-size: var(--font-lg);
-     text-align: left;
+     text-align: center;
      text-decoration: underline;
      padding: 0 var(--space-xl) 0 var(--space-xl);
      cursor: default;
@@ -12,7 +12,7 @@ const SpecificRoleStyles = styled.div`
   .specific-role-div {
     display: flex;
     flex-direction: row;
-    padding: 0 var(--space-lg) 0 var(--space-lg);
+    padding: 0 var(--space-sm) 0 var(--space-sm);
     height: 80vh;
   }
 
@@ -20,7 +20,6 @@ const SpecificRoleStyles = styled.div`
     .specific-role-div {
       display: flex;
       flex-direction: column;
-      padding: 0 var(--space-lg) 0 var(--space-lg);
       height: 80vh;
   }
    }

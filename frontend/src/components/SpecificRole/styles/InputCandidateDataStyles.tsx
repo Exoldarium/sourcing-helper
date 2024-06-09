@@ -23,7 +23,8 @@ export const InputCandidateDataStyles = styled.form`
     flex-direction: column;
     background: var(--neutral-100);
     border-radius: 5px;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
+    border: 1px solid var(--neutral-300);
+    /* box-shadow: 0 3px 10px rgb(0 0 0 / 0.4); */
     div {
       text-align: right;
     }

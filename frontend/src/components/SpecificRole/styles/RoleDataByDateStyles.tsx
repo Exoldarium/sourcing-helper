@@ -27,7 +27,7 @@ export const RoleDataByDateStyles = styled.div`
     padding: var(--space-sm);
     margin-top: var(--space-sm);
     border-radius: 5px;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
+    border: 1px solid var(--neutral-300);
     cursor: pointer;
   }
   .date-div {

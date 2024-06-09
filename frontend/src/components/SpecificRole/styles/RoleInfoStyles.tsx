@@ -7,7 +7,6 @@ export const RoleInfoStyles = styled.div`
   background: white;
   border-radius: 5px;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
-  width: fit-content;
   overflow-y: scroll;
   overflow-x: hidden;
   h1, h3 {
