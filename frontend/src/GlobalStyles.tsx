@@ -57,10 +57,13 @@ export const GlobalStyles = createGlobalStyle`
     --space-lg: 3rem;
     --space-xl: 4rem;
 
-    --font-sm: 0.667rem;
-    --font-md: 1rem;
+    --font-xxs: 0.667rem;
+    --font-xs: 0.75rem;
+    --font-sm: 1rem;
+    --font-md: 1.25rem;
     --font-lg: 1.5rem;
-    --font-xl: 2.25rem;
+    --font-xl: 2rem;
+    --font-xxl: 2.25rem;
   }
   html {
     box-sizing: border-box;

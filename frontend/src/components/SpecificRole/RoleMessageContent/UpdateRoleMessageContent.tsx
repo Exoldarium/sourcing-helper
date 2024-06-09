@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useForm } from '../../../hooks/useForm';
 import { Role } from '../../../types';
-import { UpdateRoleInfo } from '../styles/RoleInfoStyles';
+import { UpdateRoleInfo } from '../styles/RoleMessageContentStyles';
 
 interface Props {
   children: ReactNode;

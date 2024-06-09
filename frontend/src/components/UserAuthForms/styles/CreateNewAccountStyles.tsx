@@ -7,7 +7,7 @@ const CreateNewAccountStyles = styled.div`
   justify-content: center;
   margin: var(--space-sm);
   p {
-    font-size: var(--font-md);
+    font-size: var(--font-sm);
     padding: var(--space-sm);
   }
   button {

@@ -6,7 +6,7 @@ export const InputCandidateDataStyles = styled.form`
   flex: 1;
   align-items: center;
   padding: var(--space-sm);
-  font-size: var(--font-md);
+  font-size: var(--font-sm);
   color: var(--neutral-900);
   background: var(--neutral-200);
   border-radius: 5px;
@@ -46,9 +46,9 @@ export const InputCandidateDataStyles = styled.form`
     .add-role-data-button {
       margin: var(--space-sm) 0 0 var(--space-sm);
       height: var(--space-md);
-      width: var(--space-lg);
       padding: 0;
       text-align: center;
+      width: var(--space-xl);
     }
   }
 `;

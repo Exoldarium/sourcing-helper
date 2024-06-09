@@ -8,7 +8,7 @@ export const LoginStyles = styled.form`
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
   border-radius: 5px;
   padding: 0.5rem;
-  font-size: var(--font-md);
+  font-size: var(--font-sm);
   background-color: var(--neutral-200);
   input {
     height: var(--space-md);

@@ -25,8 +25,10 @@ const SpecificRole = () => {
     <SpecificRoleStyles>
       <h1 className="specific-role-header">{data.role_name}</h1>
       <div className="specific-role-div">
-        <InputCandidateData data={data} />
-        <RoleDataByDate data={data} />
+        <div className="input-date-divs">
+          <InputCandidateData data={data} />
+          <RoleDataByDate data={data} />
+        </div>
         <RoleMessageContent data={data} />
       </div>
     </SpecificRoleStyles>

@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
-export const RoleInfoStyles = styled.div`
-  padding: 2rem;
-  flex: 1;
-  margin: 1rem;
-  background: white;
+export const RoleMessageContentStyles = styled.div`
+  /* flex: 1; */
+  padding: var(--space-sm);
+  margin: var(--space-sm);
+  background: var(--neutral-200);
   border-radius: 5px;
-  box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
   overflow-y: scroll;
   overflow-x: hidden;
   h1, h3 {
     margin: 0;
+    text-align: center;
   }
   .role-info {
     display: grid;
@@ -20,15 +20,27 @@ export const RoleInfoStyles = styled.div`
     row-gap: 10px;
     cursor: pointer;
   }
-  .role-info > *{
+  .message-card {
     border-radius: 5px;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
-    background: whitesmoke;
+    border: 3px solid transparent;
+    background: var(--neutral-100);
     padding: 1rem;
     margin: 0;
   }
-  button {
-    margin: 0 1rem 1rem 0;
+  .message-card:hover {
+    border: 3px solid var(--accent-yellow-500);
+  }
+  .message-content-button-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .role-message-content-button {
+    padding: 0;
+    margin: var(--space-sm) var(--space-sm) var(--space-sm) 0;
+    height: var(--space-md);
+    width: var(--space-xl);
   }
 `;
 

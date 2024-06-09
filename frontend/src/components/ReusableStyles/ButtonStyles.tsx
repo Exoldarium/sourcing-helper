@@ -7,7 +7,7 @@ const ButtonStyles = styled.button<{
   height: var(--space-lg);
   width: auto;
   background-color: ${props => props.$buttonClicked ? 'var(--neutral-400)' : props.$backgroundColor};
-  font-size: var(--font-md);
+  font-size: var(--font-sm);
   color: var(--neutral-100);
   padding: var(--space-sm);
   border: none;

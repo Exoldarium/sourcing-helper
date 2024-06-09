@@ -6,7 +6,7 @@ export const RoleDataByDateStyles = styled.div`
   flex: 1;
   align-items: center;
   padding: var(--space-sm);
-  font-size: var(--font-md);
+  font-size: var(--font-sm);
   color: var(--neutral-900);
   background: var(--neutral-200);
   border-radius: 5px;
@@ -34,6 +34,10 @@ export const RoleDataByDateStyles = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
+    input {
+      border: 3px solid transparent;
+      border-radius: 5px;
+    }
     input:focus {
       border: 3px solid var(--accent-yellow-500);
       outline-width: 0;
@@ -43,6 +47,6 @@ export const RoleDataByDateStyles = styled.div`
     margin-top: var(--space-sm);
     padding: 0;
     height: var(--space-md);
-    width: var(--space-lg);
+    width: var(--space-xl);
   }
 `;
