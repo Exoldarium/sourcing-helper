@@ -21,10 +21,10 @@ export const RoleDataByDateStyles = styled.div`
     margin: 0;
   }
   .generateReport-div {
-    padding: var(--space-sm);
     display: flex;
     flex-direction: column;
     background: var(--neutral-100);
+    padding: var(--space-sm);
     margin-top: var(--space-sm);
     border-radius: 5px;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
@@ -34,6 +34,10 @@ export const RoleDataByDateStyles = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
+    input:focus {
+      border: 3px solid var(--accent-yellow-500);
+      outline-width: 0;
+    }
   }
   .show-data-by-date-button {
     margin-top: var(--space-sm);
