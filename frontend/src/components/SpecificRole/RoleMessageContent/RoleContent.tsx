@@ -1,18 +1,16 @@
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Role } from '../../../types';
 import { RoleContentStyles } from '../styles/RoleContentStyles';
 
 interface Props {
   data: Role;
   updateRole: boolean;
-  copyOnClick: (string: string) => void;
   setUpdatedRoleContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const RoleContent = ({ data, updateRole, copyOnClick, setUpdatedRoleContent }: Props) => {
-  const [textFromStorage, setTextFromStorage] = useState('');
+const RoleContent = ({ data, updateRole, setUpdatedRoleContent }: Props) => {
   const content = data.content.slice(0, 60) + '...';
 
   const editor = useEditor({
@@ -37,13 +35,6 @@ const RoleContent = ({ data, updateRole, copyOnClick, setUpdatedRoleContent }: P
     if (editor?.isEditable) {
       editor.commands.setContent(data.content);
     }
-
-    const textContent = localStorage.getItem(data.role_id);
-
-    if (textContent) {
-      setTextFromStorage(textContent);
-    }
-
   }, [data.content, data.role_id, editor]);
 
   if (!editor) return null;
@@ -51,12 +42,6 @@ const RoleContent = ({ data, updateRole, copyOnClick, setUpdatedRoleContent }: P
   return (
     <RoleContentStyles>
       <>
-        {!updateRole &&
-          <p onClick={() => copyOnClick(textFromStorage)}>
-            <strong>Description</strong><br></br>
-            {editor.getText().slice(0, 60) + '...'}
-          </p>
-        }
         {updateRole &&
           <>
             <div className="noteEditorButtons">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { Role } from '../../../types';
@@ -28,6 +28,7 @@ interface Props {
 const RoleMessageContent = ({ data }: Props) => {
   const [updateRole, setUpdateRole] = useState(false);
   const [updatedRoleContent, setUpdatedRoleContent] = useState('');
+  const [textFromStorage, setTextFromStorage] = useState('');
 
   const { copyText } = useCopyToClipboard();
   const { inputs } = useForm({
@@ -39,6 +40,14 @@ const RoleMessageContent = ({ data }: Props) => {
   });
   // console.log(data.role_name, 'data role name');
   // console.log(inputs.role_name, 'inputs role name');
+
+  useEffect(() => {
+    const textContent = localStorage.getItem(data.role_id);
+
+    if (textContent) {
+      setTextFromStorage(textContent);
+    }
+  }, [data.role_id]);
 
   const match = useMatch('/:id');
   const queryClient = useQueryClient();
@@ -121,11 +130,15 @@ const RoleMessageContent = ({ data }: Props) => {
         <div className="role-info">
           <p className="message-card" onClick={() => copyOnClick(data.link)}>
             <strong>Link</strong><br></br>
-            {data.link.slice(0, 30) + '...'}
+            {data.link.slice(0, 15) + '...'}
           </p>
           <p className="message-card" onClick={() => copyOnClick(data.initial_msg)}>
             <strong>Initial</strong><br></br>
             {data.initial_msg.slice(0, 60) + '...'}
+          </p>
+          <p className="message-card" onClick={() => copyOnClick(textFromStorage)}>
+            <strong>Description</strong><br></br>
+            {textFromStorage.slice(0, 45) + '...'}
           </p>
           {generateFollowUp(data.role_name, data.link).map((followUp, i) => (
             <p className="message-card" key={i} onClick={() => copyOnClick(followUp)}>
@@ -163,7 +176,6 @@ const RoleMessageContent = ({ data }: Props) => {
           <RoleContent
             data={data}
             updateRole={updateRole}
-            copyOnClick={copyOnClick}
             setUpdatedRoleContent={setUpdatedRoleContent}
           />
         </UpdateRoleMessageContent>
