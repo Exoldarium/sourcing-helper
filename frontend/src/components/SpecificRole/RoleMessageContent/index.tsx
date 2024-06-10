@@ -134,11 +134,11 @@ const RoleMessageContent = ({ data }: Props) => {
           </p>
           <p className="message-card" onClick={() => copyOnClick(data.initial_msg)}>
             <strong>Initial</strong><br></br>
-            {data.initial_msg.slice(0, 60) + '...'}
+            {data.initial_msg.slice(0, 30) + '...'}
           </p>
           <p className="message-card" onClick={() => copyOnClick(textFromStorage)}>
             <strong>Description</strong><br></br>
-            {textFromStorage.slice(0, 45) + '...'}
+            {textFromStorage.slice(0, 25) + '...'}
           </p>
           {generateFollowUp(data.role_name, data.link).map((followUp, i) => (
             <p className="message-card" key={i} onClick={() => copyOnClick(followUp)}>

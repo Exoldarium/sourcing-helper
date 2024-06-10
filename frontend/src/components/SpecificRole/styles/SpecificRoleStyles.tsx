@@ -29,18 +29,20 @@ const SpecificRoleStyles = styled.div`
     .specific-role-div {
       display: flex;
       flex-direction: column;
-      height: 80vh;
+      height: fit-content;
     }
   }
 
   @media only screen and (max-width: 767px) {
     .specific-role-header {
       text-align: center;
+      font-size: var(--font-lg);
+      padding: 0;
     }
     .specific-role-div {
       display: flex;
       flex-direction: column;
-      height: 80vh;
+      height: fit-content;
     }
     .input-date-divs {
       display: flex;

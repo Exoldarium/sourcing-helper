@@ -8,12 +8,14 @@ export const RoleMessageContentStyles = styled.div`
   border-radius: 5px;
   overflow-y: scroll;
   overflow-x: hidden;
+  height: 70vh;
   h1, h3 {
     margin: 0;
     text-align: center;
   }
   .role-info {
     display: grid;
+    justify-content: center;
     grid-template-columns: 200px 200px;
     grid-template-rows: 150px 150px; 
     column-gap: 10px;
@@ -24,7 +26,7 @@ export const RoleMessageContentStyles = styled.div`
     border-radius: 5px;
     border: 3px solid transparent;
     background: var(--neutral-100);
-    padding: 1rem;
+    padding: var(--space-sm);
     margin: 0;
   }
   .message-card:hover {
@@ -41,6 +43,21 @@ export const RoleMessageContentStyles = styled.div`
     margin: var(--space-sm) var(--space-sm) var(--space-sm) 0;
     height: var(--space-md);
     width: var(--space-xl);
+  }
+
+  @media only screen and (max-width: 767px) {
+    .message-card {
+      padding: var(--space-xs);
+    }
+    .role-info {
+      display: grid;
+      justify-content: center;
+      grid-template-columns: 130px 130px;
+      grid-template-rows: 100px 100px; 
+      column-gap: 10px;
+      row-gap: 10px;
+      cursor: pointer;
+    }
   }
 `;
 
